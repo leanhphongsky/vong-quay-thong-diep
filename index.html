@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng Quay Thông Điệp — Mỗi Ngày Một Thông Điệp Từ Vũ Trụ</title>
+  <meta name="description" content="Mỗi ngày nhận một thông điệp truyền cảm hứng riêng dành cho bạn. Hãy để vũ trụ dẫn đường.">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, #FFF8F0 0%, #FFE8D8 50%, #FFD9C8 100%);
+      padding: 80px 20px 40px;
+    }
+
+    /* Floating orbs */
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.5;
+      animation: float 6s ease-in-out infinite;
+      pointer-events: none;
+    }
+    .orb-1 { width: 400px; height: 400px; background: #FFD6C8; top: -100px; right: -100px; animation-delay: 0s; }
+    .orb-2 { width: 300px; height: 300px; background: #FFE5B4; bottom: -50px; left: -80px; animation-delay: 2s; }
+    .orb-3 { width: 200px; height: 200px; background: #C8E6D8; top: 40%; left: 10%; animation-delay: 4s; }
+
+    /* Floating particles */
+    .particles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .particle {
+      position: absolute;
+      font-size: 1.2rem;
+      animation: confetti-fall linear infinite;
+      opacity: 0.7;
+    }
+
+    /* Hero content */
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      max-width: 680px;
+    }
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-pill);
+      padding: 8px 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--peach);
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-sm);
+      animation: fadeInDown 0.6s ease forwards;
+    }
+    .hero-title {
+      color: var(--brown-dark);
+      margin-bottom: 20px;
+      animation: fadeIn 0.8s ease 0.2s both;
+    }
+    .hero-title span { color: var(--peach); }
+    .hero-desc {
+      font-size: 1.1rem;
+      color: var(--brown-mid);
+      margin-bottom: 36px;
+      animation: fadeIn 0.8s ease 0.4s both;
+    }
+    .hero-actions {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeIn 0.8s ease 0.6s both;
+    }
+
+    /* Floating wheel preview */
+    .wheel-preview {
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 500px;
+      height: 500px;
+      opacity: 0.15;
+      animation: spin-slow 30s linear infinite;
+    }
+    @media (max-width: 1100px) { .wheel-preview { display: none; } }
+
+    /* Stats strip */
+    .stats-strip {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 20px;
+    }
+    .stats-grid {
+      max-width: 700px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 20px;
+      text-align: center;
+    }
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--peach);
+      display: block;
+    }
+    .stat-label { font-size: 0.85rem; color: var(--brown-light); font-weight: 600; }
+
+    /* How it works */
+    .how {
+      padding: 80px 20px;
+      background: var(--cream);
+    }
+    .steps {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 24px;
+    }
+    .step-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      padding: 28px 20px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .step-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); }
+    .step-icon { font-size: 2.5rem; margin-bottom: 14px; display: block; }
+    .step-num {
+      display: inline-block;
+      width: 28px; height: 28px;
+      background: linear-gradient(135deg, var(--peach), var(--gold));
+      color: white;
+      border-radius: 50%;
+      font-size: 0.8rem;
+      font-weight: 800;
+      line-height: 28px;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+    .step-title { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--brown-dark); }
+    .step-desc { font-size: 0.875rem; color: var(--brown-light); }
+
+    /* Preview messages */
+    .preview-section {
+      padding: 60px 20px 80px;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--cream-dark) 100%);
+    }
+    .preview-grid {
+      max-width: 800px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 16px;
+    }
+    .preview-card {
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      aspect-ratio: 3/4;
+      position: relative;
+    }
+    .preview-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: var(--shadow-lg); }
+    .preview-card img { width: 100%; height: 100%; object-fit: cover; }
+    .preview-card-label {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(transparent, rgba(74,44,42,0.85));
+      color: white;
+      padding: 20px 10px 10px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* CTA bottom */
+    .cta-bottom {
+      padding: 60px 20px;
+      background: linear-gradient(135deg, var(--peach) 0%, var(--peach-light) 100%);
+      text-align: center;
+    }
+    .cta-bottom h2, .cta-bottom p { color: white; }
+    .cta-bottom p { opacity: 0.9; margin-bottom: 28px; }
+    .btn-white {
+      background: white;
+      color: var(--peach);
+      font-weight: 800;
+    }
+    .btn-white:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+    /* Footer */
+    .footer {
+      padding: 24px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      color: var(--brown-light);
+      font-size: 0.85rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">🌀</span>
+      Vòng Quay Thông Điệp
+    </div>
+    <div class="navbar-actions">
+      <a href="login.html" class="btn btn-secondary btn-sm">Đăng nhập</a>
+      <a href="login.html?tab=register" class="btn btn-primary btn-sm">Bắt đầu miễn phí</a>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <!-- Background decorations -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+    <div class="particles" id="particles"></div>
+
+    <!-- Big decorative wheel bg -->
+    <svg class="wheel-preview" viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="200" cy="200" r="195" stroke="#E07A5F" stroke-width="2"/>
+      <circle cx="200" cy="200" r="150" stroke="#E9C46A" stroke-width="1.5"/>
+      <circle cx="200" cy="200" r="80" fill="#E07A5F" fill-opacity="0.1"/>
+      <!-- Spokes -->
+      <line x1="200" y1="5" x2="200" y2="395" stroke="#E07A5F" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="5" y1="200" x2="395" y2="200" stroke="#E07A5F" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="60" y1="60" x2="340" y2="340" stroke="#E07A5F" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="340" y1="60" x2="60" y2="340" stroke="#E07A5F" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="130" y1="13" x2="270" y2="387" stroke="#E9C46A" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="13" y1="130" x2="387" y2="270" stroke="#E9C46A" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="270" y1="13" x2="130" y2="387" stroke="#E9C46A" stroke-width="1" stroke-opacity="0.3"/>
+      <line x1="13" y1="270" x2="387" y2="130" stroke="#E9C46A" stroke-width="1" stroke-opacity="0.3"/>
+    </svg>
+
+    <div class="hero-inner">
+      <div class="hero-eyebrow">
+        ✨ Reset mỗi ngày lúc 0:00
+      </div>
+      <h1 class="hero-title">
+        Mỗi Ngày Một<br>
+        <span>Thông Điệp</span> Từ Vũ Trụ
+      </h1>
+      <p class="hero-desc">
+        Quay vòng quay, nhận về một lá thư đặc biệt gửi riêng cho bạn hôm nay.<br>
+        70 thông điệp truyền cảm hứng đang chờ được khám phá.
+      </p>
+      <div class="hero-actions">
+        <a href="login.html?tab=register" class="btn btn-primary btn-lg">
+          🎡 Nhận thông điệp hôm nay
+        </a>
+        <a href="login.html" class="btn btn-secondary btn-lg">
+          Đăng nhập
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <div class="stats-strip">
+    <div class="stats-grid">
+      <div>
+        <span class="stat-num">70</span>
+        <span class="stat-label">Thông điệp độc đáo</span>
+      </div>
+      <div>
+        <span class="stat-num">1×</span>
+        <span class="stat-label">Lượt quay mỗi ngày</span>
+      </div>
+      <div>
+        <span class="stat-num">∞</span>
+        <span class="stat-label">Nguồn cảm hứng</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- How it works -->
+  <section class="how">
+    <h2 class="section-title">Cách hoạt động</h2>
+    <p class="section-sub">Chỉ 3 bước đơn giản để nhận thông điệp của ngày hôm nay</p>
+    <div class="steps">
+      <div class="step-card">
+        <span class="step-num">1</span>
+        <span class="step-icon">🔑</span>
+        <div class="step-title">Đăng nhập</div>
+        <p class="step-desc">Tạo tài khoản miễn phí để lưu hành trình của bạn</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">2</span>
+        <span class="step-icon">🎡</span>
+        <div class="step-title">Quay vòng quay</div>
+        <p class="step-desc">Mỗi ngày một lần — vũ trụ chọn thông điệp cho bạn</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">3</span>
+        <span class="step-icon">💌</span>
+        <div class="step-title">Nhận thông điệp</div>
+        <p class="step-desc">Đọc, suy ngẫm và mang theo tinh thần đó cả ngày</p>
+      </div>
+      <div class="step-card">
+        <span class="step-num">4</span>
+        <span class="step-icon">🔥</span>
+        <div class="step-title">Giữ streak</div>
+        <p class="step-desc">Quay mỗi ngày để xây dựng chuỗi ngày truyền cảm hứng</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preview messages -->
+  <section class="preview-section">
+    <h2 class="section-title">Khám phá thông điệp</h2>
+    <p class="section-sub">Một vài trong số 70 thông điệp đang chờ bạn</p>
+    <div class="preview-grid" id="previewGrid"></div>
+  </section>
+
+  <!-- CTA Bottom -->
+  <section class="cta-bottom">
+    <h2>Sẵn sàng bắt đầu hành trình?</h2>
+    <p>Tham gia ngay hôm nay và nhận thông điệp đầu tiên của bạn</p>
+    <a href="login.html?tab=register" class="btn btn-white btn-lg">
+      🌀 Bắt đầu ngay — Miễn phí
+    </a>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>🌀 Vòng Quay Thông Điệp &nbsp;·&nbsp; Mỗi ngày một thông điệp từ vũ trụ</p>
+  </footer>
+
+  <script src="js/data.js"></script>
+  <script>
+    // Floating particles
+    const emojis = ['✨','🌸','💫','🌙','⭐','🦋','🌺','🍃'];
+    const container = document.getElementById('particles');
+    for (let i = 0; i < 15; i++) {
+      const p = document.createElement('div');
+      p.className = 'particle';
+      p.textContent = emojis[i % emojis.length];
+      p.style.cssText = `
+        left: ${Math.random()*100}%;
+        top: ${Math.random()*100}%;
+        animation-duration: ${4 + Math.random()*6}s;
+        animation-delay: ${Math.random()*6}s;
+        font-size: ${0.8 + Math.random()*0.8}rem;
+        opacity: ${0.3 + Math.random()*0.4};
+      `;
+      container.appendChild(p);
+    }
+
+    // Preview cards (random 8 messages)
+    const previewIds = [7,54,11,29,32,65,3,20];
+    const grid = document.getElementById('previewGrid');
+    previewIds.forEach(id => {
+      const msg = getMessageById(id);
+      grid.innerHTML += `
+        <div class="preview-card" onclick="location.href='login.html'">
+          <img src="images/${String(id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
+          <div class="preview-card-label">${msg.name}</div>
+        </div>`;
+    });
+
+    // If already logged in, go to spin
+    const user = localStorage.getItem('vqtd_user');
+    if (user) location.href = 'spin.html';
+  </script>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Vòng Quay — Thông Điệp Hôm Nay</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    body { background: linear-gradient(160deg, #FFF8F0 0%, #FFE8D8 100%); padding-bottom: 80px; }
+
+    /* ── Navbar user ── */
+    .user-name { font-weight: 700; color: var(--brown-dark); font-size: 0.9rem; }
+
+    /* ── Page header ── */
+    .spin-header {
+      text-align: center;
+      padding: 32px 20px 0;
+    }
+    .spin-header h2 { margin-bottom: 6px; }
+    .spin-header p { color: var(--brown-light); font-size: 0.9rem; }
+    .greeting { color: var(--peach); }
+
+    /* ── Wheel section ── */
+    .wheel-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 20px 0;
+      gap: 24px;
+    }
+
+    .wheel-wrapper {
+      position: relative;
+      width: min(360px, 90vw);
+      height: min(360px, 90vw);
+      filter: drop-shadow(0 16px 48px rgba(224,122,95,0.25));
+    }
+    #spinCanvas {
+      width: 100%; height: 100%;
+      cursor: pointer;
+    }
+
+    /* Pointer */
+    .wheel-pointer {
+      position: absolute;
+      top: -18px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0; height: 0;
+      border-left: 14px solid transparent;
+      border-right: 14px solid transparent;
+      border-top: 36px solid var(--peach);
+      filter: drop-shadow(0 4px 8px rgba(224,122,95,0.5));
+      z-index: 2;
+    }
+    .wheel-pointer::after {
+      content: '';
+      position: absolute;
+      top: -40px;
+      left: -10px;
+      width: 20px; height: 20px;
+      background: var(--peach);
+      border-radius: 50%;
+    }
+
+    /* Center circle of wheel */
+    .wheel-center {
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 70px; height: 70px;
+      background: var(--white);
+      border-radius: 50%;
+      border: 4px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: var(--shadow-md);
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Spin button */
+    .spin-btn-wrapper { text-align: center; }
+    #spinBtn {
+      width: min(260px, 80vw);
+      height: 68px;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      border-radius: var(--radius-pill);
+      background: linear-gradient(135deg, var(--peach) 0%, var(--peach-light) 100%);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(224,122,95,0.45);
+      transition: all 0.3s var(--transition);
+      position: relative;
+      overflow: hidden;
+    }
+    #spinBtn::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
+      transform: translateX(-100%);
+    }
+    #spinBtn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 12px 40px rgba(224,122,95,0.55);
+    }
+    #spinBtn:hover:not(:disabled)::before {
+      animation: shimmer 0.8s ease forwards;
+    }
+    #spinBtn:active:not(:disabled) { transform: scale(0.98); }
+    #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+    #spinBtn.spinning { animation: pulse 0.3s ease infinite; }
+
+    /* Already spun state */
+    .already-spun {
+      display: none;
+      text-align: center;
+      animation: fadeIn 0.5s ease forwards;
+    }
+    .already-spun.show { display: block; }
+    .already-spun .today-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 2px solid var(--peach-soft);
+      padding: 24px;
+      max-width: 340px;
+      margin: 0 auto 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .already-spun .today-img {
+      width: 100%;
+      max-width: 200px;
+      border-radius: var(--radius-sm);
+      margin: 0 auto 14px;
+      box-shadow: var(--shadow-sm);
+    }
+    .already-spun .today-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      margin-bottom: 6px;
+    }
+    .already-spun .today-desc {
+      font-size: 0.85rem;
+      color: var(--brown-mid);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+    .countdown-box {
+      background: var(--gold-soft);
+      border: 1px solid #F0D080;
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      display: inline-block;
+      margin-bottom: 16px;
+    }
+    .countdown-label { font-size: 0.75rem; color: var(--brown-light); font-weight: 600; }
+    .countdown-time { font-size: 1.5rem; font-weight: 800; color: var(--brown-dark); font-family: 'Playfair Display', serif; }
+
+    /* ── Result overlay ── */
+    .result-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 300;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+    .result-overlay.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    .result-bg {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(160deg, rgba(255,232,216,0.97) 0%, rgba(255,215,195,0.97) 100%);
+      backdrop-filter: blur(8px);
+    }
+
+    /* Confetti */
+    .confetti-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+    .confetti-piece {
+      position: absolute;
+      top: -10px;
+      width: 10px; height: 10px;
+      border-radius: 2px;
+      animation: confetti-fall 3s linear forwards;
+    }
+
+    /* Envelope animation */
+    .envelope-wrapper {
+      position: relative;
+      z-index: 1;
+      perspective: 1000px;
+      width: min(320px, 90vw);
+      margin-bottom: 20px;
+      animation: bounceIn 0.7s var(--transition) forwards;
+    }
+    .envelope {
+      width: 100%;
+      background: linear-gradient(135deg, #FFF0E4, #FFE0CC);
+      border-radius: 12px;
+      border: 2px solid #F0C8B0;
+      box-shadow: var(--shadow-lg);
+      overflow: hidden;
+      position: relative;
+    }
+    .envelope-top {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 60px;
+      background: linear-gradient(135deg, #FFD6B8, #FFC4A0);
+      transform-origin: top center;
+      border-radius: 12px 12px 0 0;
+      transition: transform 0.6s ease;
+      z-index: 2;
+      clip-path: polygon(0 0, 100% 0, 50% 100%);
+    }
+    .envelope-top.open { transform: rotateX(180deg); }
+    .envelope-body { padding: 60px 16px 16px; min-height: 200px; }
+
+    /* Result card inside envelope */
+    .result-card {
+      background: white;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transform: translateY(60px);
+      opacity: 0;
+      transition: transform 0.6s ease 0.5s, opacity 0.6s ease 0.5s;
+    }
+    .result-card.show { transform: translateY(0); opacity: 1; }
+    .result-card img { width: 100%; display: block; }
+    .result-card-body { padding: 16px; }
+    .result-card-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      margin-bottom: 8px;
+    }
+    .result-card-desc {
+      font-size: 0.875rem;
+      color: var(--brown-mid);
+      line-height: 1.65;
+    }
+
+    /* Result actions */
+    .result-actions {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+      animation: fadeIn 0.5s ease 1s both;
+    }
+    .result-actions .btn { font-size: 0.875rem; padding: 11px 20px; }
+
+    /* ── Bottom nav ── */
+    .bottom-nav { display: flex; }
+
+    /* ── Mini stats ── */
+    .mini-stats {
+      max-width: 400px;
+      margin: 24px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3,1fr);
+      gap: 12px;
+      padding: 0 20px;
+    }
+    .mini-stat {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      padding: 14px 10px;
+      text-align: center;
+    }
+    .mini-stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--peach);
+      display: block;
+    }
+    .mini-stat-label { font-size: 0.7rem; color: var(--brown-light); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">🌀</span>
+      <span>Vòng Quay</span>
+    </div>
+    <div class="navbar-actions">
+      <div class="streak-badge" id="streakBadge">
+        <span class="fire">🔥</span>
+        <span id="streakNum">0</span> ngày
+      </div>
+      <span class="user-name" id="userName"></span>
+    </div>
+  </nav>
+
+  <div class="page">
+
+    <!-- Header -->
+    <div class="spin-header">
+      <h2>Thông Điệp <span class="greeting" id="greetingTime">Hôm Nay</span></h2>
+      <p id="todayDate"></p>
+    </div>
+
+    <!-- Mini stats -->
+    <div class="mini-stats">
+      <div class="mini-stat">
+        <span class="mini-stat-num" id="totalSpins">0</span>
+        <span class="mini-stat-label">Lần quay</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-num" id="uniqueCount">0</span>
+        <span class="mini-stat-label">Thông điệp</span>
+      </div>
+      <div class="mini-stat">
+        <span class="mini-stat-num" id="streakStat">0</span>
+        <span class="mini-stat-label">Ngày liên tiếp</span>
+      </div>
+    </div>
+
+    <!-- Wheel section -->
+    <div class="wheel-section">
+      <div class="wheel-wrapper" id="wheelWrapper">
+        <div class="wheel-pointer"></div>
+        <canvas id="spinCanvas" width="400" height="400"></canvas>
+        <div class="wheel-center">🌀</div>
+      </div>
+
+      <!-- Spin button -->
+      <div class="spin-btn-wrapper" id="spinBtnSection">
+        <button id="spinBtn" onclick="startSpin()">QUAY</button>
+      </div>
+
+      <!-- Already spun -->
+      <div class="already-spun" id="alreadySpun">
+        <div class="today-card">
+          <img class="today-img" id="todayMsgImg" src="" alt="">
+          <div class="today-name" id="todayMsgName"></div>
+          <div class="today-desc" id="todayMsgDesc"></div>
+          <div class="countdown-box">
+            <div class="countdown-label">Lượt quay tiếp theo sau</div>
+            <div class="countdown-time" id="countdown">--:--:--</div>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+          <button class="btn btn-primary btn-sm" onclick="showResult()">Xem lại thông điệp</button>
+          <a href="library.html" class="btn btn-secondary btn-sm">📚 Thư viện</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Result Overlay -->
+  <div class="result-overlay" id="resultOverlay">
+    <div class="result-bg" onclick="closeResult()"></div>
+    <div class="confetti-container" id="confettiContainer"></div>
+
+    <div class="envelope-wrapper">
+      <div class="envelope">
+        <div class="envelope-top" id="envelopeTop"></div>
+        <div class="envelope-body">
+          <div class="result-card" id="resultCard">
+            <img id="resultImg" src="" alt="">
+            <div class="result-card-body">
+              <div class="result-card-name" id="resultName"></div>
+              <div class="result-card-desc" id="resultDesc"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="result-actions">
+      <button class="btn btn-primary" onclick="shareMessage()">💌 Chia sẻ</button>
+      <button class="btn btn-secondary" onclick="saveImage()">⬇️ Lưu ảnh</button>
+      <a href="library.html" class="btn btn-secondary">📚 Thư viện</a>
+      <button class="btn btn-ghost" onclick="closeResult()">✕ Đóng</button>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="spin.html" class="active">
+      <span class="nav-icon">🎡</span>
+      Quay
+    </a>
+    <a href="library.html">
+      <span class="nav-icon">📚</span>
+      Thư viện
+    </a>
+    <a href="profile.html">
+      <span class="nav-icon">👤</span>
+      Hồ sơ
+    </a>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    // ── Auth guard ──
+    const user = getUser();
+    if (!user) location.href = 'login.html';
+    document.getElementById('userName').textContent = user?.name || '';
+
+    // ── Greeting ──
+    const hour = new Date().getHours();
+    const greet = hour < 12 ? 'Buổi Sáng' : hour < 18 ? 'Buổi Chiều' : 'Buổi Tối';
+    document.getElementById('greetingTime').textContent = greet;
+
+    // ── Date ──
+    const dateOpts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
+    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('vi-VN', dateOpts);
+
+    // ── Stats ──
+    function refreshStats() {
+      const h = getHistory();
+      const s = getStreak();
+      document.getElementById('totalSpins').textContent = h.length;
+      document.getElementById('uniqueCount').textContent = uniqueMessagesCount();
+      document.getElementById('streakNum').textContent = s.count;
+      document.getElementById('streakStat').textContent = s.count;
+    }
+    refreshStats();
+
+    // ── Check if already spun ──
+    let currentMsgId = null;
+    function checkTodaySpin() {
+      const spin = getTodaySpin();
+      if (spin) {
+        currentMsgId = spin.messageId;
+        document.getElementById('spinBtnSection').style.display = 'none';
+        const alreadySpun = document.getElementById('alreadySpun');
+        alreadySpun.classList.add('show');
+        const msg = getMessageById(spin.messageId);
+        document.getElementById('todayMsgImg').src = `images/${String(spin.messageId).padStart(2,'0')}.png`;
+        document.getElementById('todayMsgName').textContent = msg.name;
+        document.getElementById('todayMsgDesc').textContent = msg.desc;
+        startCountdown();
+      }
+    }
+    checkTodaySpin();
+
+    // ── Countdown ──
+    function startCountdown() {
+      function update() {
+        const secs = secondsUntilMidnight();
+        const h = Math.floor(secs/3600);
+        const m = Math.floor((secs%3600)/60);
+        const s = secs%60;
+        document.getElementById('countdown').textContent =
+          `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+        if (secs <= 0) location.reload();
+      }
+      update();
+      setInterval(update, 1000);
+    }
+
+    // ── SPIN WHEEL (Canvas) ──
+    const canvas = document.getElementById('spinCanvas');
+    const ctx    = canvas.getContext('2d');
+    const W = 400, H = 400, CX = 200, CY = 200, R = 185;
+    const SEGMENTS = 12;
+    const COLORS = [
+      '#FFB5A7','#FFC8A2','#FFD9B0','#FFE5C0',
+      '#FFF0C8','#E8F5D0','#C8E6D8','#B8D8E8',
+      '#C8C0E8','#DDB8D8','#ECC8D8','#F5D8C8'
+    ];
+    const ICONS  = ['⭐','🌸','🌙','💫','🦋','🌺','✨','🌼','🍃','🌈','💖','🌟'];
+    const NAMES  = ['Tình Yêu','Hy Vọng','Bình An','Dũng Cảm','Trí Tuệ','Thịnh Vượng',
+                    'Hạnh Phúc','Sáng Tạo','Kiên Nhẫn','Chữa Lành','Phát Triển','Niềm Tin'];
+
+    let currentAngle = 0;
+    let isSpinning   = false;
+
+    function drawWheel(rotation) {
+      ctx.clearRect(0, 0, W, H);
+      const seg = (Math.PI * 2) / SEGMENTS;
+
+      for (let i = 0; i < SEGMENTS; i++) {
+        const start = rotation + i * seg;
+        const end   = start + seg;
+        const mid   = start + seg / 2;
+
+        // Sector fill
+        ctx.beginPath();
+        ctx.moveTo(CX, CY);
+        ctx.arc(CX, CY, R, start, end);
+        ctx.closePath();
+        ctx.fillStyle = COLORS[i];
+        ctx.fill();
+
+        // Sector border
+        ctx.strokeStyle = 'white';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Icon
+        const iconR = R * 0.65;
+        const ix = CX + Math.cos(mid) * iconR;
+        const iy = CY + Math.sin(mid) * iconR;
+        ctx.save();
+        ctx.translate(ix, iy);
+        ctx.rotate(mid + Math.PI / 2);
+        ctx.font = '22px serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(ICONS[i], 0, 0);
+        ctx.restore();
+
+        // Short label
+        const labelR = R * 0.38;
+        const lx = CX + Math.cos(mid) * labelR;
+        const ly = CY + Math.sin(mid) * labelR;
+        ctx.save();
+        ctx.translate(lx, ly);
+        ctx.rotate(mid + Math.PI / 2);
+        ctx.font = 'bold 9px Nunito, sans-serif';
+        ctx.fillStyle = 'rgba(74,44,42,0.6)';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(NAMES[i], 0, 0);
+        ctx.restore();
+      }
+
+      // Outer ring
+      ctx.beginPath();
+      ctx.arc(CX, CY, R + 4, 0, Math.PI * 2);
+      ctx.strokeStyle = 'rgba(224,122,95,0.4)';
+      ctx.lineWidth = 8;
+      ctx.stroke();
+    }
+
+    drawWheel(0);
+
+    // ── Spin logic ──
+    function startSpin() {
+      if (isSpinning) return;
+      isSpinning = true;
+      const btn = document.getElementById('spinBtn');
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      // Pick random message
+      const msg = getRandomMessage();
+      currentMsgId = msg.id;
+
+      // Calculate rotation: land on a random segment + many full rotations
+      const extraSpins = 5 + Math.random() * 3; // 5-8 full spins
+      const targetAngle = currentAngle + (Math.PI * 2 * extraSpins) + Math.random() * Math.PI * 2;
+
+      const duration = 4000; // ms
+      const startTime = performance.now();
+      const startAngle = currentAngle;
+
+      function easeOut(t) {
+        return 1 - Math.pow(1 - t, 4);
+      }
+
+      function animate(time) {
+        const elapsed = time - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        currentAngle = startAngle + (targetAngle - startAngle) * easeOut(progress);
+        drawWheel(currentAngle);
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          currentAngle = targetAngle % (Math.PI * 2);
+          isSpinning = false;
+          onSpinEnd(msg);
+        }
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    function onSpinEnd(msg) {
+      // Save to history & streak
+      addToHistory(msg.id);
+      updateStreak();
+      refreshStats();
+
+      // Show result after short delay
+      setTimeout(() => showResultFor(msg), 400);
+    }
+
+    // ── Result overlay ──
+    function showResult() {
+      if (!currentMsgId) return;
+      showResultFor(getMessageById(currentMsgId));
+    }
+
+    function showResultFor(msg) {
+      // Set content
+      document.getElementById('resultImg').src = `images/${String(msg.id).padStart(2,'0')}.png`;
+      document.getElementById('resultName').textContent = msg.name;
+      document.getElementById('resultDesc').textContent = msg.desc;
+
+      // Show overlay
+      const overlay = document.getElementById('resultOverlay');
+      overlay.classList.add('show');
+      document.body.style.overflow = 'hidden';
+
+      // Open envelope after short delay
+      setTimeout(() => {
+        document.getElementById('envelopeTop').classList.add('open');
+        setTimeout(() => {
+          document.getElementById('resultCard').classList.add('show');
+          spawnConfetti();
+        }, 400);
+      }, 300);
+    }
+
+    function closeResult() {
+      const overlay = document.getElementById('resultOverlay');
+      overlay.classList.remove('show');
+      document.body.style.overflow = '';
+      document.getElementById('envelopeTop').classList.remove('open');
+      document.getElementById('resultCard').classList.remove('show');
+      document.getElementById('confettiContainer').innerHTML = '';
+
+      // If this was a fresh spin, show "already spun" UI
+      if (!document.getElementById('alreadySpun').classList.contains('show')) {
+        document.getElementById('spinBtnSection').style.display = 'none';
+        document.getElementById('alreadySpun').classList.add('show');
+        const msg = getMessageById(currentMsgId);
+        document.getElementById('todayMsgImg').src = `images/${String(currentMsgId).padStart(2,'0')}.png`;
+        document.getElementById('todayMsgName').textContent = msg.name;
+        document.getElementById('todayMsgDesc').textContent = msg.desc;
+        startCountdown();
+      }
+    }
+
+    // ── Confetti ──
+    const confettiColors = ['#FFB5A7','#E9C46A','#A8C5A0','#B8D8E8','#DDB8D8','#FFC8A2'];
+    function spawnConfetti() {
+      const container = document.getElementById('confettiContainer');
+      for (let i = 0; i < 40; i++) {
+        const piece = document.createElement('div');
+        piece.className = 'confetti-piece';
+        piece.style.cssText = `
+          left: ${Math.random()*100}%;
+          background: ${confettiColors[Math.floor(Math.random()*confettiColors.length)]};
+          width: ${6+Math.random()*8}px;
+          height: ${6+Math.random()*8}px;
+          border-radius: ${Math.random()>0.5?'50%':'2px'};
+          animation-duration: ${2+Math.random()*2}s;
+          animation-delay: ${Math.random()*0.5}s;
+        `;
+        container.appendChild(piece);
+      }
+    }
+
+    // ── Share ──
+    function shareMessage() {
+      if (!currentMsgId) return;
+      const msg = getMessageById(currentMsgId);
+      const text = `🌀 Thông điệp hôm nay của tôi: "${msg.name}" — ${msg.desc}`;
+      if (navigator.share) {
+        navigator.share({ title: 'Vòng Quay Thông Điệp', text });
+      } else {
+        navigator.clipboard.writeText(text);
+        showToast('Đã copy thông điệp vào clipboard! ✅');
+      }
+    }
+
+    function saveImage() {
+      if (!currentMsgId) return;
+      const a = document.createElement('a');
+      a.href = `images/${String(currentMsgId).padStart(2,'0')}.png`;
+      a.download = `thong-diep-${currentMsgId}.png`;
+      a.click();
+    }
+
+    // ── Toast ──
+    let toastTimer;
+    function showToast(msg) {
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.classList.add('show');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    // Click wheel to spin
+    canvas.addEventListener('click', () => {
+      if (!isSpinning && !hasSpunToday()) startSpin();
+    });
+  </script>
+</body>
+</html>

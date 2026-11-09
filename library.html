@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thư Viện Thông Điệp</title>
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    body { background: var(--cream); padding-bottom: 80px; }
+
+    .lib-header {
+      padding: 32px 20px 24px;
+      text-align: center;
+    }
+    .lib-header h2 { margin-bottom: 6px; }
+
+    /* Progress bar */
+    .progress-section {
+      max-width: 500px;
+      margin: 0 auto 32px;
+      padding: 0 20px;
+    }
+    .progress-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--brown-mid);
+      margin-bottom: 8px;
+    }
+    .progress-label span { color: var(--peach); }
+
+    /* Tab filters */
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+      padding: 0 20px;
+      margin-bottom: 24px;
+    }
+    .filter-tab {
+      padding: 8px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--white);
+      border: 2px solid var(--border);
+      color: var(--brown-light);
+      transition: all 0.2s;
+    }
+    .filter-tab.active {
+      background: var(--peach);
+      border-color: var(--peach);
+      color: white;
+    }
+    .filter-tab:hover:not(.active) { border-color: var(--peach); color: var(--peach); }
+
+    /* Grid */
+    .library-grid {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px;
+    }
+    .lib-card {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      animation: fadeIn 0.4s ease forwards;
+    }
+    .lib-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+    .lib-card img { width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block; }
+    .lib-card-info { padding: 10px; }
+    .lib-card-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      line-height: 1.3;
+      margin-bottom: 4px;
+    }
+    .lib-card-date {
+      font-size: 0.65rem;
+      color: var(--brown-light);
+      font-weight: 600;
+    }
+    .lib-card-new {
+      display: inline-block;
+      background: var(--peach);
+      color: white;
+      font-size: 0.6rem;
+      font-weight: 800;
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      display: none;
+    }
+    .empty-state.show { display: block; }
+    .empty-emoji { font-size: 3rem; margin-bottom: 16px; }
+    .empty-state h3 { margin-bottom: 8px; }
+    .empty-state p { color: var(--brown-light); font-size: 0.9rem; margin-bottom: 24px; }
+
+    /* Detail modal */
+    .detail-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 400;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    .detail-modal.show { opacity: 1; pointer-events: all; }
+    .detail-bg { position: absolute; inset: 0; background: rgba(74,44,42,0.5); backdrop-filter: blur(4px); }
+    .detail-box {
+      position: relative;
+      z-index: 1;
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-lg);
+      width: 100%; max-width: 380px;
+      overflow: hidden;
+      animation: scaleIn 0.3s var(--transition) forwards;
+    }
+    .detail-box img { width: 100%; display: block; }
+    .detail-body { padding: 20px; }
+    .detail-name { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+    .detail-desc { font-size: 0.9rem; color: var(--brown-mid); line-height: 1.65; margin-bottom: 16px; }
+    .detail-date { font-size: 0.8rem; color: var(--brown-light); font-weight: 600; margin-bottom: 16px; }
+    .detail-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .detail-close {
+      position: absolute;
+      top: 12px; right: 12px;
+      width: 32px; height: 32px;
+      background: rgba(255,255,255,0.9);
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: var(--shadow-sm);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">📚</span>
+      Thư Viện
+    </div>
+    <div class="navbar-actions">
+      <a href="spin.html" class="btn btn-primary btn-sm">🎡 Quay ngay</a>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div class="lib-header">
+      <h2>Thư Viện Thông Điệp</h2>
+      <p class="section-sub" style="margin-bottom:0">Những thông điệp vũ trụ đã gửi đến bạn</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="progress-section">
+      <div class="progress-label">
+        <span>Bộ sưu tập của bạn</span>
+        <span><span id="uniqueCount">0</span>/70 thông điệp</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <!-- Filter tabs -->
+    <div class="filter-tabs">
+      <div class="filter-tab active" onclick="filter('all', this)">Tất cả</div>
+      <div class="filter-tab" onclick="filter('week', this)">7 ngày qua</div>
+      <div class="filter-tab" onclick="filter('month', this)">Tháng này</div>
+    </div>
+
+    <!-- Grid -->
+    <div class="library-grid" id="libraryGrid"></div>
+
+    <!-- Empty state -->
+    <div class="empty-state" id="emptyState">
+      <div class="empty-emoji">🎡</div>
+      <h3>Chưa có thông điệp nào</h3>
+      <p>Hãy quay vòng quay để nhận thông điệp đầu tiên của bạn!</p>
+      <a href="spin.html" class="btn btn-primary">🎡 Quay ngay</a>
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <div class="detail-modal" id="detailModal">
+    <div class="detail-bg" onclick="closeDetail()"></div>
+    <div class="detail-box">
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+      <img id="detailImg" src="" alt="">
+      <div class="detail-body">
+        <div class="detail-name" id="detailName"></div>
+        <div class="detail-date" id="detailDate"></div>
+        <div class="detail-desc" id="detailDesc"></div>
+        <div class="detail-actions">
+          <button class="btn btn-primary btn-sm" onclick="shareDetail()">💌 Chia sẻ</button>
+          <button class="btn btn-secondary btn-sm" onclick="saveDetail()">⬇️ Lưu ảnh</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="spin.html">
+      <span class="nav-icon">🎡</span>
+      Quay
+    </a>
+    <a href="library.html" class="active">
+      <span class="nav-icon">📚</span>
+      Thư viện
+    </a>
+    <a href="profile.html">
+      <span class="nav-icon">👤</span>
+      Hồ sơ
+    </a>
+  </nav>
+
+  <script src="js/data.js"></script>
+  <script src="js/storage.js"></script>
+  <script>
+    if (!getUser()) location.href = 'login.html';
+
+    let currentDetailId = null;
+    const history = getHistory();
+    const unique  = uniqueMessagesCount();
+    document.getElementById('uniqueCount').textContent = unique;
+    document.getElementById('progressFill').style.width = (unique / 70 * 100) + '%';
+
+    function formatDate(dateStr) {
+      const d = new Date(dateStr);
+      return d.toLocaleDateString('vi-VN', { weekday:'short', day:'numeric', month:'long', year:'numeric' });
+    }
+
+    function renderGrid(items) {
+      const grid = document.getElementById('libraryGrid');
+      const empty = document.getElementById('emptyState');
+      grid.innerHTML = '';
+      if (!items.length) { empty.classList.add('show'); return; }
+      empty.classList.remove('show');
+      const today = getTodayStr();
+      items.forEach(item => {
+        const msg = getMessageById(item.messageId);
+        const isNew = item.date === today;
+        grid.innerHTML += `
+          <div class="lib-card" onclick="openDetail(${item.messageId}, '${item.date}')">
+            <img src="images/${String(item.messageId).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
+            <div class="lib-card-info">
+              <div class="lib-card-name">${msg.name}${isNew ? '<span class="lib-card-new">MỚI</span>' : ''}</div>
+              <div class="lib-card-date">${formatDate(item.date)}</div>
+            </div>
+          </div>`;
+      });
+    }
+
+    function filter(type, el) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      let items = [...history];
+      if (type === 'week') {
+        const cutoff = new Date(); cutoff.setDate(cutoff.getDate() - 7);
+        items = items.filter(h => new Date(h.date) >= cutoff);
+      } else if (type === 'month') {
+        const now = new Date();
+        items = items.filter(h => {
+          const d = new Date(h.date);
+          return d.getMonth() === now.getMonth() && d.getFullYear() === now.getFullYear();
+        });
+      }
+      renderGrid(items);
+    }
+
+    renderGrid(history);
+
+    function openDetail(msgId, date) {
+      currentDetailId = msgId;
+      const msg = getMessageById(msgId);
+      document.getElementById('detailImg').src = `images/${String(msgId).padStart(2,'0')}.png`;
+      document.getElementById('detailName').textContent = msg.name;
+      document.getElementById('detailDate').textContent = '📅 ' + formatDate(date);
+      document.getElementById('detailDesc').textContent = msg.desc;
+      document.getElementById('detailModal').classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDetail() {
+      document.getElementById('detailModal').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function shareDetail() {
+      const msg = getMessageById(currentDetailId);
+      const text = `🌀 Thông điệp: "${msg.name}" — ${msg.desc}`;
+      if (navigator.share) navigator.share({ title: 'Vòng Quay Thông Điệp', text });
+      else navigator.clipboard?.writeText(text);
+    }
+
+    function saveDetail() {
+      const a = document.createElement('a');
+      a.href = `images/${String(currentDetailId).padStart(2,'0')}.png`;
+      a.download = `thong-diep-${currentDetailId}.png`;
+      a.click();
+    }
+  </script>
+</body>
+</html>
