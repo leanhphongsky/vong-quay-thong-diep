@@ -1,0 +1,14 @@
+# Dependencies
+node_modules/
+
+# Environment variables (KHÔNG push key lên GitHub)
+.env
+.env.local
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
