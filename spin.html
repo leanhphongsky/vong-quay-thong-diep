@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vòng Quay Thông Điệp — Vũ Trụ Dẫn Lối</title>
   <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/kokonut.css">
   <style>
     body {
       background: radial-gradient(circle at 50% 10%, #FFFDF9 0%, #FFF3EB 55%, #FDE3D6 100%);
@@ -75,7 +76,6 @@
       box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
     }
 
-    /* Vạch gạch chân cam sáng bóng đặc trưng Kokonut UI */
     .morphic-nav-item.active::after {
       content: '';
       position: absolute;
@@ -102,11 +102,7 @@
     .tab-view { display: none; }
     .tab-view.active { display: block; animation: fadeIn 0.35s ease forwards; }
 
-    /* ── General Section Headers ── */
-    .section-hero {
-      text-align: center;
-      padding: 24px 20px 10px;
-    }
+    .section-hero { text-align: center; padding: 24px 20px 10px; }
     .badge-eyebrow {
       display: inline-flex;
       align-items: center;
@@ -139,11 +135,6 @@
       color: var(--brown-dark);
       margin-bottom: 14px;
       line-height: 1.25;
-    }
-    .home-hero-title span {
-      background: linear-gradient(135deg, #E07A5F, #E9C46A);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
     }
     .home-hero-desc {
       font-size: 1.05rem;
@@ -190,22 +181,10 @@
       text-align: center;
       box-shadow: var(--shadow-sm);
     }
-    .mini-stat-num {
-      font-family: 'Cinzel', 'Playfair Display', serif;
-      font-size: 1.35rem;
-      font-weight: 700;
-      color: var(--peach);
-      display: block;
-    }
+    .mini-stat-num { font-family: 'Cinzel', 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--peach); display: block; }
     .mini-stat-label { font-size: 0.68rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
 
-    .wheel-section {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px 16px 0;
-      gap: 20px;
-    }
+    .wheel-section { display: flex; flex-direction: column; align-items: center; padding: 20px 16px 0; gap: 20px; }
     .wheel-outer-glow {
       position: relative;
       padding: 12px;
@@ -266,15 +245,7 @@
 
     .already-spun { display: none; text-align: center; animation: fadeIn 0.5s ease forwards; max-width: 440px; width: 100%; }
     .already-spun.show { display: block; }
-    .today-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 2px solid var(--peach-soft);
-      padding: 22px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow-md);
-      position: relative;
-    }
+    .today-card { background: var(--white); border-radius: var(--radius); border: 2px solid var(--peach-soft); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-md); position: relative; }
     .today-img { width: 100%; max-width: 220px; border-radius: var(--radius-sm); margin: 0 auto 14px; display: block; box-shadow: var(--shadow-sm); }
     .today-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 6px; }
     .today-desc { font-size: 0.88rem; color: var(--brown-mid); line-height: 1.6; margin-bottom: 16px; }
@@ -294,7 +265,7 @@
     .lib-card-img-box { width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative; background: #FDF4ED; }
     .lib-card-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* ── TAB VỀ DỰ ÁN (ABOUT) STYLES ── */
+    /* ── TAB VỀ DỰ ÁN STYLES ── */
     .about-card {
       background: var(--white);
       border-radius: var(--radius);
@@ -309,7 +280,7 @@
     .about-step { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
     .about-step-num { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #E07A5F, #E9C46A); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
 
-    /* ── TAB CÀI ĐẶT (SETTINGS) STYLES ── */
+    /* ── TAB CÀI ĐẶT STYLES ── */
     .settings-container { max-width: 600px; margin: 0 auto 30px; padding: 0 16px; }
     .settings-group {
       background: var(--white);
@@ -320,7 +291,7 @@
       box-shadow: var(--shadow-sm);
     }
     .settings-group-title { font-size: 0.84rem; font-weight: 800; color: var(--brown-light); text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px; }
-    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
     .settings-row:last-child { border-bottom: none; }
     .settings-slider { width: 140px; accent-color: var(--peach); }
     .badges-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
@@ -328,7 +299,7 @@
     .badge-item.earned { border-color: var(--gold); background: #FFF9E6; }
     .badge-item:not(.earned) { opacity: 0.4; filter: grayscale(1); }
 
-    /* Ritual Wax Seal Modal & Story Modal */
+    /* Modals */
     .ritual-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(14, 17, 30, 0.94); backdrop-filter: blur(12px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; overflow-y: auto; }
     .ritual-overlay.show { opacity: 1; pointer-events: all; }
     .seal-step { text-align: center; animation: scaleIn 0.5s var(--transition) forwards; max-width: 360px; width: 100%; }
@@ -336,7 +307,6 @@
     .letter-step { display: none; width: 100%; max-width: 480px; animation: scaleIn 0.5s var(--transition) forwards; background: #FFFDF9; border-radius: var(--radius); border: 2px solid #E9C46A; padding: 24px; position: relative; max-height: 88vh; overflow-y: auto; }
     .letter-step.show { display: block; }
     .letter-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.06); border: none; font-size: 1.1rem; cursor: pointer; }
-    .letter-img { width: 100%; max-width: 280px; border-radius: var(--radius-sm); margin: 0 auto 16px; display: block; box-shadow: var(--shadow-md); }
     .story-modal { position: fixed; inset: 0; z-index: 600; background: rgba(0, 0, 0, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .story-modal.show { opacity: 1; pointer-events: all; }
     .story-preview-img { max-height: 72vh; max-width: 90vw; border-radius: 18px; margin-bottom: 16px; }
@@ -376,7 +346,7 @@
   <div class="page" style="padding-top:10px;">
 
     <!-- ========================================== -->
-    <!-- 1. TAB HOME (GIỚI THIỆU & LANDING)         -->
+    <!-- 1. TAB HOME (KOKONUT CARD STACK & MARKER)  -->
     <!-- ========================================== -->
     <div id="viewHome" class="tab-view">
       <div class="container">
@@ -384,7 +354,7 @@
           <div class="badge-eyebrow">✦ Trạm Sạc Tâm Hồn & Chánh Niệm</div>
           <h1 class="home-hero-title">
             Mỗi Ngày Một Lá Thư<br>
-            <span>Từ Vũ Trụ</span> Gửi Bạn
+            <span class="marker-highlight">Từ Vũ Trụ</span> Gửi Bạn
           </h1>
           <p class="home-hero-desc">
             Dành ra 2 phút bình an mỗi sáng để đón nhận thông điệp dẫn lối. 70 bài học chữa lành được chắt lọc để nuôi dưỡng nội lực và thắp sáng năng lượng tích cực trong bạn.
@@ -396,6 +366,23 @@
             <button class="btn btn-secondary btn-lg" onclick="switchMainTab('library')">
               📚 Khám Phá 70 Thông Điệp
             </button>
+          </div>
+        </div>
+
+        <!-- KOKONUT UI CARD STACK (THROW DECK) -->
+        <div style="margin: 36px auto 44px; text-align: center;">
+          <h3 style="font-family:'Cinzel',serif;font-size:1.3rem;margin-bottom:6px;">
+            Bộ Bài Thông Điệp Khởi Sắc ✦ Lướt Xem
+          </h3>
+          <p style="font-size:0.86rem;color:var(--brown-light);margin-bottom:18px;">
+            Trải nghiệm bộ bài Tarot thông điệp 3D — Lướt qua từng hạt mầm trí tuệ
+          </p>
+          <div class="stack-deck-wrapper" id="homeStackDeck">
+            <!-- 3 lá bài xếp chồng động -->
+          </div>
+          <div class="stack-controls">
+            <button class="btn btn-secondary btn-sm" onclick="prevStackDeck()">← Lá trước</button>
+            <button class="btn btn-gold btn-sm" onclick="nextStackDeck()">Lá tiếp theo →</button>
           </div>
         </div>
 
@@ -429,7 +416,7 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. TAB VÒNG QUAY (SPIN)                    -->
+    <!-- 2. TAB VÒNG QUAY (KOKONUT LOADER & WHEEL)  -->
     <!-- ========================================== -->
     <div id="viewSpin" class="tab-view active">
       <div class="section-hero">
@@ -476,6 +463,18 @@
 
         <div class="spin-btn-wrapper" id="spinBtnSection">
           <button id="spinBtn" onclick="startSpin()">QUAY VÒNG QUAY</button>
+        </div>
+
+        <!-- KOKONUT ORBITAL LOADER (HIỆN KHI VÒNG ĐANG QUAY) -->
+        <div id="spinOrbitalLoader" style="display:none;text-align:center;">
+          <div class="orbital-loader">
+            <div class="orbital-ring"></div>
+            <div class="orbital-ring"></div>
+            <div class="orbital-core">✦</div>
+          </div>
+          <div style="font-size:0.86rem;font-weight:700;color:var(--peach);">
+            Đang kết nối năng lượng vũ trụ...
+          </div>
         </div>
 
         <div class="already-spun" id="alreadySpun">
@@ -553,7 +552,7 @@
             Trong nhịp sống hiện đại hối hả, chúng ta thường bị cuốn vào những lo toan, thông báo và áp lực bên ngoài. <strong>Vòng Quay Thông Điệp</strong> ra đời như một điểm chạm tĩnh lặng — nơi mỗi ngày bạn dành ra đúng 2 phút để quay về lắng nghe chính mình.
           </p>
           <p>
-            Đây không phải là trò chơi may rủi hay bói toán mê tín, mà là một công cụ thực hành chánh niệm giúp hướng tâm trí bạn về những giá trị sống tích cực, tử tế và an yên.
+            Đây không phải là trò chơi may rủi hay bói toán mê tín, mà là một công cụ thực hành <span class="marker-highlight">chánh niệm & chữa lành</span> giúp hướng tâm trí bạn về những giá trị sống tích cực, tử tế và an yên.
           </p>
         </div>
 
@@ -585,57 +584,69 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 5. TAB CÀI ĐẶT & HỒ SƠ (SETTINGS)          -->
+    <!-- 5. TAB CÀI ĐẶT (AVATAR PICKER & SWITCH)    -->
     <!-- ========================================== -->
     <div id="viewSettings" class="tab-view">
       <div class="section-hero">
         <div class="badge-eyebrow">⚙️ Tùy Chỉnh & Tài Khoản</div>
         <h2 style="font-family:'Cinzel',serif;">Cài Đặt Ứng Dụng</h2>
-        <p style="color:var(--brown-light);font-size:0.88rem;">Quản lý âm thanh, tài khoản và dữ liệu của bạn</p>
+        <p style="color:var(--brown-light);font-size:0.88rem;">Quản lý âm thanh, linh vật và dữ liệu của bạn</p>
       </div>
 
       <div class="settings-container">
-        <!-- Âm thanh & Âm nhạc -->
+
+        <!-- KOKONUT UI AVATAR PICKER (LINH VẬT TÂM THỨC) -->
         <div class="settings-group">
-          <div class="settings-group-title">🎵 Âm Nhạc & Giác Quan</div>
-          <div class="settings-row">
+          <div class="settings-group-title">👤 Linh Vật Tâm Thức (Avatar Picker)</div>
+          <div class="avatar-picker-card">
+            <div class="avatar-display" id="settingsAvatarDisplay">🌸</div>
+            <div style="flex:1;">
+              <div style="font-weight:700;font-size:0.92rem;" id="setProfName">Đang tải...</div>
+              <div style="font-size:0.78rem;color:var(--brown-light);" id="spiritAnimalTitle">Linh vật: Hoa Sen Tĩnh Lặng</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="rollRandomAvatar()" title="Lắc linh vật ngẫu nhiên">
+              🎲 Lắc Ngẫu Nhiên
+            </button>
+          </div>
+        </div>
+
+        <!-- KOKONUT UI LIQUID GLASS MUSIC CARD -->
+        <div class="settings-group">
+          <div class="settings-group-title">🎵 Trình Phát Nhạc Nền (Liquid Glass Card)</div>
+          <div class="liquid-music-card">
+            <div class="liquid-disc-box" id="liquidDiscBox">
+              <div class="liquid-disc-core"></div>
+            </div>
+            <div class="liquid-music-details">
+              <div class="liquid-music-title" id="liquidSongTitle">Lofi Thiền Định</div>
+              <div class="liquid-music-artist">Âm Hưởng Tĩnh Lặng Vũ Trụ</div>
+              <div class="liquid-progress-bar">
+                <div class="liquid-progress-fill" id="liquidProgressFill"></div>
+              </div>
+            </div>
+            <button class="music-next-btn" onclick="bgMusic.playRandomNext()" title="Đổi bài ngẫu nhiên khác">
+              ⏭️
+            </button>
+          </div>
+
+          <div class="settings-row" style="margin-top:14px;">
             <div>
               <div style="font-weight:700;font-size:0.92rem;">Âm lượng Lofi</div>
               <div style="font-size:0.75rem;color:var(--brown-light);">Điều chỉnh độ to nhỏ của nhạc nền</div>
             </div>
             <input type="range" class="settings-slider" id="musicVolumeSlider" min="0" max="1" step="0.05" oninput="changeMusicVolume(this.value)">
           </div>
+
+          <!-- KOKONUT UI SWITCH BUTTON CHO HIỆU ỨNG ÂM THANH -->
           <div class="settings-row">
             <div>
               <div style="font-weight:700;font-size:0.92rem;">Hiệu ứng âm thanh (SFX)</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Tiếng vòng quay & chuông thiền định</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Tiếng khẩy kim & chuông xoay Tây Tạng</div>
             </div>
-            <button class="btn btn-secondary btn-sm" id="sfxToggleBtn" onclick="toggleSoundFx()">
-              🔊 Đang Bật
-            </button>
-          </div>
-          <div class="settings-row">
-            <div>
-              <div style="font-weight:700;font-size:0.92rem;">Đổi bài hát khác</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Chọn ngẫu nhiên 1 trong 9 bản Lofi</div>
-            </div>
-            <button class="btn btn-gold btn-sm" onclick="bgMusic.playRandomNext()">
-              ⏭️ Đổi bài
-            </button>
-          </div>
-        </div>
-
-        <!-- Thông tin tài khoản -->
-        <div class="settings-group">
-          <div class="settings-group-title">👤 Tài Khoản & Đồng Bộ</div>
-          <div class="settings-row">
-            <div>
-              <div style="font-weight:700;font-size:0.92rem;" id="setProfName">Đang tải...</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);" id="setProfEmail"></div>
-            </div>
-            <span style="font-size:0.75rem;font-weight:800;color:#2E7D32;background:#E8F5E9;padding:4px 10px;border-radius:100px;">
-              🟢 Đã Đồng Bộ Cloud
-            </span>
+            <label class="kokonut-switch">
+              <input type="checkbox" id="sfxSwitch" onchange="toggleSoundFxSwitch(this.checked)">
+              <span class="kokonut-slider"></span>
+            </label>
           </div>
         </div>
 
@@ -672,7 +683,7 @@
 
   </div>
 
-  <!-- NGHI THỨC PHONG BÌ SÁP NIÊM PHONG -->
+  <!-- NGHI THỨC PHONG BÌ SÁP NIÊM PHONG (KOKONUT CARD FLIP 3D) -->
   <div class="ritual-overlay" id="ritualOverlay">
     <div class="seal-step" id="sealStep">
       <div class="envelope-box">
@@ -689,7 +700,25 @@
     <div class="letter-step" id="letterStep">
       <button class="letter-close" onclick="closeRitual()">✕</button>
       <div id="letterCatTag" style="text-align:center;margin-bottom:10px;"></div>
-      <img id="letterImg" class="letter-img" src="" alt="">
+
+      <!-- KOKONUT UI CARD FLIP 3D (LẬT MẶT THẺ BÀI) -->
+      <div class="card-flip-container" id="letterFlipContainer" onclick="toggleCardFlip()" title="Chạm để lật mặt thẻ bài">
+        <div class="card-flip-inner">
+          <div class="card-flip-front">
+            <div style="font-size:2.8rem;margin-bottom:12px;color:#E9C46A;">✦ 🌀 ✦</div>
+            <div style="font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;letter-spacing:2px;color:#E9C46A;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
+            <p style="font-size:0.8rem;color:rgba(255,255,255,0.7);max-width:200px;">Lá thư tâm thức dành riêng cho bạn hôm nay</p>
+            <div style="margin-top:20px;font-size:0.75rem;color:#E07A5F;font-weight:700;">🔄 Chạm để lật mặt tranh</div>
+          </div>
+          <div class="card-flip-back">
+            <img id="letterImg" src="" alt="Thông Điệp">
+          </div>
+        </div>
+      </div>
+      <p style="text-align:center;font-size:0.75rem;color:var(--brown-light);margin-top:6px;margin-bottom:14px;">
+        🔄 Chạm vào thẻ bài để lật mặt 3D
+      </p>
+
       <div id="letterTitle" class="letter-title"></div>
       <div id="letterDesc" class="letter-desc"></div>
 
@@ -749,6 +778,21 @@
     let currentLibCategory = 'all';
     let libSearchQuery = '';
     let toastTimer = null;
+    let stackIndex = 0;
+
+    // Danh sách avatar linh vật cho Avatar Picker
+    const SPIRIT_AVATARS = [
+      { emoji: '🌸', name: 'Hoa Sen Tĩnh Lặng' },
+      { emoji: '🦋', name: 'Bướm Bay Tự Do' },
+      { emoji: '🕊️', name: 'Bồ Câu Bình An' },
+      { emoji: '🐬', name: 'Cá Heo Thuận Dòng' },
+      { emoji: '🦌', name: 'Nai Rừng Trong Sáng' },
+      { emoji: '🦉', name: 'Cú Mèo Trí Tuệ' },
+      { emoji: '🦁', name: 'Sư Tử Dũng Cảm' },
+      { emoji: '☀️', name: 'Mặt Trời Khai Sáng' },
+      { emoji: '🌙', name: 'Ánh Trăng Huyền Ảo' },
+      { emoji: '🌿', name: 'Mầm Xanh Bền Bỉ' }
+    ];
 
     // Toast
     function showToast(msg) {
@@ -767,17 +811,17 @@
       }, 2200);
     }
 
-    // ── CHUYỂN TAB SPA KHÔNG TẢI LẠI TRANG (NHẠC KHÔNG DỪNG) ──
+    // ── CHUYỂN TAB MORPHIC NAVBAR (KOKONUT UI) ──
     function switchMainTab(tabName) {
       document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
       document.querySelectorAll('.morphic-nav-item').forEach(b => b.classList.remove('active'));
 
       const tabMap = {
-        home:     { view: 'viewHome',     btn: 'mNavHome',     title: 'Trang Chủ' },
-        spin:     { view: 'viewSpin',     btn: 'mNavSpin',     title: 'Vòng Quay' },
-        library:  { view: 'viewLibrary',  btn: 'mNavLibrary',  title: 'Bộ Sưu Tập' },
-        about:    { view: 'viewAbout',    btn: 'mNavAbout',    title: 'Về Dự Án' },
-        settings: { view: 'viewSettings', btn: 'mNavSettings', title: 'Cài Đặt' }
+        home:     { view: 'viewHome',     btn: 'mNavHome' },
+        spin:     { view: 'viewSpin',     btn: 'mNavSpin' },
+        library:  { view: 'viewLibrary',  btn: 'mNavLibrary' },
+        about:    { view: 'viewAbout',    btn: 'mNavAbout' },
+        settings: { view: 'viewSettings', btn: 'mNavSettings' }
       };
 
       const target = tabMap[tabName] || tabMap.spin;
@@ -785,13 +829,14 @@
       document.getElementById(target.btn).classList.add('active');
       window.location.hash = tabName;
 
+      if (tabName === 'home') renderStackDeck();
       if (tabName === 'library') renderLibraryGrid();
       if (tabName === 'settings') renderSettingsTab();
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ── KHỞI TẠO TOÀN BỘ ỨNG DỤNG ──
+    // ── KHỞI TẠO ỨNG DỤNG ──
     async function initPage() {
       currentUser = await getCurrentUser();
       if (!currentUser) {
@@ -799,13 +844,21 @@
         return;
       }
 
-      // Slider volume
+      // Slider volume & switches
       const volSlider = document.getElementById('musicVolumeSlider');
       if (volSlider && bgMusic) {
         volSlider.value = bgMusic.audio.volume;
       }
+      const sfxSw = document.getElementById('sfxSwitch');
+      if (sfxSw) {
+        sfxSw.checked = !sounds.isMuted();
+      }
 
-      updateSoundButton();
+      // Avatar
+      initAvatar();
+
+      // Cập nhật liquid music player
+      updateLiquidMusicPlayer();
 
       if (currentUser.id && currentUser.id !== 'guest') {
         await syncDataFromSupabase(currentUser.id);
@@ -813,6 +866,7 @@
 
       refreshStats();
       checkTodaySpin();
+      renderStackDeck();
 
       // Kiểm tra URL Hash
       const hash = window.location.hash.replace('#', '');
@@ -821,24 +875,123 @@
       }
     }
 
+    // ── KOKONUT CARD STACK (THROW DECK) ──
+    const STACK_PREVIEWS = [
+      { id: 1, name: "Tri Tâm Khai Sáng" },
+      { id: 7, name: "Yêu Chính Mình" },
+      { id: 11, name: "Tái Sinh" },
+      { id: 29, name: "Chánh Niệm" },
+      { id: 54, name: "Hy Vọng" },
+      { id: 70, name: "Vùng Nước Lặng" }
+    ];
+
+    function renderStackDeck() {
+      const container = document.getElementById('homeStackDeck');
+      if (!container) return;
+      container.innerHTML = '';
+
+      for (let i = 0; i < 3; i++) {
+        const itemIdx = (stackIndex + i) % STACK_PREVIEWS.length;
+        const msg = getMessageById(STACK_PREVIEWS[itemIdx].id);
+        const card = document.createElement('div');
+        card.className = `stack-card-item pos-${i}`;
+        card.innerHTML = `
+          <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}">
+          <div style="padding:10px 14px;background:white;">
+            <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:0.95rem;color:var(--brown-dark);">${msg.name}</div>
+            <div style="font-size:0.75rem;color:var(--brown-light);">${msg.desc.slice(0, 60)}...</div>
+          </div>
+        `;
+        card.onclick = () => nextStackDeck();
+        container.appendChild(card);
+      }
+    }
+
+    function nextStackDeck() {
+      stackIndex = (stackIndex + 1) % STACK_PREVIEWS.length;
+      renderStackDeck();
+    }
+
+    function prevStackDeck() {
+      stackIndex = (stackIndex - 1 + STACK_PREVIEWS.length) % STACK_PREVIEWS.length;
+      renderStackDeck();
+    }
+
+    // ── KOKONUT CARD FLIP 3D ──
+    function toggleCardFlip() {
+      const container = document.getElementById('letterFlipContainer');
+      if (container) {
+        container.classList.toggle('flipped');
+        sounds.playTick(1.2);
+      }
+    }
+
+    // ── KOKONUT AVATAR PICKER (🎲 LẮC LINH VẬT) ──
+    function initAvatar() {
+      const saved = JSON.parse(localStorage.getItem('vqtd_spirit_avatar') || 'null');
+      if (saved) {
+        applyAvatar(saved);
+      } else {
+        applyAvatar(SPIRIT_AVATARS[0]);
+      }
+    }
+
+    function applyAvatar(avatar) {
+      const display = document.getElementById('settingsAvatarDisplay');
+      const title = document.getElementById('spiritAnimalTitle');
+      if (display) display.textContent = avatar.emoji;
+      if (title) title.textContent = `Linh vật: ${avatar.name}`;
+      localStorage.setItem('vqtd_spirit_avatar', JSON.stringify(avatar));
+    }
+
+    function rollRandomAvatar() {
+      const display = document.getElementById('settingsAvatarDisplay');
+      if (display) display.classList.add('rolling');
+      sounds.playWaxCrack();
+
+      setTimeout(() => {
+        const random = SPIRIT_AVATARS[Math.floor(Math.random() * SPIRIT_AVATARS.length)];
+        applyAvatar(random);
+        if (display) display.classList.remove('rolling');
+        showToast(`Đã nhận linh vật mới: ${random.emoji} ${random.name}! ✨`);
+      }, 400);
+    }
+
+    // ── KOKONUT LIQUID GLASS MUSIC PLAYER ──
+    function updateLiquidMusicPlayer() {
+      const disc = document.getElementById('liquidDiscBox');
+      const title = document.getElementById('liquidSongTitle');
+      const fill = document.getElementById('liquidProgressFill');
+
+      if (bgMusic && bgMusic.currentSong) {
+        if (title) title.textContent = bgMusic.currentSong.title;
+        if (disc) {
+          if (bgMusic.isPlaying) disc.classList.add('spinning');
+          else disc.classList.remove('spinning');
+        }
+      }
+
+      if (bgMusic && bgMusic.audio && fill) {
+        bgMusic.audio.addEventListener('timeupdate', () => {
+          if (bgMusic.audio.duration) {
+            const pct = (bgMusic.audio.currentTime / bgMusic.audio.duration) * 100;
+            fill.style.width = pct + '%';
+          }
+        });
+      }
+    }
+
     function changeMusicVolume(val) {
-      if (bgMusic) {
-        bgMusic.setVolume(parseFloat(val));
-      }
+      if (bgMusic) bgMusic.setVolume(parseFloat(val));
     }
 
-    function toggleSoundFx() {
-      const isMuted = sounds.toggleMute();
-      updateSoundButton();
-      showToast(isMuted ? 'Đã tắt tiếng hiệu ứng 🔇' : 'Đã bật tiếng hiệu ứng 🔊');
-    }
-
-    function updateSoundButton() {
-      const isMuted = sounds.isMuted();
-      const btn = document.getElementById('sfxToggleBtn');
-      if (btn) {
-        btn.textContent = isMuted ? '🔇 Đã Tắt' : '🔊 Đang Bật';
+    function toggleSoundFxSwitch(checked) {
+      if (checked) {
+        if (sounds.isMuted()) sounds.toggleMute();
+      } else {
+        if (!sounds.isMuted()) sounds.toggleMute();
       }
+      showToast(checked ? 'Đã bật hiệu ứng âm thanh 🔊' : 'Đã tắt hiệu ứng âm thanh 🔇');
     }
 
     // ── Ngày tháng ──
@@ -997,6 +1150,10 @@
       btn.disabled = true;
       btn.textContent = 'ĐANG DẪN LỐI...';
 
+      // Hiện Kokonut Orbital Loader
+      const loader = document.getElementById('spinOrbitalLoader');
+      if (loader) loader.style.display = 'block';
+
       const msg = getRandomMessage();
       currentMsgId = msg.id;
 
@@ -1030,6 +1187,7 @@
         } else {
           currentAngle = targetAngle % (Math.PI * 2);
           isSpinning = false;
+          if (loader) loader.style.display = 'none';
           onSpinFinished(msg);
         }
       }
@@ -1053,6 +1211,10 @@
       letterStep.classList.remove('show');
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
+
+      // Đặt thẻ bài ở mặt lưng để người dùng lật
+      const flipContainer = document.getElementById('letterFlipContainer');
+      if (flipContainer) flipContainer.classList.add('flipped');
 
       const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
       document.getElementById('letterCatTag').innerHTML = `
@@ -1223,7 +1385,8 @@
       const u = uniqueMessagesCount();
 
       document.getElementById('setProfName').textContent = currentUser?.name || 'Người dùng';
-      document.getElementById('setProfEmail').textContent = currentUser?.email || 'Chế độ Khách';
+
+      updateLiquidMusicPlayer();
 
       const grid = document.getElementById('setBadgesGrid');
       grid.innerHTML = '';

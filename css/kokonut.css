@@ -1,0 +1,314 @@
+/* ============================================================
+   KOKONUT UI STYLES FOR VÒNG QUAY THÔNG ĐIỆP
+   Components:
+   1. Morphic Navbar (Split Nav)
+   2. Liquid Glass Card (Now Playing Music Player)
+   3. Card Flip 3D (Tarot Wisdom Card)
+   4. Card Stack (Throw Deck)
+   5. Marker Text (Hand-drawn Highlighter)
+   6. Switch Button (Theme / SFX Toggle)
+   7. Avatar Picker (Cosmic Avatar with Dice 🎲)
+   8. Orbital Loader (Celestial Spinner)
+   ============================================================ */
+
+/* ── 1. MARKER TEXT (Nét Bút Dạ Quang Tự Nhiên) ── */
+.marker-highlight {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+  z-index: 1;
+}
+.marker-highlight::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  right: -4px;
+  bottom: 2px;
+  height: 38%;
+  background: linear-gradient(100deg, rgba(233, 196, 106, 0.45) 0%, rgba(224, 122, 95, 0.5) 100%);
+  border-radius: 4px;
+  z-index: -1;
+  transform: rotate(-1deg) skew(-4deg);
+  transition: all 0.3s ease;
+}
+.marker-highlight:hover::before {
+  height: 50%;
+  background: linear-gradient(100deg, rgba(233, 196, 106, 0.65) 0%, rgba(224, 122, 95, 0.7) 100%);
+}
+
+/* ── 2. SWITCH BUTTON (Kokonut UI Switch Toggle) ── */
+.kokonut-switch {
+  position: relative;
+  display: inline-block;
+  width: 52px;
+  height: 28px;
+  cursor: pointer;
+}
+.kokonut-switch input { opacity: 0; width: 0; height: 0; }
+.kokonut-slider {
+  position: absolute;
+  inset: 0;
+  background-color: #E2D9D2;
+  border-radius: 34px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+.kokonut-slider::before {
+  position: absolute;
+  content: "";
+  height: 22px;
+  width: 22px;
+  left: 3px;
+  bottom: 2px;
+  background-color: white;
+  border-radius: 50%;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+.kokonut-switch input:checked + .kokonut-slider {
+  background: linear-gradient(135deg, #E07A5F, #F4A47A);
+  box-shadow: 0 2px 10px rgba(224, 122, 95, 0.35);
+}
+.kokonut-switch input:checked + .kokonut-slider::before {
+  transform: translateX(24px);
+}
+
+/* ── 3. CARD FLIP 3D (Lật Thẻ Bài Thông Điệp) ── */
+.card-flip-container {
+  perspective: 1200px;
+  width: 100%;
+  max-width: 290px;
+  margin: 0 auto;
+  cursor: pointer;
+  user-select: none;
+}
+.card-flip-inner {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3/4;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.34, 1.4, 0.64, 1);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 16px 45px rgba(90, 45, 25, 0.22);
+}
+.card-flip-container.flipped .card-flip-inner {
+  transform: rotateY(180deg);
+}
+.card-flip-front, .card-flip-back {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+.card-flip-front {
+  background: linear-gradient(145deg, #1A1C2E, #0E101D);
+  border: 2px solid #E9C46A;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  text-align: center;
+  color: #FFFDF9;
+}
+.card-flip-front::before {
+  content: '';
+  position: absolute;
+  inset: 10px;
+  border: 1.5px dashed rgba(233, 196, 106, 0.5);
+  border-radius: 10px;
+  pointer-events: none;
+}
+.card-flip-back {
+  transform: rotateY(180deg);
+  background: white;
+  border: 2px solid #E9C46A;
+}
+.card-flip-back img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* ── 4. CARD STACK / THROW DECK (Bộ Bài Chồng 3D) ── */
+.stack-deck-wrapper {
+  position: relative;
+  width: min(300px, 85vw);
+  height: 380px;
+  margin: 20px auto 40px;
+}
+.stack-card-item {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius);
+  background: var(--white);
+  border: 2px solid var(--border);
+  box-shadow: 0 12px 35px rgba(90, 45, 25, 0.15);
+  overflow: hidden;
+  transition: all 0.45s cubic-bezier(0.34, 1.3, 0.64, 1);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+}
+.stack-card-item.pos-0 {
+  z-index: 3;
+  transform: translateY(0) scale(1) rotate(0deg);
+  opacity: 1;
+}
+.stack-card-item.pos-1 {
+  z-index: 2;
+  transform: translateY(16px) scale(0.94) rotate(3deg);
+  opacity: 0.85;
+}
+.stack-card-item.pos-2 {
+  z-index: 1;
+  transform: translateY(32px) scale(0.88) rotate(-3deg);
+  opacity: 0.65;
+}
+.stack-card-item img {
+  width: 100%;
+  aspect-ratio: 3/4;
+  object-fit: cover;
+}
+.stack-controls {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 10px;
+}
+
+/* ── 5. LIQUID GLASS MUSIC PLAYER (Đĩa Than Kính Mờ) ── */
+.liquid-music-card {
+  background: rgba(255, 252, 247, 0.88);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1.5px solid rgba(233, 196, 106, 0.35);
+  border-radius: 24px;
+  padding: 16px 20px;
+  box-shadow: 0 16px 45px rgba(90, 45, 25, 0.15), inset 0 1px 2px rgba(255,255,255,0.8);
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  max-width: 440px;
+  margin: 0 auto;
+}
+.liquid-disc-box {
+  position: relative;
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #333 0%, #111 60%, #000 100%);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  border: 3px solid #E9C46A;
+}
+.liquid-disc-box.spinning {
+  animation: spin-slow 8s linear infinite;
+}
+.liquid-disc-core {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E07A5F, #E9C46A);
+  border: 2px solid white;
+}
+.liquid-music-details {
+  flex: 1;
+  overflow: hidden;
+}
+.liquid-music-title {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: var(--brown-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin-bottom: 3px;
+}
+.liquid-music-artist {
+  font-size: 0.75rem;
+  color: var(--brown-light);
+  font-weight: 600;
+}
+.liquid-progress-bar {
+  width: 100%;
+  height: 5px;
+  background: #EED8C9;
+  border-radius: 10px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+.liquid-progress-fill {
+  height: 100%;
+  width: 35%;
+  background: linear-gradient(90deg, #E07A5F, #E9C46A);
+  border-radius: 10px;
+}
+
+/* ── 6. AVATAR PICKER (Linh Vật Tâm Thức Với Xúc Xắc 🎲) ── */
+.avatar-picker-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 18px;
+  background: var(--cream);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+}
+.avatar-display {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #E07A5F, #E9C46A);
+  border: 3px solid white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  box-shadow: 0 4px 14px rgba(224, 122, 95, 0.35);
+  transition: transform 0.3s ease;
+}
+.avatar-display.rolling {
+  animation: sealCrack 0.4s ease;
+}
+
+/* ── 7. ORBITAL CELESTIAL LOADER ── */
+.orbital-loader {
+  position: relative;
+  width: 70px;
+  height: 70px;
+  margin: 0 auto 14px;
+}
+.orbital-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid transparent;
+  border-top-color: #E9C46A;
+  border-right-color: #E07A5F;
+  border-radius: 50%;
+  animation: spin-slow 1.5s linear infinite;
+}
+.orbital-ring:nth-child(2) {
+  inset: 8px;
+  border-top-color: #81B29A;
+  border-left-color: #9B89B3;
+  animation: spin-slow 2.2s linear infinite reverse;
+}
+.orbital-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.2rem;
+  animation: pulse 1.5s ease-in-out infinite;
+}
