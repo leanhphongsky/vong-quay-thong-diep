@@ -8,20 +8,106 @@
   <style>
     body {
       background: radial-gradient(circle at 50% 10%, #FFFDF9 0%, #FFF3EB 55%, #FDE3D6 100%);
+      padding-top: 80px;
       padding-bottom: 90px;
       overflow-x: hidden;
     }
 
-    /* ── Tab Views ── */
+    /* ── KOKONUT UI MORPHIC FLOATING NAVBAR ── */
+    .morphic-navbar-wrapper {
+      position: fixed;
+      top: 14px;
+      left: 0;
+      right: 0;
+      z-index: 300;
+      display: flex;
+      justify-content: center;
+      padding: 0 12px;
+      pointer-events: none;
+    }
+
+    .morphic-navbar {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(18, 20, 31, 0.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 100px;
+      padding: 5px 6px;
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 255, 255, 0.4);
+      user-select: none;
+      max-width: 95vw;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .morphic-navbar::-webkit-scrollbar { display: none; }
+
+    .morphic-nav-item {
+      position: relative;
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.72);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.86rem;
+      font-weight: 700;
+      padding: 8px 16px;
+      border-radius: 100px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      outline: none;
+    }
+
+    .morphic-nav-item:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .morphic-nav-item.active {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.14);
+      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+    }
+
+    /* Vạch gạch chân cam sáng bóng đặc trưng Kokonut UI */
+    .morphic-nav-item.active::after {
+      content: '';
+      position: absolute;
+      bottom: 3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 18px;
+      height: 2.5px;
+      background: linear-gradient(90deg, #E07A5F, #F4A47A);
+      border-radius: 2px;
+      box-shadow: 0 1px 4px rgba(224, 122, 95, 0.6);
+    }
+
+    @media (max-width: 600px) {
+      .morphic-nav-item {
+        padding: 6px 11px;
+        font-size: 0.78rem;
+        gap: 4px;
+      }
+      .morphic-nav-item .nav-label-long { display: none; }
+    }
+
+    /* ── Tab Views System ── */
     .tab-view { display: none; }
     .tab-view.active { display: block; animation: fadeIn 0.35s ease forwards; }
 
-    /* ── Header ── */
-    .spin-header {
+    /* ── General Section Headers ── */
+    .section-hero {
       text-align: center;
-      padding: 24px 20px 0;
+      padding: 24px 20px 10px;
     }
-    .spin-eyebrow {
+    .badge-eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 6px;
@@ -34,13 +120,62 @@
       color: var(--peach);
       margin-bottom: 8px;
     }
-    .spin-header h2 { font-size: clamp(1.4rem, 4vw, 2rem); margin-bottom: 4px; }
-    .spin-header p { color: var(--brown-light); font-size: 0.88rem; }
 
-    /* ── Mini stats bar ── */
+    /* ── TAB HOME STYLES ── */
+    .home-hero-card {
+      background: radial-gradient(circle at 50% 30%, #FFFDF9 0%, #FFF2EA 50%, #FDE4D8 100%);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 48px 24px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 28px;
+      position: relative;
+      overflow: hidden;
+    }
+    .home-hero-title {
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      color: var(--brown-dark);
+      margin-bottom: 14px;
+      line-height: 1.25;
+    }
+    .home-hero-title span {
+      background: linear-gradient(135deg, #E07A5F, #E9C46A);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .home-hero-desc {
+      font-size: 1.05rem;
+      color: var(--brown-mid);
+      max-width: 620px;
+      margin: 0 auto 28px;
+      line-height: 1.65;
+    }
+
+    .energy-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+    .energy-card {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      padding: 22px 18px;
+      text-align: center;
+      transition: all 0.25s ease;
+    }
+    .energy-card:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: var(--shadow-md); }
+    .energy-icon { font-size: 2.2rem; margin-bottom: 10px; display: block; }
+    .energy-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--brown-dark); }
+    .energy-desc { font-size: 0.84rem; color: var(--brown-light); line-height: 1.55; }
+
+    /* ── TAB VÒNG QUAY STYLES ── */
     .mini-stats {
       max-width: 440px;
-      margin: 18px auto 0;
+      margin: 10px auto 0;
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
@@ -64,22 +199,19 @@
     }
     .mini-stat-label { font-size: 0.68rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
 
-    /* ── Wheel Area ── */
     .wheel-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 24px 16px 0;
+      padding: 20px 16px 0;
       gap: 20px;
     }
-
     .wheel-outer-glow {
       position: relative;
       padding: 12px;
       border-radius: 50%;
       background: radial-gradient(circle, rgba(233,196,106,0.35) 0%, rgba(224,122,95,0.1) 65%, transparent 75%);
     }
-
     .wheel-wrapper {
       position: relative;
       width: min(350px, 86vw);
@@ -87,15 +219,7 @@
       border-radius: 50%;
       box-shadow: 0 16px 50px rgba(90, 45, 25, 0.22), 0 0 35px rgba(233, 196, 106, 0.3);
     }
-
-    #spinCanvas {
-      width: 100%;
-      height: 100%;
-      border-radius: 50%;
-      cursor: pointer;
-      display: block;
-    }
-
+    #spinCanvas { width: 100%; height: 100%; border-radius: 50%; cursor: pointer; display: block; }
     .wheel-pointer {
       position: absolute;
       top: -18px;
@@ -108,26 +232,20 @@
       filter: drop-shadow(0 4px 10px rgba(211, 84, 0, 0.5));
     }
     .wheel-pointer svg { width: 100%; height: 100%; }
-
     .wheel-center-orb {
       position: absolute;
-      top: 50%;
-      left: 50%;
+      top: 50%; left: 50%;
       transform: translate(-50%, -50%);
-      width: 68px;
-      height: 68px;
+      width: 68px; height: 68px;
       background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #FFF3CD 35%, #F6D365 70%, #E07A5F 100%);
       border-radius: 50%;
       border: 3px solid #FFF8F0;
       box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.8);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 1.6rem;
       pointer-events: none;
       z-index: 5;
     }
-
     #spinBtn {
       width: min(280px, 82vw);
       height: 64px;
@@ -142,24 +260,11 @@
       cursor: pointer;
       box-shadow: 0 10px 30px rgba(224, 122, 95, 0.45), 0 0 20px rgba(233, 196, 106, 0.35);
       transition: all 0.3s var(--transition);
-      position: relative;
-      overflow: hidden;
     }
-    #spinBtn:hover:not(:disabled) {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 14px 40px rgba(224, 122, 95, 0.6), 0 0 30px rgba(233, 196, 106, 0.5);
-    }
-    #spinBtn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
-    #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+    #spinBtn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); }
+    #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    /* ── Đã Quay Hôm Nay ── */
-    .already-spun {
-      display: none;
-      text-align: center;
-      animation: fadeIn 0.5s ease forwards;
-      max-width: 440px;
-      width: 100%;
-    }
+    .already-spun { display: none; text-align: center; animation: fadeIn 0.5s ease forwards; max-width: 440px; width: 100%; }
     .already-spun.show { display: block; }
     .today-card {
       background: var(--white);
@@ -169,434 +274,170 @@
       margin-bottom: 16px;
       box-shadow: var(--shadow-md);
       position: relative;
-      overflow: hidden;
     }
-    .today-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 5px;
-      background: linear-gradient(90deg, var(--peach), var(--gold));
-    }
-    .today-img {
-      width: 100%;
-      max-width: 220px;
-      border-radius: var(--radius-sm);
-      margin: 0 auto 14px;
-      box-shadow: var(--shadow-sm);
-      border: 1px solid var(--border);
-    }
-    .today-name {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      color: var(--brown-dark);
-      margin-bottom: 6px;
-    }
-    .today-desc {
-      font-size: 0.88rem;
-      color: var(--brown-mid);
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
+    .today-img { width: 100%; max-width: 220px; border-radius: var(--radius-sm); margin: 0 auto 14px; display: block; box-shadow: var(--shadow-sm); }
+    .today-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 6px; }
+    .today-desc { font-size: 0.88rem; color: var(--brown-mid); line-height: 1.6; margin-bottom: 16px; }
+    .countdown-box { background: #FFF9E6; border: 1px solid #F0D080; border-radius: var(--radius-sm); padding: 10px 18px; display: inline-block; margin-bottom: 14px; }
+    .countdown-time { font-size: 1.4rem; font-weight: 800; color: var(--brown-dark); font-family: 'Cinzel', serif; }
 
-    .countdown-box {
-      background: #FFF9E6;
-      border: 1px solid #F0D080;
-      border-radius: var(--radius-sm);
-      padding: 10px 18px;
-      display: inline-block;
-      margin-bottom: 14px;
-    }
-    .countdown-label { font-size: 0.72rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
-    .countdown-time {
-      font-size: 1.4rem;
-      font-weight: 800;
-      color: var(--brown-dark);
-      font-family: 'Cinzel', serif;
-      letter-spacing: 1px;
-    }
-
-    /* ── Ritual Wax Seal Modal ── */
-    .ritual-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 500;
-      background: rgba(14, 17, 30, 0.94);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.5s ease;
-      overflow-y: auto;
-    }
-    .ritual-overlay.show { opacity: 1; pointer-events: all; }
-
-    .seal-step {
-      text-align: center;
-      animation: scaleIn 0.5s var(--transition) forwards;
-      max-width: 360px;
-      width: 100%;
-    }
-    .envelope-box {
-      background: linear-gradient(145deg, #FFF0E4, #FFE3D1);
-      border-radius: 20px;
-      border: 2px solid #F5C7AF;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(233,196,106,0.3);
-      padding: 45px 24px 35px;
-      position: relative;
-      margin-bottom: 20px;
-    }
-    .envelope-box::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 90px;
-      background: linear-gradient(180deg, rgba(230,122,95,0.12), transparent);
-      clip-path: polygon(0 0, 100% 0, 50% 100%);
-      pointer-events: none;
-    }
-    .seal-text {
-      color: var(--brown-dark);
-      font-family: 'Playfair Display', serif;
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-bottom: 24px;
-    }
-
-    .letter-step {
-      display: none;
-      width: 100%;
-      max-width: 480px;
-      animation: scaleIn 0.5s var(--transition) forwards;
-      background: #FFFDF9;
-      border-radius: var(--radius);
-      border: 2px solid #E9C46A;
-      box-shadow: 0 25px 70px rgba(0,0,0,0.7), 0 0 45px rgba(233,196,106,0.4);
-      padding: 24px;
-      position: relative;
-      max-height: 88vh;
-      overflow-y: auto;
-    }
-    .letter-step.show { display: block; }
-    .letter-close {
-      position: absolute;
-      top: 14px; right: 14px;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: rgba(0,0,0,0.06);
-      border: none;
-      font-size: 1.1rem;
-      cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-    }
-
-    .letter-img {
-      width: 100%;
-      max-width: 280px;
-      border-radius: var(--radius-sm);
-      margin: 0 auto 16px;
-      display: block;
-      box-shadow: var(--shadow-md);
-      border: 2px solid rgba(233,196,106,0.4);
-    }
-    .letter-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.45rem;
-      font-weight: 700;
-      color: var(--brown-dark);
-      text-align: center;
-      margin-bottom: 6px;
-    }
-    .letter-desc {
-      font-size: 0.95rem;
-      color: var(--brown-mid);
-      text-align: center;
-      line-height: 1.65;
-      margin-bottom: 18px;
-    }
-
-    .action-box {
-      background: #FFF9ED;
-      border: 1.5px solid #F0D488;
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
-      margin-bottom: 16px;
-    }
-    .action-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 0.72rem;
-      font-weight: 800;
-      color: #B7791F;
-      text-transform: uppercase;
-      margin-bottom: 6px;
-    }
-    .action-text {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: var(--brown-dark);
-      margin-bottom: 8px;
-    }
-    .action-check-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--peach);
-      cursor: pointer;
-    }
-
-    .journal-box {
-      background: var(--cream);
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 14px 16px;
-      margin-bottom: 18px;
-    }
-    .journal-title {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--brown-mid);
-      margin-bottom: 6px;
-    }
-    .journal-input {
-      width: 100%;
-      height: 70px;
-      padding: 10px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.88rem;
-      resize: none;
-      outline: none;
-      background: white;
-    }
-    .journal-input:focus { border-color: var(--peach); }
-
-    .letter-actions {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    /* ── Tab Thư Viện Styles ── */
-    .search-filter-box {
-      max-width: 520px;
-      margin: 0 auto 20px;
-      padding: 0 16px;
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-    }
-    .search-input {
-      width: 100%;
-      padding: 12px 18px;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius-pill);
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.92rem;
-      outline: none;
-      background: white;
-      box-shadow: var(--shadow-sm);
-    }
-    .search-input:focus { border-color: var(--peach); box-shadow: 0 0 0 4px rgba(224,122,95,0.12); }
-
-    .filter-tabs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      scrollbar-width: none;
-    }
+    /* ── TAB THƯ VIỆN STYLES ── */
+    .search-filter-box { max-width: 520px; margin: 0 auto 20px; padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
+    .search-input { width: 100%; padding: 12px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-pill); font-family: 'Nunito', sans-serif; font-size: 0.92rem; outline: none; background: white; }
+    .filter-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
     .filter-tabs::-webkit-scrollbar { display: none; }
-    .filter-tab {
-      padding: 7px 16px;
-      border-radius: var(--radius-pill);
-      font-size: 0.82rem;
-      font-weight: 700;
-      cursor: pointer;
-      background: var(--white);
-      border: 1.5px solid var(--border);
-      color: var(--brown-light);
-      white-space: nowrap;
-      transition: all 0.2s;
-    }
-    .filter-tab.active {
-      background: var(--brown-dark);
-      border-color: var(--brown-dark);
-      color: #FFD700;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
-    }
+    .filter-tab { padding: 7px 16px; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; cursor: pointer; background: var(--white); border: 1.5px solid var(--border); color: var(--brown-light); white-space: nowrap; transition: all 0.2s; }
+    .filter-tab.active { background: var(--brown-dark); border-color: var(--brown-dark); color: #FFD700; }
+    .library-grid { max-width: 940px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
+    .lib-card { background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.25s ease; }
+    .lib-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold); }
+    .lib-card-img-box { width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative; background: #FDF4ED; }
+    .lib-card-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    .library-grid {
-      max-width: 940px;
-      margin: 0 auto;
-      padding: 0 16px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 14px;
-    }
-    .lib-card {
+    /* ── TAB VỀ DỰ ÁN (ABOUT) STYLES ── */
+    .about-card {
       background: var(--white);
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--border);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      cursor: pointer;
-      transition: all 0.25s ease;
-      display: flex;
-      flex-direction: column;
-    }
-    .lib-card:hover {
-      transform: translateY(-5px);
-      box-shadow: var(--shadow-md);
-      border-color: var(--gold);
-    }
-    .lib-card-img-box {
-      width: 100%;
-      aspect-ratio: 3/4;
-      overflow: hidden;
-      position: relative;
-      background: #FDF4ED;
-    }
-    .lib-card-img-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-    .lib-card:hover .lib-card-img-box img { transform: scale(1.05); }
-    .lib-card-info { padding: 10px 12px; flex: 1; display: flex; flex-direction: column; }
-    .lib-card-name {
-      font-size: 0.82rem;
-      font-weight: 700;
-      color: var(--brown-dark);
-      line-height: 1.35;
-      margin-bottom: 6px;
-    }
-    .lib-card-meta {
-      margin-top: auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      font-size: 0.68rem;
-      color: var(--brown-light);
-      font-weight: 600;
-    }
-
-    /* ── Tab Hồ Sơ Styles ── */
-    .profile-hero-card {
-      background: linear-gradient(135deg, #E07A5F 0%, #F4A47A 100%);
       border-radius: var(--radius);
-      padding: 32px 20px;
-      text-align: center;
-      color: white;
-      margin: 0 16px 20px;
-      box-shadow: var(--shadow-md);
-    }
-    .profile-avatar-circle {
-      width: 80px; height: 80px;
-      background: rgba(255,255,255,0.25);
-      border: 3px solid rgba(255,255,255,0.7);
-      border-radius: 50%;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 2.2rem;
-      margin: 0 auto 12px;
-      backdrop-filter: blur(8px);
-    }
-    .badges-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 10px;
-      padding: 0 16px;
-    }
-    .badge-item {
-      text-align: center;
-      padding: 12px 6px;
-      background: var(--white);
-      border-radius: var(--radius-sm);
       border: 1.5px solid var(--border);
-      transition: all 0.2s;
+      padding: 32px 24px;
+      max-width: 720px;
+      margin: 0 auto 24px;
+      box-shadow: var(--shadow-sm);
+      line-height: 1.75;
     }
+    .about-card h3 { font-family: 'Cinzel', 'Playfair Display', serif; margin-bottom: 12px; color: var(--peach); font-size: 1.25rem; }
+    .about-step { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
+    .about-step-num { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #E07A5F, #E9C46A); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
+
+    /* ── TAB CÀI ĐẶT (SETTINGS) STYLES ── */
+    .settings-container { max-width: 600px; margin: 0 auto 30px; padding: 0 16px; }
+    .settings-group {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 1.5px solid var(--border);
+      padding: 22px;
+      margin-bottom: 18px;
+      box-shadow: var(--shadow-sm);
+    }
+    .settings-group-title { font-size: 0.84rem; font-weight: 800; color: var(--brown-light); text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .settings-row:last-child { border-bottom: none; }
+    .settings-slider { width: 140px; accent-color: var(--peach); }
+    .badges-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
+    .badge-item { text-align: center; padding: 12px 6px; background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--border); }
     .badge-item.earned { border-color: var(--gold); background: #FFF9E6; }
     .badge-item:not(.earned) { opacity: 0.4; filter: grayscale(1); }
 
-    /* Modal Story */
-    .story-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 600;
-      background: rgba(0, 0, 0, 0.92);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
-    }
+    /* Ritual Wax Seal Modal & Story Modal */
+    .ritual-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(14, 17, 30, 0.94); backdrop-filter: blur(12px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; overflow-y: auto; }
+    .ritual-overlay.show { opacity: 1; pointer-events: all; }
+    .seal-step { text-align: center; animation: scaleIn 0.5s var(--transition) forwards; max-width: 360px; width: 100%; }
+    .envelope-box { background: linear-gradient(145deg, #FFF0E4, #FFE3D1); border-radius: 20px; border: 2px solid #F5C7AF; padding: 45px 24px 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .letter-step { display: none; width: 100%; max-width: 480px; animation: scaleIn 0.5s var(--transition) forwards; background: #FFFDF9; border-radius: var(--radius); border: 2px solid #E9C46A; padding: 24px; position: relative; max-height: 88vh; overflow-y: auto; }
+    .letter-step.show { display: block; }
+    .letter-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.06); border: none; font-size: 1.1rem; cursor: pointer; }
+    .letter-img { width: 100%; max-width: 280px; border-radius: var(--radius-sm); margin: 0 auto 16px; display: block; box-shadow: var(--shadow-md); }
+    .story-modal { position: fixed; inset: 0; z-index: 600; background: rgba(0, 0, 0, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .story-modal.show { opacity: 1; pointer-events: all; }
-    .story-preview-img {
-      max-height: 72vh;
-      max-width: 90vw;
-      border-radius: 18px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-      margin-bottom: 16px;
-    }
-
-    #confettiCanvas {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 550;
-    }
+    .story-preview-img { max-height: 72vh; max-width: 90vw; border-radius: 18px; margin-bottom: 16px; }
+    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 550; }
   </style>
 </head>
 <body>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <div class="navbar-brand">
-      <span style="color:var(--gold);font-size:1.4rem;">✦</span>
-      <span id="navTitleText">Vòng Quay Thông Điệp</span>
-    </div>
-    <div class="navbar-actions">
-      <!-- Nút âm thanh -->
-      <button class="btn-icon" id="soundBtn" onclick="toggleSoundFx()" title="Bật/Tắt hiệu ứng âm thanh">
-        🔊
+  <!-- KOKONUT UI MORPHIC FLOATING NAVBAR (SPLIT NAV) -->
+  <div class="morphic-navbar-wrapper">
+    <nav class="morphic-navbar">
+      <button class="morphic-nav-item" id="mNavHome" onclick="switchMainTab('home')">
+        <span>🏠</span>
+        <span class="nav-label-long">Trang Chủ</span>
       </button>
-      <!-- Streak -->
-      <div class="streak-badge" id="streakBadge">
-        <span>🔥</span>
-        <span id="streakNum">0</span> ngày
-      </div>
-      <span class="user-name" id="userName" style="font-weight:700;font-size:0.88rem;"></span>
-    </div>
-  </nav>
+      <button class="morphic-nav-item active" id="mNavSpin" onclick="switchMainTab('spin')">
+        <span>🎡</span>
+        <span class="nav-label-long">Vòng Quay</span>
+      </button>
+      <button class="morphic-nav-item" id="mNavLibrary" onclick="switchMainTab('library')">
+        <span>📚</span>
+        <span class="nav-label-long">Bộ Sưu Tập</span>
+      </button>
+      <button class="morphic-nav-item" id="mNavAbout" onclick="switchMainTab('about')">
+        <span>📖</span>
+        <span class="nav-label-long">Về Dự Án</span>
+      </button>
+      <button class="morphic-nav-item" id="mNavSettings" onclick="switchMainTab('settings')">
+        <span>⚙️</span>
+        <span class="nav-label-long">Cài Đặt</span>
+      </button>
+    </nav>
+  </div>
 
   <canvas id="confettiCanvas"></canvas>
 
-  <div class="page">
+  <div class="page" style="padding-top:10px;">
 
     <!-- ========================================== -->
-    <!-- TAB 1: VÒNG QUAY (SPIN)                     -->
+    <!-- 1. TAB HOME (GIỚI THIỆU & LANDING)         -->
+    <!-- ========================================== -->
+    <div id="viewHome" class="tab-view">
+      <div class="container">
+        <div class="home-hero-card">
+          <div class="badge-eyebrow">✦ Trạm Sạc Tâm Hồn & Chánh Niệm</div>
+          <h1 class="home-hero-title">
+            Mỗi Ngày Một Lá Thư<br>
+            <span>Từ Vũ Trụ</span> Gửi Bạn
+          </h1>
+          <p class="home-hero-desc">
+            Dành ra 2 phút bình an mỗi sáng để đón nhận thông điệp dẫn lối. 70 bài học chữa lành được chắt lọc để nuôi dưỡng nội lực và thắp sáng năng lượng tích cực trong bạn.
+          </p>
+          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-gold btn-lg" onclick="switchMainTab('spin')">
+              🎡 Quay Ngay Hôm Nay
+            </button>
+            <button class="btn btn-secondary btn-lg" onclick="switchMainTab('library')">
+              📚 Khám Phá 70 Thông Điệp
+            </button>
+          </div>
+        </div>
+
+        <h2 style="text-align:center;font-family:'Cinzel',serif;margin-bottom:8px;">4 Nguồn Năng Lượng Tỉnh Thức</h2>
+        <p style="text-align:center;color:var(--brown-light);margin-bottom:24px;font-size:0.92rem;">
+          Được thiết kế toàn diện để đồng hành cùng bạn trên mọi nẻo đường cuộc sống
+        </p>
+        <div class="energy-grid">
+          <div class="energy-card">
+            <span class="energy-icon">🧘</span>
+            <div class="energy-title">Trí Tuệ & Tĩnh Lặng</div>
+            <p class="energy-desc">Quay về bên trong, lắng nghe trực giác và tìm lại bình yên giữa ồn ào cuộc sống.</p>
+          </div>
+          <div class="energy-card">
+            <span class="energy-icon">💖</span>
+            <div class="energy-title">Yêu Thương & Chữa Lành</div>
+            <p class="energy-desc">Học cách yêu mình trọn vẹn, bao dung với tha nhân và chữa lành những tổn thương.</p>
+          </div>
+          <div class="energy-card">
+            <span class="energy-icon">⚡</span>
+            <div class="energy-title">Kỷ Luật & Hành Động</div>
+            <p class="energy-desc">Vững vàng với mục tiêu, kiến tạo thói quen tốt và bước qua mọi giới hạn cũ.</p>
+          </div>
+          <div class="energy-card">
+            <span class="energy-icon">🌊</span>
+            <div class="energy-title">Thuận Dòng & Tái Sinh</div>
+            <p class="energy-desc">Học nghệ thuật buông bỏ đúng lúc, đón nhận sự trù phú và để đời nở hoa.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 2. TAB VÒNG QUAY (SPIN)                    -->
     <!-- ========================================== -->
     <div id="viewSpin" class="tab-view active">
-      <div class="spin-header">
-        <div class="spin-eyebrow">
-          <span>🌀</span> La Bàn Vũ Trụ
-        </div>
-        <h2>Thông Điệp <span style="color:var(--peach);" id="greetingTime">Hôm Nay</span></h2>
-        <p id="todayDate"></p>
+      <div class="section-hero">
+        <div class="badge-eyebrow">🌀 La Bàn Thông Điệp</div>
+        <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.4rem, 4vw, 2rem);">
+          Thông Điệp <span style="color:var(--peach);" id="greetingTime">Hôm Nay</span>
+        </h2>
+        <p id="todayDate" style="color:var(--brown-light);font-size:0.88rem;"></p>
       </div>
 
       <div class="mini-stats">
@@ -616,7 +457,7 @@
 
       <div class="wheel-section">
         <div class="wheel-outer-glow">
-          <div class="wheel-wrapper" id="wheelWrapper">
+          <div class="wheel-wrapper">
             <div class="wheel-pointer">
               <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M16 44L0 8C0 3.58172 7.16344 0 16 0C24.8366 0 32 3.58172 32 8L16 44Z" fill="url(#goldGrad)"/>
@@ -645,7 +486,9 @@
             <div class="today-desc" id="todayMsgDesc"></div>
 
             <div class="countdown-box">
-              <div class="countdown-label">Lá thư tiếp theo sau</div>
+              <div style="font-size:0.72rem;font-weight:700;color:var(--brown-light);text-transform:uppercase;">
+                Lá thư tiếp theo sau
+              </div>
               <div class="countdown-time" id="countdown">--:--:--</div>
             </div>
           </div>
@@ -660,17 +503,18 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- TAB 2: THƯ VIỆN 70 THÔNG ĐIỆP (LIBRARY)     -->
+    <!-- 3. TAB BỘ SƯU TẬP (LIBRARY)                -->
     <!-- ========================================== -->
     <div id="viewLibrary" class="tab-view">
-      <div class="spin-header" style="padding-bottom:12px;">
-        <h2>Kho Tàng Thông Điệp</h2>
-        <p>Bộ sưu tập những hạt mầm chánh niệm đã gửi đến bạn</p>
+      <div class="section-hero">
+        <div class="badge-eyebrow">📚 Kho Tàng Chữa Lành</div>
+        <h2 style="font-family:'Cinzel',serif;">Bộ Sưu Tập 70 Thông Điệp</h2>
+        <p style="color:var(--brown-light);font-size:0.88rem;">Khám phá tất cả các hạt mầm trí tuệ bạn đã mở khóa</p>
       </div>
 
       <div style="max-width:520px;margin:0 auto 16px;padding:0 16px;">
         <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;margin-bottom:6px;">
-          <span>Tiến trình khai mở</span>
+          <span>Tiến trình mở khóa</span>
           <span style="color:var(--peach);"><span id="libUniqueCount">0</span>/70</span>
         </div>
         <div class="progress-bar">
@@ -693,36 +537,134 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- TAB 3: HỒ SƠ & HUY HIỆU (PROFILE)          -->
+    <!-- 4. TAB VỀ DỰ ÁN (ABOUT)                    -->
     <!-- ========================================== -->
-    <div id="viewProfile" class="tab-view">
-      <div class="profile-hero-card">
-        <div class="profile-avatar-circle" id="profAvatar">🌸</div>
-        <h2 style="font-size:1.4rem;margin-bottom:4px;color:white;" id="profName">—</h2>
-        <p style="font-size:0.85rem;color:rgba(255,255,255,0.85);" id="profEmail"></p>
+    <div id="viewAbout" class="tab-view">
+      <div class="section-hero">
+        <div class="badge-eyebrow">✦ Triết Lý & Sứ Mệnh</div>
+        <h2 style="font-family:'Cinzel',serif;">Về Dự Án Vòng Quay</h2>
+        <p style="color:var(--brown-light);font-size:0.88rem;">Chiếc la bàn bình yên giúp bạn neo đậu tâm hồn mỗi ngày</p>
       </div>
 
-      <div style="padding:0 16px;max-width:520px;margin:0 auto 20px;">
-        <div style="font-size:0.82rem;font-weight:800;color:var(--brown-light);text-transform:uppercase;margin-bottom:10px;">
-          Bộ Huy Hiệu Khai Sáng
+      <div class="container">
+        <div class="about-card">
+          <h3>🌟 Ý Nghĩa Hình Thành</h3>
+          <p style="margin-bottom:16px;">
+            Trong nhịp sống hiện đại hối hả, chúng ta thường bị cuốn vào những lo toan, thông báo và áp lực bên ngoài. <strong>Vòng Quay Thông Điệp</strong> ra đời như một điểm chạm tĩnh lặng — nơi mỗi ngày bạn dành ra đúng 2 phút để quay về lắng nghe chính mình.
+          </p>
+          <p>
+            Đây không phải là trò chơi may rủi hay bói toán mê tín, mà là một công cụ thực hành chánh niệm giúp hướng tâm trí bạn về những giá trị sống tích cực, tử tế và an yên.
+          </p>
         </div>
-        <div class="badges-grid" id="profBadgesGrid"></div>
-      </div>
 
-      <div style="padding:0 16px;max-width:520px;margin:0 auto 30px;">
-        <div style="font-size:0.82rem;font-weight:800;color:var(--brown-light);text-transform:uppercase;margin-bottom:10px;">
-          Cài Đặt & Tài Khoản
-        </div>
-        <div style="background:white;border-radius:18px;border:1.5px solid var(--border);overflow:hidden;">
-          <div class="settings-item" onclick="exportData()" style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;">
-            <span>📤</span>
-            <span style="flex:1;font-weight:700;font-size:0.9rem;">Xuất bản sao lưu dữ liệu</span>
-            <span>›</span>
+        <div class="about-card">
+          <h3>🕯️ Nghi Thức 3 Bước Đón Nhận Hiệu Quả</h3>
+          <div class="about-step">
+            <div class="about-step-num">1</div>
+            <div>
+              <strong>Thở Sâu & Khởi Tạo Tâm Tĩnh</strong>
+              <p style="font-size:0.88rem;color:var(--brown-light);margin-top:2px;">Trước khi nhấn quay, hãy nhắm mắt hít một hơi thật sâu, thả lỏng đôi vai và mở lòng đón nhận bài học ngày hôm nay.</p>
+            </div>
           </div>
-          <div class="settings-item danger" onclick="confirmLogout()" style="padding:15px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#E74C3C;">
-            <span>🚪</span>
-            <span style="flex:1;font-weight:700;font-size:0.9rem;">Đăng xuất</span>
-            <span>›</span>
+          <div class="about-step">
+            <div class="about-step-num">2</div>
+            <div>
+              <strong>Đọc Lời Nhắn & Suy Ngẫm</strong>
+              <p style="font-size:0.88rem;color:var(--brown-light);margin-top:2px;">Đọc thông điệp không chỉ bằng mắt mà bằng trái tim. Tự hỏi bản thân: "Thông điệp này đang soi sáng điều gì trong đời sống mình lúc này?"</p>
+            </div>
+          </div>
+          <div class="about-step">
+            <div class="about-step-num">3</div>
+            <div>
+              <strong>Thực Hiện Hành Động Nhỏ & Viết Nhật Ký</strong>
+              <p style="font-size:0.88rem;color:var(--brown-light);margin-top:2px;">Làm ngay hành động gợi ý trong ngày và viết lại đôi dòng cảm xúc vào ô nhật ký để lưu giữ dấu ấn chặng đường.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. TAB CÀI ĐẶT & HỒ SƠ (SETTINGS)          -->
+    <!-- ========================================== -->
+    <div id="viewSettings" class="tab-view">
+      <div class="section-hero">
+        <div class="badge-eyebrow">⚙️ Tùy Chỉnh & Tài Khoản</div>
+        <h2 style="font-family:'Cinzel',serif;">Cài Đặt Ứng Dụng</h2>
+        <p style="color:var(--brown-light);font-size:0.88rem;">Quản lý âm thanh, tài khoản và dữ liệu của bạn</p>
+      </div>
+
+      <div class="settings-container">
+        <!-- Âm thanh & Âm nhạc -->
+        <div class="settings-group">
+          <div class="settings-group-title">🎵 Âm Nhạc & Giác Quan</div>
+          <div class="settings-row">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;">Âm lượng Lofi</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Điều chỉnh độ to nhỏ của nhạc nền</div>
+            </div>
+            <input type="range" class="settings-slider" id="musicVolumeSlider" min="0" max="1" step="0.05" oninput="changeMusicVolume(this.value)">
+          </div>
+          <div class="settings-row">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;">Hiệu ứng âm thanh (SFX)</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Tiếng vòng quay & chuông thiền định</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" id="sfxToggleBtn" onclick="toggleSoundFx()">
+              🔊 Đang Bật
+            </button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;">Đổi bài hát khác</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Chọn ngẫu nhiên 1 trong 9 bản Lofi</div>
+            </div>
+            <button class="btn btn-gold btn-sm" onclick="bgMusic.playRandomNext()">
+              ⏭️ Đổi bài
+            </button>
+          </div>
+        </div>
+
+        <!-- Thông tin tài khoản -->
+        <div class="settings-group">
+          <div class="settings-group-title">👤 Tài Khoản & Đồng Bộ</div>
+          <div class="settings-row">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;" id="setProfName">Đang tải...</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);" id="setProfEmail"></div>
+            </div>
+            <span style="font-size:0.75rem;font-weight:800;color:#2E7D32;background:#E8F5E9;padding:4px 10px;border-radius:100px;">
+              🟢 Đã Đồng Bộ Cloud
+            </span>
+          </div>
+        </div>
+
+        <!-- Huy hiệu mở khóa -->
+        <div class="settings-group">
+          <div class="settings-group-title">🏅 8 Huy Hiệu Danh Dự</div>
+          <div class="badges-grid" id="setBadgesGrid"></div>
+        </div>
+
+        <!-- Dữ liệu & Đăng xuất -->
+        <div class="settings-group">
+          <div class="settings-group-title">🔒 Dữ Liệu & Thoát</div>
+          <div class="settings-row">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;">Xuất bản sao lưu dữ liệu</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Tải tệp JSON chứa toàn bộ lịch sử</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="exportData()">
+              📤 Xuất JSON
+            </button>
+          </div>
+          <div class="settings-row">
+            <div>
+              <div style="font-weight:700;font-size:0.92rem;color:#E74C3C;">Đăng xuất tài khoản</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Thoát phiên làm việc hiện tại</div>
+            </div>
+            <button class="btn btn-sm" style="background:#FDE8E8;color:#E74C3C;border:1px solid #F8B4B4;" onclick="confirmLogout()">
+              🚪 Đăng Xuất
+            </button>
           </div>
         </div>
       </div>
@@ -792,22 +734,6 @@
     </div>
   </div>
 
-  <!-- BOTTOM NAV (SPA TAB SWITCHING — KHÔNG RELOAD TRANG, NHẠC KHÔNG DỪNG) -->
-  <nav class="bottom-nav">
-    <button class="nav-tab-btn active" id="tabBtnSpin" onclick="switchMainTab('spin')">
-      <span class="nav-icon">🎡</span>
-      <span>Quay</span>
-    </button>
-    <button class="nav-tab-btn" id="tabBtnLibrary" onclick="switchMainTab('library')">
-      <span class="nav-icon">📚</span>
-      <span>Thư viện</span>
-    </button>
-    <button class="nav-tab-btn" id="tabBtnProfile" onclick="switchMainTab('profile')">
-      <span class="nav-icon">👤</span>
-      <span>Hồ sơ</span>
-    </button>
-  </nav>
-
   <!-- Script Modules -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
@@ -824,7 +750,7 @@
     let libSearchQuery = '';
     let toastTimer = null;
 
-    // ── TOAST THÔNG BÁO HOÀN TOÀN ẨN SAU 2.2S ──
+    // Toast
     function showToast(msg) {
       let toast = document.getElementById('toast');
       if (!toast) {
@@ -841,29 +767,27 @@
       }, 2200);
     }
 
-    // ── CHUYỂN TAB SPA KHÔNG TẢI LẠI TRANG (NHẠC KHÔNG BỊ TẮT) ──
+    // ── CHUYỂN TAB SPA KHÔNG TẢI LẠI TRANG (NHẠC KHÔNG DỪNG) ──
     function switchMainTab(tabName) {
       document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.morphic-nav-item').forEach(b => b.classList.remove('active'));
 
-      if (tabName === 'library') {
-        document.getElementById('viewLibrary').classList.add('active');
-        document.getElementById('tabBtnLibrary').classList.add('active');
-        document.getElementById('navTitleText').textContent = 'Kho Tàng Thông Điệp';
-        renderLibraryGrid();
-        window.location.hash = 'library';
-      } else if (tabName === 'profile') {
-        document.getElementById('viewProfile').classList.add('active');
-        document.getElementById('tabBtnProfile').classList.add('active');
-        document.getElementById('navTitleText').textContent = 'Hồ Sơ & Huy Hiệu';
-        renderProfileTab();
-        window.location.hash = 'profile';
-      } else {
-        document.getElementById('viewSpin').classList.add('active');
-        document.getElementById('tabBtnSpin').classList.add('active');
-        document.getElementById('navTitleText').textContent = 'Vòng Quay Thông Điệp';
-        window.location.hash = 'spin';
-      }
+      const tabMap = {
+        home:     { view: 'viewHome',     btn: 'mNavHome',     title: 'Trang Chủ' },
+        spin:     { view: 'viewSpin',     btn: 'mNavSpin',     title: 'Vòng Quay' },
+        library:  { view: 'viewLibrary',  btn: 'mNavLibrary',  title: 'Bộ Sưu Tập' },
+        about:    { view: 'viewAbout',    btn: 'mNavAbout',    title: 'Về Dự Án' },
+        settings: { view: 'viewSettings', btn: 'mNavSettings', title: 'Cài Đặt' }
+      };
+
+      const target = tabMap[tabName] || tabMap.spin;
+      document.getElementById(target.view).classList.add('active');
+      document.getElementById(target.btn).classList.add('active');
+      window.location.hash = tabName;
+
+      if (tabName === 'library') renderLibraryGrid();
+      if (tabName === 'settings') renderSettingsTab();
+
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
@@ -874,7 +798,12 @@
         location.href = 'login.html';
         return;
       }
-      document.getElementById('userName').textContent = currentUser.name || '';
+
+      // Slider volume
+      const volSlider = document.getElementById('musicVolumeSlider');
+      if (volSlider && bgMusic) {
+        volSlider.value = bgMusic.audio.volume;
+      }
 
       updateSoundButton();
 
@@ -885,10 +814,16 @@
       refreshStats();
       checkTodaySpin();
 
-      // Kiểm tra URL Hash để mở đúng tab nếu người dùng vào từ link
+      // Kiểm tra URL Hash
       const hash = window.location.hash.replace('#', '');
-      if (hash === 'library' || hash === 'profile') {
+      if (['home', 'spin', 'library', 'about', 'settings'].includes(hash)) {
         switchMainTab(hash);
+      }
+    }
+
+    function changeMusicVolume(val) {
+      if (bgMusic) {
+        bgMusic.setVolume(parseFloat(val));
       }
     }
 
@@ -899,11 +834,14 @@
     }
 
     function updateSoundButton() {
-      const btn = document.getElementById('soundBtn');
-      btn.textContent = sounds.isMuted() ? '🔇' : '🔊';
+      const isMuted = sounds.isMuted();
+      const btn = document.getElementById('sfxToggleBtn');
+      if (btn) {
+        btn.textContent = isMuted ? '🔇 Đã Tắt' : '🔊 Đang Bật';
+      }
     }
 
-    // ── Thời gian & Ngày tháng ──
+    // ── Ngày tháng ──
     const hour = new Date().getHours();
     const greet = hour < 12 ? 'Buổi Sáng' : hour < 18 ? 'Buổi Chiều' : 'Buổi Tối';
     document.getElementById('greetingTime').textContent = greet;
@@ -917,10 +855,8 @@
       const u = uniqueMessagesCount();
       document.getElementById('totalSpins').textContent = h.length;
       document.getElementById('uniqueCount').textContent = u;
-      document.getElementById('streakNum').textContent = s.count;
       document.getElementById('streakStat').textContent = s.count;
 
-      // Cập nhật tab Thư Viện
       const libU = document.getElementById('libUniqueCount');
       if (libU) libU.textContent = u;
       const libBar = document.getElementById('libProgressFill');
@@ -944,7 +880,6 @@
         document.getElementById('todayCatTag').innerHTML = `
           <span class="cat-tag ${cat.id}">${cat.icon} ${cat.name}</span>
         `;
-
         startCountdown();
       }
     }
@@ -1213,7 +1148,7 @@
       }
     }
 
-    // ── LOGIC TAB THƯ VIỆN ──
+    // ── THƯ VIỆN GRID ──
     function renderLibraryGrid() {
       const history = getHistory();
       const grid = document.getElementById('libGridContainer');
@@ -1241,9 +1176,9 @@
               <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
               ${isUnlocked ? '' : '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🔒</div>'}
             </div>
-            <div class="lib-card-info">
-              <div class="lib-card-name">${msg.name}</div>
-              <div class="lib-card-meta">
+            <div style="padding:10px 12px;">
+              <div style="font-size:0.82rem;font-weight:700;color:var(--brown-dark);margin-bottom:4px;">${msg.name}</div>
+              <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--brown-light);font-weight:600;">
                 <span style="color:${cat.color};font-weight:700;">${cat.icon} ${cat.name.split(' ')[0]}</span>
                 <span>${isUnlocked ? '✓ Đã mở' : 'Chưa mở'}</span>
               </div>
@@ -1270,7 +1205,7 @@
       showLetterModal();
     }
 
-    // ── LOGIC TAB HỒ SƠ ──
+    // ── CÀI ĐẶT & HUY HIỆU ──
     const BADGES = [
       { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu tiên' },
       { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày liên tiếp' },
@@ -1282,16 +1217,15 @@
       { emoji:'💎', name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
     ];
 
-    function renderProfileTab() {
+    function renderSettingsTab() {
       const h = getHistory();
       const s = getStreak();
       const u = uniqueMessagesCount();
 
-      document.getElementById('profName').textContent = currentUser?.name || 'Bạn';
-      document.getElementById('profEmail').textContent = currentUser?.email || 'Chế độ trải nghiệm';
-      document.getElementById('profAvatar').textContent = (currentUser?.name || 'U')[0].toUpperCase();
+      document.getElementById('setProfName').textContent = currentUser?.name || 'Người dùng';
+      document.getElementById('setProfEmail').textContent = currentUser?.email || 'Chế độ Khách';
 
-      const grid = document.getElementById('profBadgesGrid');
+      const grid = document.getElementById('setBadgesGrid');
       grid.innerHTML = '';
       BADGES.forEach(b => {
         let val = 0;
@@ -1312,7 +1246,7 @@
     async function confirmLogout() {
       if (confirm('Bạn có chắc muốn đăng xuất?')) {
         await logoutUser();
-        location.href = 'index.html';
+        location.href = 'login.html';
       }
     }
 
