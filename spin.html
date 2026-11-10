@@ -3,172 +3,227 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vòng Quay — Thông Điệp Hôm Nay</title>
+  <title>La Bàn Thông Điệp — Vũ Trụ Gửi Bạn</title>
   <link rel="stylesheet" href="css/global.css">
   <style>
-    body { background: linear-gradient(160deg, #FFF8F0 0%, #FFE8D8 100%); padding-bottom: 80px; }
+    body {
+      background: radial-gradient(circle at 50% 10%, #FFFDF9 0%, #FFF3EB 55%, #FDE3D6 100%);
+      padding-bottom: 90px;
+      overflow-x: hidden;
+    }
 
-    /* ── Navbar user ── */
-    .user-name { font-weight: 700; color: var(--brown-dark); font-size: 0.9rem; }
-
-    /* ── Page header ── */
+    /* ── Header ── */
     .spin-header {
       text-align: center;
-      padding: 32px 20px 0;
+      padding: 24px 20px 0;
     }
-    .spin-header h2 { margin-bottom: 6px; }
-    .spin-header p { color: var(--brown-light); font-size: 0.9rem; }
-    .greeting { color: var(--peach); }
+    .spin-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(224, 122, 95, 0.1);
+      border: 1px solid rgba(224, 122, 95, 0.2);
+      border-radius: var(--radius-pill);
+      padding: 4px 16px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--peach);
+      margin-bottom: 8px;
+    }
+    .spin-header h2 { font-size: clamp(1.4rem, 4vw, 2rem); margin-bottom: 4px; }
+    .spin-header p { color: var(--brown-light); font-size: 0.88rem; }
 
-    /* ── Wheel section ── */
+    /* ── Mini stats bar ── */
+    .mini-stats {
+      max-width: 440px;
+      margin: 18px auto 0;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      padding: 0 16px;
+    }
+    .mini-stat {
+      background: rgba(255, 252, 247, 0.85);
+      backdrop-filter: blur(8px);
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border);
+      padding: 10px 8px;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+    }
+    .mini-stat-num {
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: var(--peach);
+      display: block;
+    }
+    .mini-stat-label { font-size: 0.68rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
+
+    /* ── Wheel Area ── */
     .wheel-section {
       display: flex;
       flex-direction: column;
       align-items: center;
-      padding: 24px 20px 0;
-      gap: 24px;
+      padding: 24px 16px 0;
+      gap: 20px;
+    }
+
+    .wheel-outer-glow {
+      position: relative;
+      padding: 12px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(233,196,106,0.35) 0%, rgba(224,122,95,0.1) 65%, transparent 75%);
     }
 
     .wheel-wrapper {
       position: relative;
-      width: min(360px, 90vw);
-      height: min(360px, 90vw);
-      filter: drop-shadow(0 16px 48px rgba(224,122,95,0.25));
-    }
-    #spinCanvas {
-      width: 100%; height: 100%;
-      cursor: pointer;
+      width: min(350px, 86vw);
+      height: min(350px, 86vw);
+      border-radius: 50%;
+      box-shadow: 0 16px 50px rgba(90, 45, 25, 0.22), 0 0 35px rgba(233, 196, 106, 0.3);
     }
 
-    /* Pointer */
+    #spinCanvas {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      cursor: pointer;
+      display: block;
+    }
+
+    /* Kim chỉ vàng hoàng gia */
     .wheel-pointer {
       position: absolute;
       top: -18px;
       left: 50%;
       transform: translateX(-50%);
-      width: 0; height: 0;
-      border-left: 14px solid transparent;
-      border-right: 14px solid transparent;
-      border-top: 36px solid var(--peach);
-      filter: drop-shadow(0 4px 8px rgba(224,122,95,0.5));
-      z-index: 2;
+      width: 32px;
+      height: 44px;
+      z-index: 10;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 10px rgba(211, 84, 0, 0.5));
     }
-    .wheel-pointer::after {
-      content: '';
-      position: absolute;
-      top: -40px;
-      left: -10px;
-      width: 20px; height: 20px;
-      background: var(--peach);
-      border-radius: 50%;
-    }
+    .wheel-pointer svg { width: 100%; height: 100%; }
 
-    /* Center circle of wheel */
-    .wheel-center {
+    /* Tâm cầu pha lê */
+    .wheel-center-orb {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 50%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      width: 70px; height: 70px;
-      background: var(--white);
+      width: 68px;
+      height: 68px;
+      background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #FFF3CD 35%, #F6D365 70%, #E07A5F 100%);
       border-radius: 50%;
-      border: 4px solid var(--border);
+      border: 3px solid #FFF8F0;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.8);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
-      box-shadow: var(--shadow-md);
-      z-index: 2;
+      font-size: 1.6rem;
       pointer-events: none;
+      z-index: 5;
     }
 
-    /* Spin button */
-    .spin-btn-wrapper { text-align: center; }
+    /* ── Nút Quay ── */
     #spinBtn {
-      width: min(260px, 80vw);
-      height: 68px;
-      font-size: 1.3rem;
+      width: min(280px, 82vw);
+      height: 64px;
+      font-family: 'Cinzel', 'Playfair Display', serif;
+      font-size: 1.25rem;
       font-weight: 800;
-      letter-spacing: 2px;
+      letter-spacing: 3px;
       border-radius: var(--radius-pill);
-      background: linear-gradient(135deg, var(--peach) 0%, var(--peach-light) 100%);
+      background: linear-gradient(135deg, #E07A5F 0%, #F4A47A 50%, #E9C46A 100%);
       color: white;
-      border: none;
+      border: 2px solid rgba(255,255,255,0.6);
       cursor: pointer;
-      box-shadow: 0 8px 32px rgba(224,122,95,0.45);
+      box-shadow: 0 10px 30px rgba(224, 122, 95, 0.45), 0 0 20px rgba(233, 196, 106, 0.35);
       transition: all 0.3s var(--transition);
       position: relative;
       overflow: hidden;
     }
-    #spinBtn::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg,transparent,rgba(255,255,255,0.25),transparent);
-      transform: translateX(-100%);
-    }
     #spinBtn:hover:not(:disabled) {
       transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 12px 40px rgba(224,122,95,0.55);
+      box-shadow: 0 14px 40px rgba(224, 122, 95, 0.6), 0 0 30px rgba(233, 196, 106, 0.5);
     }
-    #spinBtn:hover:not(:disabled)::before {
-      animation: shimmer 0.8s ease forwards;
-    }
-    #spinBtn:active:not(:disabled) { transform: scale(0.98); }
-    #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; }
-    #spinBtn.spinning { animation: pulse 0.3s ease infinite; }
+    #spinBtn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
+    #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* Already spun state */
+    /* ── Trạng Thái Đã Quay Hôm Nay ── */
     .already-spun {
       display: none;
       text-align: center;
       animation: fadeIn 0.5s ease forwards;
+      max-width: 440px;
+      width: 100%;
     }
     .already-spun.show { display: block; }
-    .already-spun .today-card {
+    .today-card {
       background: var(--white);
       border-radius: var(--radius);
       border: 2px solid var(--peach-soft);
-      padding: 24px;
-      max-width: 340px;
-      margin: 0 auto 20px;
+      padding: 22px;
+      margin-bottom: 16px;
       box-shadow: var(--shadow-md);
+      position: relative;
+      overflow: hidden;
     }
-    .already-spun .today-img {
+    .today-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 5px;
+      background: linear-gradient(90deg, var(--peach), var(--gold));
+    }
+    .today-img {
       width: 100%;
-      max-width: 200px;
+      max-width: 220px;
       border-radius: var(--radius-sm);
       margin: 0 auto 14px;
       box-shadow: var(--shadow-sm);
+      border: 1px solid var(--border);
     }
-    .already-spun .today-name {
+    .today-name {
       font-family: 'Playfair Display', serif;
-      font-size: 1rem;
+      font-size: 1.15rem;
       font-weight: 700;
       color: var(--brown-dark);
       margin-bottom: 6px;
     }
-    .already-spun .today-desc {
-      font-size: 0.85rem;
+    .today-desc {
+      font-size: 0.88rem;
       color: var(--brown-mid);
       line-height: 1.6;
-      margin-bottom: 14px;
-    }
-    .countdown-box {
-      background: var(--gold-soft);
-      border: 1px solid #F0D080;
-      border-radius: var(--radius-sm);
-      padding: 12px 20px;
-      display: inline-block;
       margin-bottom: 16px;
     }
-    .countdown-label { font-size: 0.75rem; color: var(--brown-light); font-weight: 600; }
-    .countdown-time { font-size: 1.5rem; font-weight: 800; color: var(--brown-dark); font-family: 'Playfair Display', serif; }
 
-    /* ── Result overlay ── */
-    .result-overlay {
+    .countdown-box {
+      background: #FFF9E6;
+      border: 1px solid #F0D080;
+      border-radius: var(--radius-sm);
+      padding: 10px 18px;
+      display: inline-block;
+      margin-bottom: 14px;
+    }
+    .countdown-label { font-size: 0.72rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
+    .countdown-time {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: var(--brown-dark);
+      font-family: 'Cinzel', serif;
+      letter-spacing: 1px;
+    }
+
+    /* ── MODAL NGHI THỨC MỞ THƯ PHONG BÌ SÁP ── */
+    .ritual-overlay {
       position: fixed;
       inset: 0;
-      z-index: 300;
+      z-index: 500;
+      background: rgba(14, 17, 30, 0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -177,125 +232,199 @@
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.5s ease;
+      overflow-y: auto;
     }
-    .result-overlay.show {
-      opacity: 1;
-      pointer-events: all;
-    }
-    .result-bg {
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(160deg, rgba(255,232,216,0.97) 0%, rgba(255,215,195,0.97) 100%);
-      backdrop-filter: blur(8px);
-    }
+    .ritual-overlay.show { opacity: 1; pointer-events: all; }
 
-    /* Confetti */
-    .confetti-container { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-    .confetti-piece {
-      position: absolute;
-      top: -10px;
-      width: 10px; height: 10px;
-      border-radius: 2px;
-      animation: confetti-fall 3s linear forwards;
-    }
-
-    /* Envelope animation */
-    .envelope-wrapper {
-      position: relative;
-      z-index: 1;
-      perspective: 1000px;
-      width: min(320px, 90vw);
-      margin-bottom: 20px;
-      animation: bounceIn 0.7s var(--transition) forwards;
-    }
-    .envelope {
+    /* Bước 1: Phong bì kín có con dấu sáp */
+    .seal-step {
+      text-align: center;
+      animation: scaleIn 0.5s var(--transition) forwards;
+      max-width: 360px;
       width: 100%;
-      background: linear-gradient(135deg, #FFF0E4, #FFE0CC);
-      border-radius: 12px;
-      border: 2px solid #F0C8B0;
-      box-shadow: var(--shadow-lg);
-      overflow: hidden;
-      position: relative;
     }
-    .envelope-top {
+    .envelope-box {
+      background: linear-gradient(145deg, #FFF0E4, #FFE3D1);
+      border-radius: 20px;
+      border: 2px solid #F5C7AF;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 30px rgba(233,196,106,0.3);
+      padding: 45px 24px 35px;
+      position: relative;
+      margin-bottom: 20px;
+    }
+    .envelope-box::after {
+      content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
-      height: 60px;
-      background: linear-gradient(135deg, #FFD6B8, #FFC4A0);
-      transform-origin: top center;
-      border-radius: 12px 12px 0 0;
-      transition: transform 0.6s ease;
-      z-index: 2;
+      height: 90px;
+      background: linear-gradient(180deg, rgba(230,122,95,0.12), transparent);
       clip-path: polygon(0 0, 100% 0, 50% 100%);
+      pointer-events: none;
     }
-    .envelope-top.open { transform: rotateX(180deg); }
-    .envelope-body { padding: 60px 16px 16px; min-height: 200px; }
-
-    /* Result card inside envelope */
-    .result-card {
-      background: white;
-      border-radius: var(--radius-sm);
-      overflow: hidden;
-      box-shadow: var(--shadow-sm);
-      transform: translateY(60px);
-      opacity: 0;
-      transition: transform 0.6s ease 0.5s, opacity 0.6s ease 0.5s;
-    }
-    .result-card.show { transform: translateY(0); opacity: 1; }
-    .result-card img { width: 100%; display: block; }
-    .result-card-body { padding: 16px; }
-    .result-card-name {
+    .seal-text {
+      color: var(--brown-dark);
       font-family: 'Playfair Display', serif;
-      font-size: 1.1rem;
+      font-size: 1.25rem;
       font-weight: 700;
+      margin-bottom: 24px;
+    }
+
+    /* Bước 2: Lá thư mở ra chi tiết */
+    .letter-step {
+      display: none;
+      width: 100%;
+      max-width: 480px;
+      animation: scaleIn 0.5s var(--transition) forwards;
+      background: #FFFDF9;
+      border-radius: var(--radius);
+      border: 2px solid #E9C46A;
+      box-shadow: 0 25px 70px rgba(0,0,0,0.7), 0 0 45px rgba(233,196,106,0.4);
+      padding: 24px;
+      position: relative;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+    .letter-step.show { display: block; }
+    .letter-close {
+      position: absolute;
+      top: 14px; right: 14px;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.06);
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s;
+    }
+    .letter-close:hover { background: rgba(0,0,0,0.12); }
+
+    .letter-img {
+      width: 100%;
+      max-width: 280px;
+      border-radius: var(--radius-sm);
+      margin: 0 auto 16px;
+      display: block;
+      box-shadow: var(--shadow-md);
+      border: 2px solid rgba(233,196,106,0.4);
+    }
+    .letter-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      text-align: center;
+      margin-bottom: 6px;
+    }
+    .letter-desc {
+      font-size: 0.95rem;
+      color: var(--brown-mid);
+      text-align: center;
+      line-height: 1.65;
+      margin-bottom: 18px;
+    }
+
+    /* Khung Hành Động Tỉnh Thức */
+    .action-box {
+      background: #FFF9ED;
+      border: 1.5px solid #F0D488;
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 16px;
+    }
+    .action-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #B7791F;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+    .action-text {
+      font-size: 0.88rem;
+      font-weight: 600;
       color: var(--brown-dark);
       margin-bottom: 8px;
     }
-    .result-card-desc {
-      font-size: 0.875rem;
-      color: var(--brown-mid);
-      line-height: 1.65;
-    }
-
-    /* Result actions */
-    .result-actions {
-      position: relative;
-      z-index: 1;
+    .action-check-label {
       display: flex;
-      gap: 10px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeIn 0.5s ease 1s both;
-    }
-    .result-actions .btn { font-size: 0.875rem; padding: 11px 20px; }
-
-    /* ── Bottom nav ── */
-    .bottom-nav { display: flex; }
-
-    /* ── Mini stats ── */
-    .mini-stats {
-      max-width: 400px;
-      margin: 24px auto 0;
-      display: grid;
-      grid-template-columns: repeat(3,1fr);
-      gap: 12px;
-      padding: 0 20px;
-    }
-    .mini-stat {
-      background: var(--white);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      padding: 14px 10px;
-      text-align: center;
-    }
-    .mini-stat-num {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.82rem;
       font-weight: 700;
       color: var(--peach);
-      display: block;
+      cursor: pointer;
     }
-    .mini-stat-label { font-size: 0.7rem; color: var(--brown-light); font-weight: 600; }
+
+    /* Khung Nhật Ký Cảm Nghĩ */
+    .journal-box {
+      background: var(--cream);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .journal-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--brown-mid);
+      margin-bottom: 6px;
+    }
+    .journal-input {
+      width: 100%;
+      height: 70px;
+      padding: 10px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.88rem;
+      resize: none;
+      outline: none;
+      background: white;
+    }
+    .journal-input:focus { border-color: var(--peach); }
+
+    /* Action buttons in letter */
+    .letter-actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    /* ── Modal Story Preview ── */
+    .story-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 600;
+      background: rgba(0, 0, 0, 0.9);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    .story-modal.show { opacity: 1; pointer-events: all; }
+    .story-preview-img {
+      max-height: 72vh;
+      max-width: 90vw;
+      border-radius: 18px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+      margin-bottom: 16px;
+    }
+    .story-modal-actions { display: flex; gap: 12px; }
+
+    /* Confetti canvas */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 550;
+    }
   </style>
 </head>
 <body>
@@ -303,27 +432,35 @@
   <!-- Navbar -->
   <nav class="navbar">
     <div class="navbar-brand">
-      <span class="brand-icon">🌀</span>
-      <span>Vòng Quay</span>
+      <span style="color:var(--gold);font-size:1.4rem;">✦</span>
+      <span>Vòng Quay Thông Điệp</span>
     </div>
     <div class="navbar-actions">
+      <!-- Nút Âm Thanh Mute/Unmute -->
+      <button class="btn-icon" id="soundBtn" onclick="toggleSound()" title="Bật/Tắt âm thanh">
+        🔊
+      </button>
+      <!-- Huy hiệu Streak -->
       <div class="streak-badge" id="streakBadge">
-        <span class="fire">🔥</span>
+        <span>🔥</span>
         <span id="streakNum">0</span> ngày
       </div>
-      <span class="user-name" id="userName"></span>
+      <span class="user-name" id="userName" style="font-weight:700;font-size:0.88rem;"></span>
     </div>
   </nav>
 
-  <div class="page">
+  <canvas id="confettiCanvas"></canvas>
 
-    <!-- Header -->
+  <div class="page">
     <div class="spin-header">
-      <h2>Thông Điệp <span class="greeting" id="greetingTime">Hôm Nay</span></h2>
+      <div class="spin-eyebrow">
+        <span>🌀</span> La Bàn Vũ Trụ
+      </div>
+      <h2>Thông Điệp <span style="color:var(--peach);" id="greetingTime">Hôm Nay</span></h2>
       <p id="todayDate"></p>
     </div>
 
-    <!-- Mini stats -->
+    <!-- Mini stats bar -->
     <div class="mini-stats">
       <div class="mini-stat">
         <span class="mini-stat-num" id="totalSpins">0</span>
@@ -339,64 +476,120 @@
       </div>
     </div>
 
-    <!-- Wheel section -->
+    <!-- Khu vực Vòng Quay -->
     <div class="wheel-section">
-      <div class="wheel-wrapper" id="wheelWrapper">
-        <div class="wheel-pointer"></div>
-        <canvas id="spinCanvas" width="400" height="400"></canvas>
-        <div class="wheel-center">🌀</div>
+      <div class="wheel-outer-glow">
+        <div class="wheel-wrapper" id="wheelWrapper">
+          <!-- Kim chỉ đỉnh vàng -->
+          <div class="wheel-pointer">
+            <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 44L0 8C0 3.58172 7.16344 0 16 0C24.8366 0 32 3.58172 32 8L16 44Z" fill="url(#goldGrad)"/>
+              <defs>
+                <linearGradient id="goldGrad" x1="0" y1="0" x2="32" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F6D365"/>
+                  <stop offset="1" stop-color="#E07A5F"/>
+                </linearGradient>
+              </defs>
+            </svg>
+          </div>
+
+          <canvas id="spinCanvas" width="450" height="450"></canvas>
+          <div class="wheel-center-orb">✦</div>
+        </div>
       </div>
 
-      <!-- Spin button -->
+      <!-- Nút Quay -->
       <div class="spin-btn-wrapper" id="spinBtnSection">
-        <button id="spinBtn" onclick="startSpin()">QUAY</button>
+        <button id="spinBtn" onclick="startSpin()">QUAY VÒNG QUAY</button>
       </div>
 
-      <!-- Already spun -->
+      <!-- Đã quay hôm nay -->
       <div class="already-spun" id="alreadySpun">
         <div class="today-card">
+          <div id="todayCatTag" style="margin-bottom:10px;"></div>
           <img class="today-img" id="todayMsgImg" src="" alt="">
           <div class="today-name" id="todayMsgName"></div>
           <div class="today-desc" id="todayMsgDesc"></div>
+
           <div class="countdown-box">
-            <div class="countdown-label">Lượt quay tiếp theo sau</div>
+            <div class="countdown-label">Lá thư tiếp theo sau</div>
             <div class="countdown-time" id="countdown">--:--:--</div>
           </div>
         </div>
+
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button class="btn btn-primary btn-sm" onclick="showResult()">Xem lại thông điệp</button>
+          <button class="btn btn-gold btn-sm" onclick="showLetterModal()">📜 Xem lại lá thư</button>
+          <button class="btn btn-primary btn-sm" onclick="exportInstagramStory()">📸 Tạo ảnh Story</button>
           <a href="library.html" class="btn btn-secondary btn-sm">📚 Thư viện</a>
         </div>
       </div>
     </div>
-
   </div>
 
-  <!-- Result Overlay -->
-  <div class="result-overlay" id="resultOverlay">
-    <div class="result-bg" onclick="closeResult()"></div>
-    <div class="confetti-container" id="confettiContainer"></div>
-
-    <div class="envelope-wrapper">
-      <div class="envelope">
-        <div class="envelope-top" id="envelopeTop"></div>
-        <div class="envelope-body">
-          <div class="result-card" id="resultCard">
-            <img id="resultImg" src="" alt="">
-            <div class="result-card-body">
-              <div class="result-card-name" id="resultName"></div>
-              <div class="result-card-desc" id="resultDesc"></div>
-            </div>
-          </div>
+  <!-- NGHI THỨC MỞ PHONG BÌ SÁP NIÊM PHONG -->
+  <div class="ritual-overlay" id="ritualOverlay">
+    <!-- Bước 1: Phong bì có tem sáp -->
+    <div class="seal-step" id="sealStep">
+      <div class="envelope-box">
+        <div class="seal-text">Vũ Trụ Đã Gửi Một Lá Thư Đến Bạn</div>
+        <div class="wax-seal" id="waxSealBtn" onclick="crackWaxSeal()">
+          <span class="wax-seal-inner">🌀</span>
         </div>
+        <p style="margin-top:16px;font-size:0.85rem;color:var(--brown-mid);font-weight:700;">
+          Chạm vào con dấu sáp để mở niêm phong
+        </p>
       </div>
     </div>
 
-    <div class="result-actions">
-      <button class="btn btn-primary" onclick="shareMessage()">💌 Chia sẻ</button>
-      <button class="btn btn-secondary" onclick="saveImage()">⬇️ Lưu ảnh</button>
-      <a href="library.html" class="btn btn-secondary">📚 Thư viện</a>
-      <button class="btn btn-ghost" onclick="closeResult()">✕ Đóng</button>
+    <!-- Bước 2: Lá thư chi tiết -->
+    <div class="letter-step" id="letterStep">
+      <button class="letter-close" onclick="closeRitual()">✕</button>
+
+      <div id="letterCatTag" style="text-align:center;margin-bottom:10px;"></div>
+      <img id="letterImg" class="letter-img" src="" alt="">
+      <div id="letterTitle" class="letter-title"></div>
+      <div id="letterDesc" class="letter-desc"></div>
+
+      <!-- Gợi ý hành động hôm nay -->
+      <div class="action-box" id="actionBox">
+        <div class="action-badge">✨ Hành Động Tỉnh Thức Hôm Nay</div>
+        <div class="action-text" id="actionText"></div>
+        <label class="action-check-label">
+          <input type="checkbox" id="actionCheckbox" onchange="toggleActionDone()">
+          <span>Tôi đã hoàn thành hành động này hôm nay</span>
+        </label>
+      </div>
+
+      <!-- Nhật ký cảm nhận -->
+      <div class="journal-box">
+        <div class="journal-title">✍️ Cảm nghĩ & Lời biết ơn của bạn hôm nay:</div>
+        <textarea id="journalInput" class="journal-input" placeholder="Viết vài dòng suy ngẫm để lưu giữ khoảnh khắc này..."></textarea>
+        <button class="btn btn-secondary btn-sm" style="margin-top:6px;width:100%;" onclick="saveTodayJournal()">
+          💾 Lưu nhật ký này
+        </button>
+      </div>
+
+      <div class="letter-actions">
+        <button class="btn btn-gold" onclick="exportInstagramStory()">
+          📸 Tạo Story Share
+        </button>
+        <button class="btn btn-secondary" onclick="shareMessageDirect()">
+          💌 Chia sẻ link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL XEM & TẢI ẢNH STORY INSTAGRAM -->
+  <div class="story-modal" id="storyModal">
+    <img id="storyImgPreview" class="story-preview-img" src="" alt="Story Preview">
+    <div class="story-modal-actions">
+      <a id="downloadStoryBtn" class="btn btn-gold" download="thong-diep-story.png">
+        ⬇️ Tải ảnh Story
+      </a>
+      <button class="btn btn-secondary" onclick="closeStoryModal()">
+        ✕ Đóng
+      </button>
     </div>
   </div>
 
@@ -416,31 +609,49 @@
     </a>
   </nav>
 
+  <!-- Script Modules -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
+  <script src="js/sound.js"></script>
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/story-generator.js"></script>
   <script>
     let currentMsgId = null;
+    let currentUser = null;
 
+    // ── Khởi Tạo Trang ──
     async function initPage() {
-      const user = await getCurrentUser();
-      if (!user) {
+      currentUser = await getCurrentUser();
+      if (!currentUser) {
         location.href = 'login.html';
         return;
       }
-      document.getElementById('userName').textContent = user?.name || '';
+      document.getElementById('userName').textContent = currentUser.name || '';
 
-      // Đồng bộ từ Cloud nếu có
-      if (user.id && user.id !== 'guest') {
-        await syncDataFromSupabase(user.id);
+      // Cập nhật biểu tượng âm thanh
+      updateSoundButton();
+
+      if (currentUser.id && currentUser.id !== 'guest') {
+        await syncDataFromSupabase(currentUser.id);
       }
 
       refreshStats();
       checkTodaySpin();
     }
 
-    // ── Greeting & Date ──
+    function toggleSound() {
+      const isMuted = sounds.toggleMute();
+      updateSoundButton();
+      showToast(isMuted ? 'Đã tắt âm thanh 🔇' : 'Đã bật âm thanh 🔊');
+    }
+
+    function updateSoundButton() {
+      const btn = document.getElementById('soundBtn');
+      btn.textContent = sounds.isMuted() ? '🔇' : '🔊';
+    }
+
+    // ── Thời gian & Ngày tháng ──
     const hour = new Date().getHours();
     const greet = hour < 12 ? 'Buổi Sáng' : hour < 18 ? 'Buổi Chiều' : 'Buổi Tối';
     document.getElementById('greetingTime').textContent = greet;
@@ -465,9 +676,16 @@
         const alreadySpun = document.getElementById('alreadySpun');
         alreadySpun.classList.add('show');
         const msg = getMessageById(spin.messageId);
+
         document.getElementById('todayMsgImg').src = `images/${String(spin.messageId).padStart(2,'0')}.png`;
         document.getElementById('todayMsgName').textContent = msg.name;
         document.getElementById('todayMsgDesc').textContent = msg.desc;
+
+        const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
+        document.getElementById('todayCatTag').innerHTML = `
+          <span class="cat-tag ${cat.id}">${cat.icon} ${cat.name}</span>
+        `;
+
         startCountdown();
       }
     }
@@ -486,103 +704,140 @@
       setInterval(update, 1000);
     }
 
-    // ── Canvas Wheel ──
+    // ── CANVAS LA BÀN HOÀNG KIM (Celestial Compass Wheel) ──
     const canvas = document.getElementById('spinCanvas');
     const ctx    = canvas.getContext('2d');
-    const W = 400, H = 400, CX = 200, CY = 200, R = 185;
+    const W = 450, H = 450, CX = 225, CY = 225, R = 210;
     const SEGMENTS = 12;
-    const COLORS = [
-      '#FFB5A7','#FFC8A2','#FFD9B0','#FFE5C0',
-      '#FFF0C8','#E8F5D0','#C8E6D8','#B8D8E8',
-      '#C8C0E8','#DDB8D8','#ECC8D8','#F5D8C8'
+
+    const PALETTE = [
+      '#FFDFC9', '#FFEAC9', '#FFF5C9', '#F1FFD4',
+      '#D8FCEB', '#D2F5F8', '#DBECFF', '#E4E2FF',
+      '#EFE2FF', '#FCE2F7', '#FFE0EA', '#FFE7DD'
     ];
-    const ICONS  = ['⭐','🌸','🌙','💫','🦋','🌺','✨','🌼','🍃','🌈','💖','🌟'];
-    const NAMES  = ['Tình Yêu','Hy Vọng','Bình An','Dũng Cảm','Trí Tuệ','Thịnh Vượng',
-                    'Hạnh Phúc','Sáng Tạo','Kiên Nhẫn','Chữa Lành','Phát Triển','Niềm Tin'];
+    const RUNES = ['✦','✧','☽','☼','★','☆','☯','⚘','☘','❊','☸','࿏'];
+    const LABELS = ['Bình An','Trí Tuệ','Hy Vọng','Chữa Lành','Dồi Dào','Tình Yêu',
+                    'Kỷ Luật','Bền Bỉ','Khai Sáng','Chánh Niệm','Thong Dong','Phúc Lạc'];
 
     let currentAngle = 0;
     let isSpinning   = false;
+    let lastSegmentPassed = -1;
 
     function drawWheel(rotation) {
       ctx.clearRect(0, 0, W, H);
-      const seg = (Math.PI * 2) / SEGMENTS;
+      const segAngle = (Math.PI * 2) / SEGMENTS;
 
+      // 1. Viền ngoài La Bàn Kim Loại Vàng
+      ctx.save();
+      ctx.beginPath();
+      ctx.arc(CX, CY, R + 6, 0, Math.PI * 2);
+      ctx.fillStyle = '#E9C46A';
+      ctx.shadowColor = 'rgba(233,196,106,0.6)';
+      ctx.shadowBlur = 18;
+      ctx.fill();
+
+      ctx.beginPath();
+      ctx.arc(CX, CY, R + 2, 0, Math.PI * 2);
+      ctx.fillStyle = '#5A3828';
+      ctx.fill();
+      ctx.restore();
+
+      // 2. Vẽ 12 ô màu pastel với ký tự cổ
       for (let i = 0; i < SEGMENTS; i++) {
-        const start = rotation + i * seg;
-        const end   = start + seg;
-        const mid   = start + seg / 2;
+        const start = rotation + i * segAngle;
+        const end   = start + segAngle;
+        const mid   = start + segAngle / 2;
 
         ctx.beginPath();
         ctx.moveTo(CX, CY);
         ctx.arc(CX, CY, R, start, end);
         ctx.closePath();
-        ctx.fillStyle = COLORS[i];
+        ctx.fillStyle = PALETTE[i];
         ctx.fill();
 
-        ctx.strokeStyle = 'white';
-        ctx.lineWidth = 3;
+        // Đường chỉ viền trắng kim
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        const iconR = R * 0.65;
-        const ix = CX + Math.cos(mid) * iconR;
-        const iy = CY + Math.sin(mid) * iconR;
+        // Cổ tự / Chòm sao
+        const runeR = R * 0.72;
+        const rx = CX + Math.cos(mid) * runeR;
+        const ry = CY + Math.sin(mid) * runeR;
         ctx.save();
-        ctx.translate(ix, iy);
+        ctx.translate(rx, ry);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = '22px serif';
+        ctx.font = 'bold 20px serif';
+        ctx.fillStyle = '#6E4532';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(ICONS[i], 0, 0);
+        ctx.fillText(RUNES[i], 0, 0);
         ctx.restore();
 
-        const labelR = R * 0.38;
+        // Tên ngắn năng lượng
+        const labelR = R * 0.42;
         const lx = CX + Math.cos(mid) * labelR;
         const ly = CY + Math.sin(mid) * labelR;
         ctx.save();
         ctx.translate(lx, ly);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = 'bold 9px Nunito, sans-serif';
-        ctx.fillStyle = 'rgba(74,44,42,0.6)';
+        ctx.font = 'bold 10px Nunito, sans-serif';
+        ctx.fillStyle = '#5A3828';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(NAMES[i], 0, 0);
+        ctx.fillText(LABELS[i], 0, 0);
         ctx.restore();
       }
 
+      // Vành đai trong trang trí
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 4, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(224,122,95,0.4)';
-      ctx.lineWidth = 8;
+      ctx.arc(CX, CY, 52, 0, Math.PI * 2);
+      ctx.strokeStyle = '#E9C46A';
+      ctx.lineWidth = 4;
       ctx.stroke();
     }
 
     drawWheel(0);
 
+    // ── Bắt đầu quay ──
     function startSpin() {
       if (isSpinning || hasSpunToday()) return;
       isSpinning = true;
+
+      // Khởi động Web Audio
+      sounds.init();
+
       const btn = document.getElementById('spinBtn');
       btn.disabled = true;
-      btn.textContent = '...';
+      btn.textContent = 'ĐANG DẪN LỐI...';
 
       const msg = getRandomMessage();
       currentMsgId = msg.id;
 
-      const extraSpins = 5 + Math.random() * 3;
+      const extraSpins = 6 + Math.random() * 3;
       const targetAngle = currentAngle + (Math.PI * 2 * extraSpins) + Math.random() * Math.PI * 2;
 
-      const duration = 4000;
+      const duration = 4600;
       const startTime = performance.now();
       const startAngle = currentAngle;
+      const segAngle = (Math.PI * 2) / SEGMENTS;
 
-      function easeOut(t) {
-        return 1 - Math.pow(1 - t, 4);
+      function easeOutCubic(t) {
+        return 1 - Math.pow(1 - t, 3.5);
       }
 
       function animate(time) {
         const elapsed = time - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        currentAngle = startAngle + (targetAngle - startAngle) * easeOut(progress);
+        currentAngle = startAngle + (targetAngle - startAngle) * easeOutCubic(progress);
+
+        // Tính tiếng tick khi đi qua từng nấc
+        const currentSegIndex = Math.floor((currentAngle % (Math.PI * 2)) / segAngle);
+        if (currentSegIndex !== lastSegmentPassed) {
+          sounds.playTick(1.0 + (1 - progress) * 0.5);
+          lastSegmentPassed = currentSegIndex;
+        }
+
         drawWheel(currentAngle);
 
         if (progress < 1) {
@@ -590,100 +845,188 @@
         } else {
           currentAngle = targetAngle % (Math.PI * 2);
           isSpinning = false;
-          onSpinEnd(msg);
+          onSpinFinished(msg);
         }
       }
 
       requestAnimationFrame(animate);
     }
 
-    async function onSpinEnd(msg) {
+    async function onSpinFinished(msg) {
+      // Âm thanh chuông thiền định ngân vang
+      sounds.playSingingBowl();
+
+      // Lưu kết quả vào Cloud và Local
       await recordSpinToCloud(msg.id);
       refreshStats();
-      setTimeout(() => showResultFor(msg), 400);
+
+      // Mở nghi thức tem sáp
+      setTimeout(() => openRitualEnvelope(msg), 500);
     }
 
-    function showResult() {
-      if (!currentMsgId) return;
-      showResultFor(getMessageById(currentMsgId));
-    }
+    // ── Nghi Thức Phong Bì Sáp ──
+    function openRitualEnvelope(msg) {
+      const overlay = document.getElementById('ritualOverlay');
+      const sealStep = document.getElementById('sealStep');
+      const letterStep = document.getElementById('letterStep');
 
-    function showResultFor(msg) {
-      document.getElementById('resultImg').src = `images/${String(msg.id).padStart(2,'0')}.png`;
-      document.getElementById('resultName').textContent = msg.name;
-      document.getElementById('resultDesc').textContent = msg.desc;
-
-      const overlay = document.getElementById('resultOverlay');
+      sealStep.style.display = 'block';
+      letterStep.classList.remove('show');
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      setTimeout(() => {
-        document.getElementById('envelopeTop').classList.add('open');
-        setTimeout(() => {
-          document.getElementById('resultCard').classList.add('show');
-          spawnConfetti();
-        }, 400);
-      }, 300);
+      // Nạp trước dữ liệu vào lá thư
+      const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
+      document.getElementById('letterCatTag').innerHTML = `
+        <span class="cat-tag ${cat.id}">${cat.icon} ${cat.name}</span>
+      `;
+      document.getElementById('letterImg').src = `images/${String(msg.id).padStart(2,'0')}.png`;
+      document.getElementById('letterTitle').textContent = msg.name;
+      document.getElementById('letterDesc').textContent = `"${msg.desc}"`;
+      document.getElementById('actionText').textContent = msg.action || "Thở sâu và giữ nụ cười an lành.";
+
+      // Reset nhật ký
+      const todayRecord = getTodaySpin();
+      document.getElementById('journalInput').value = todayRecord?.note || '';
+      document.getElementById('actionCheckbox').checked = todayRecord?.actionDone || false;
     }
 
-    function closeResult() {
-      const overlay = document.getElementById('resultOverlay');
+    function crackWaxSeal() {
+      const sealBtn = document.getElementById('waxSealBtn');
+      sealBtn.style.animation = 'sealCrack 0.6s ease forwards';
+      sounds.playWaxCrack();
+
+      setTimeout(() => {
+        document.getElementById('sealStep').style.display = 'none';
+        document.getElementById('letterStep').classList.add('show');
+        launchConfetti();
+      }, 550);
+    }
+
+    function showLetterModal() {
+      if (!currentMsgId) return;
+      const msg = getMessageById(currentMsgId);
+      openRitualEnvelope(msg);
+      // Nếu đã bóc tem rồi thì vào thẳng lá thư
+      document.getElementById('sealStep').style.display = 'none';
+      document.getElementById('letterStep').classList.add('show');
+    }
+
+    function closeRitual() {
+      const overlay = document.getElementById('ritualOverlay');
       overlay.classList.remove('show');
       document.body.style.overflow = '';
-      document.getElementById('envelopeTop').classList.remove('open');
-      document.getElementById('resultCard').classList.remove('show');
-      document.getElementById('confettiContainer').innerHTML = '';
 
+      // Hiển thị trạng thái đã quay
       if (!document.getElementById('alreadySpun').classList.contains('show')) {
-        document.getElementById('spinBtnSection').style.display = 'none';
-        document.getElementById('alreadySpun').classList.add('show');
-        const msg = getMessageById(currentMsgId);
-        document.getElementById('todayMsgImg').src = `images/${String(currentMsgId).padStart(2,'0')}.png`;
-        document.getElementById('todayMsgName').textContent = msg.name;
-        document.getElementById('todayMsgDesc').textContent = msg.desc;
-        startCountdown();
+        checkTodaySpin();
       }
     }
 
-    const confettiColors = ['#FFB5A7','#E9C46A','#A8C5A0','#B8D8E8','#DDB8D8','#FFC8A2'];
-    function spawnConfetti() {
-      const container = document.getElementById('confettiContainer');
-      for (let i = 0; i < 40; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.cssText = `
-          left: ${Math.random()*100}%;
-          background: ${confettiColors[Math.floor(Math.random()*confettiColors.length)]};
-          width: ${6+Math.random()*8}px;
-          height: ${6+Math.random()*8}px;
-          border-radius: ${Math.random()>0.5?'50%':'2px'};
-          animation-duration: ${2+Math.random()*2}s;
-          animation-delay: ${Math.random()*0.5}s;
-        `;
-        container.appendChild(piece);
-      }
+    // ── Lưu Nhật Ký & Check Hành Động ──
+    function toggleActionDone() {
+      const done = document.getElementById('actionCheckbox').checked;
+      const note = document.getElementById('journalInput').value.trim();
+      saveMessageNote(getTodayStr(), note, done);
+      showToast(done ? 'Tuyệt vời! Bạn đã hoàn thành hành động hôm nay ✨' : 'Đã bỏ dấu hoàn thành');
     }
 
-    function shareMessage() {
+    function saveTodayJournal() {
+      const note = document.getElementById('journalInput').value.trim();
+      const done = document.getElementById('actionCheckbox').checked;
+      saveMessageNote(getTodayStr(), note, done);
+      showToast('Đã lưu nhật ký của bạn thành công! 💾');
+    }
+
+    // ── Tạo Ảnh Story 9:16 Instagram ──
+    async function exportInstagramStory() {
+      if (!currentMsgId) return;
+      const msg = getMessageById(currentMsgId);
+      const note = document.getElementById('journalInput')?.value || '';
+
+      showToast('Đang tạo ảnh Story tuyệt đẹp...');
+      const dataUrl = await generateStoryCard({
+        message: msg,
+        userName: currentUser?.name || 'Bạn',
+        dateStr: document.getElementById('todayDate').textContent,
+        note
+      });
+
+      document.getElementById('storyImgPreview').src = dataUrl;
+      const dlBtn = document.getElementById('downloadStoryBtn');
+      dlBtn.href = dataUrl;
+      dlBtn.download = `thong-diep-${msg.id}-story.png`;
+
+      document.getElementById('storyModal').classList.add('show');
+    }
+
+    function closeStoryModal() {
+      document.getElementById('storyModal').classList.remove('show');
+    }
+
+    // ── Chia sẻ Link ──
+    function shareMessageDirect() {
       if (!currentMsgId) return;
       const msg = getMessageById(currentMsgId);
       const text = `🌀 Thông điệp hôm nay của tôi: "${msg.name}" — ${msg.desc}`;
       if (navigator.share) {
-        navigator.share({ title: 'Vòng Quay Thông Điệp', text });
+        navigator.share({ title: 'Vòng Quay Thông Điệp', text, url: window.location.href });
       } else {
         navigator.clipboard.writeText(text);
-        showToast('Đã copy thông điệp vào clipboard! ✅');
+        showToast('Đã copy thông điệp vào bộ nhớ tạm! ✅');
       }
     }
 
-    function saveImage() {
-      if (!currentMsgId) return;
-      const a = document.createElement('a');
-      a.href = `images/${String(currentMsgId).padStart(2,'0')}.png`;
-      a.download = `thong-diep-${currentMsgId}.png`;
-      a.click();
+    // ── Bắn Confetti Hào Quang ──
+    function launchConfetti() {
+      const c = document.getElementById('confettiCanvas');
+      c.width = window.innerWidth;
+      c.height = window.innerHeight;
+      const cCtx = c.getContext('2d');
+
+      const pieces = [];
+      const colors = ['#E9C46A', '#E07A5F', '#F4A47A', '#81B29A', '#9B89B3', '#FFFFFF'];
+      for (let i = 0; i < 60; i++) {
+        pieces.push({
+          x: c.width / 2,
+          y: c.height / 2,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.8) * 18,
+          size: 6 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          rot: Math.random() * 360,
+          vr: (Math.random() - 0.5) * 12,
+          alpha: 1
+        });
+      }
+
+      function render() {
+        cCtx.clearRect(0, 0, c.width, c.height);
+        let alive = false;
+        pieces.forEach(p => {
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.4; // gravity
+          p.rot += p.vr;
+          p.alpha -= 0.012;
+          if (p.alpha > 0) {
+            alive = true;
+            cCtx.save();
+            cCtx.globalAlpha = p.alpha;
+            cCtx.translate(p.x, p.y);
+            cCtx.rotate((p.rot * Math.PI) / 180);
+            cCtx.fillStyle = p.color;
+            cCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+            cCtx.restore();
+          }
+        });
+        if (alive) requestAnimationFrame(render);
+        else cCtx.clearRect(0, 0, c.width, c.height);
+      }
+      requestAnimationFrame(render);
     }
 
+    // Toast
     let toastTimer;
     function showToast(msg) {
       let toast = document.getElementById('toast');
@@ -698,10 +1041,6 @@
       clearTimeout(toastTimer);
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
     }
-
-    canvas.addEventListener('click', () => {
-      if (!isSpinning && !hasSpunToday()) startSpin();
-    });
 
     initPage();
   </script>

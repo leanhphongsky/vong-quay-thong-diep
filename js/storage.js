@@ -1,5 +1,5 @@
 // ============================================================
-// STORAGE & SUPABASE SYNC SERVICE
+// STORAGE & SUPABASE SYNC SERVICE (Hỗ trợ Nhật Ký & Note)
 // ============================================================
 
 const STORAGE_KEYS = {
@@ -125,7 +125,6 @@ async function syncDataFromSupabase(userId) {
   if (!sbClient || !userId || userId === 'guest') return;
 
   try {
-    // 1. Fetch spin history
     const { data: historyData, error: hErr } = await sbClient
       .from('spin_history')
       .select('message_id, spin_date')
@@ -133,14 +132,19 @@ async function syncDataFromSupabase(userId) {
       .order('created_at', { ascending: false });
 
     if (!hErr && historyData) {
-      const formatted = historyData.map(item => ({
-        date: item.spin_date,
-        messageId: item.message_id
-      }));
+      const localHist = getLocalHistory();
+      const formatted = historyData.map(item => {
+        const existing = localHist.find(l => l.date === item.spin_date);
+        return {
+          date: item.spin_date,
+          messageId: item.message_id,
+          note: existing?.note || '',
+          actionDone: existing?.actionDone || false
+        };
+      });
       saveLocalHistory(formatted);
     }
 
-    // 2. Fetch profile / streak
     const { data: profile, error: pErr } = await sbClient
       .from('profiles')
       .select('streak_count, last_spin_date')
@@ -162,14 +166,12 @@ async function recordSpinToCloud(messageId) {
   const user = getLocalUser();
   const today = getTodayStr();
 
-  // Luôn lưu local trước
   let history = getLocalHistory();
   if (!history.find(h => h.date === today)) {
-    history.unshift({ date: today, messageId });
+    history.unshift({ date: today, messageId, note: '', actionDone: false });
     saveLocalHistory(history);
   }
 
-  // Cập nhật streak local
   const yesterday = getYesterdayStr();
   let streak = getLocalStreak();
   if (streak.lastDate !== today) {
@@ -182,17 +184,14 @@ async function recordSpinToCloud(messageId) {
     saveLocalStreak(streak);
   }
 
-  // Nếu đã đăng nhập Supabase, ghi nhận lên cloud
   if (sbClient && user && user.id && user.id !== 'guest') {
     try {
-      // 1. Insert spin history
       await sbClient.from('spin_history').insert({
         user_id: user.id,
         message_id: messageId,
         spin_date: today
       });
 
-      // 2. Update profiles
       await sbClient.from('profiles').update({
         streak_count: streak.count,
         last_spin_date: today,
@@ -204,6 +203,17 @@ async function recordSpinToCloud(messageId) {
   }
 
   return { history, streak };
+}
+
+// Lưu nhật ký / cảm nhận cá nhân
+function saveMessageNote(dateStr, noteText, actionDone = null) {
+  const history = getLocalHistory();
+  const item = history.find(h => h.date === dateStr);
+  if (item) {
+    item.note = noteText;
+    if (actionDone !== null) item.actionDone = actionDone;
+    saveLocalHistory(history);
+  }
 }
 
 // ---- Compatibility Functions ----
