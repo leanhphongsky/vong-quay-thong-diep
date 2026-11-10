@@ -416,24 +416,38 @@
     </a>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
   <script>
-    // ── Auth guard ──
-    const user = getUser();
-    if (!user) location.href = 'login.html';
-    document.getElementById('userName').textContent = user?.name || '';
+    let currentMsgId = null;
 
-    // ── Greeting ──
+    async function initPage() {
+      const user = await getCurrentUser();
+      if (!user) {
+        location.href = 'login.html';
+        return;
+      }
+      document.getElementById('userName').textContent = user?.name || '';
+
+      // Đồng bộ từ Cloud nếu có
+      if (user.id && user.id !== 'guest') {
+        await syncDataFromSupabase(user.id);
+      }
+
+      refreshStats();
+      checkTodaySpin();
+    }
+
+    // ── Greeting & Date ──
     const hour = new Date().getHours();
     const greet = hour < 12 ? 'Buổi Sáng' : hour < 18 ? 'Buổi Chiều' : 'Buổi Tối';
     document.getElementById('greetingTime').textContent = greet;
 
-    // ── Date ──
     const dateOpts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
     document.getElementById('todayDate').textContent = new Date().toLocaleDateString('vi-VN', dateOpts);
 
-    // ── Stats ──
     function refreshStats() {
       const h = getHistory();
       const s = getStreak();
@@ -442,10 +456,7 @@
       document.getElementById('streakNum').textContent = s.count;
       document.getElementById('streakStat').textContent = s.count;
     }
-    refreshStats();
 
-    // ── Check if already spun ──
-    let currentMsgId = null;
     function checkTodaySpin() {
       const spin = getTodaySpin();
       if (spin) {
@@ -460,9 +471,7 @@
         startCountdown();
       }
     }
-    checkTodaySpin();
 
-    // ── Countdown ──
     function startCountdown() {
       function update() {
         const secs = secondsUntilMidnight();
@@ -477,7 +486,7 @@
       setInterval(update, 1000);
     }
 
-    // ── SPIN WHEEL (Canvas) ──
+    // ── Canvas Wheel ──
     const canvas = document.getElementById('spinCanvas');
     const ctx    = canvas.getContext('2d');
     const W = 400, H = 400, CX = 200, CY = 200, R = 185;
@@ -503,7 +512,6 @@
         const end   = start + seg;
         const mid   = start + seg / 2;
 
-        // Sector fill
         ctx.beginPath();
         ctx.moveTo(CX, CY);
         ctx.arc(CX, CY, R, start, end);
@@ -511,12 +519,10 @@
         ctx.fillStyle = COLORS[i];
         ctx.fill();
 
-        // Sector border
         ctx.strokeStyle = 'white';
         ctx.lineWidth = 3;
         ctx.stroke();
 
-        // Icon
         const iconR = R * 0.65;
         const ix = CX + Math.cos(mid) * iconR;
         const iy = CY + Math.sin(mid) * iconR;
@@ -529,7 +535,6 @@
         ctx.fillText(ICONS[i], 0, 0);
         ctx.restore();
 
-        // Short label
         const labelR = R * 0.38;
         const lx = CX + Math.cos(mid) * labelR;
         const ly = CY + Math.sin(mid) * labelR;
@@ -544,7 +549,6 @@
         ctx.restore();
       }
 
-      // Outer ring
       ctx.beginPath();
       ctx.arc(CX, CY, R + 4, 0, Math.PI * 2);
       ctx.strokeStyle = 'rgba(224,122,95,0.4)';
@@ -554,23 +558,20 @@
 
     drawWheel(0);
 
-    // ── Spin logic ──
     function startSpin() {
-      if (isSpinning) return;
+      if (isSpinning || hasSpunToday()) return;
       isSpinning = true;
       const btn = document.getElementById('spinBtn');
       btn.disabled = true;
       btn.textContent = '...';
 
-      // Pick random message
       const msg = getRandomMessage();
       currentMsgId = msg.id;
 
-      // Calculate rotation: land on a random segment + many full rotations
-      const extraSpins = 5 + Math.random() * 3; // 5-8 full spins
+      const extraSpins = 5 + Math.random() * 3;
       const targetAngle = currentAngle + (Math.PI * 2 * extraSpins) + Math.random() * Math.PI * 2;
 
-      const duration = 4000; // ms
+      const duration = 4000;
       const startTime = performance.now();
       const startAngle = currentAngle;
 
@@ -596,34 +597,26 @@
       requestAnimationFrame(animate);
     }
 
-    function onSpinEnd(msg) {
-      // Save to history & streak
-      addToHistory(msg.id);
-      updateStreak();
+    async function onSpinEnd(msg) {
+      await recordSpinToCloud(msg.id);
       refreshStats();
-
-      // Show result after short delay
       setTimeout(() => showResultFor(msg), 400);
     }
 
-    // ── Result overlay ──
     function showResult() {
       if (!currentMsgId) return;
       showResultFor(getMessageById(currentMsgId));
     }
 
     function showResultFor(msg) {
-      // Set content
       document.getElementById('resultImg').src = `images/${String(msg.id).padStart(2,'0')}.png`;
       document.getElementById('resultName').textContent = msg.name;
       document.getElementById('resultDesc').textContent = msg.desc;
 
-      // Show overlay
       const overlay = document.getElementById('resultOverlay');
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      // Open envelope after short delay
       setTimeout(() => {
         document.getElementById('envelopeTop').classList.add('open');
         setTimeout(() => {
@@ -641,7 +634,6 @@
       document.getElementById('resultCard').classList.remove('show');
       document.getElementById('confettiContainer').innerHTML = '';
 
-      // If this was a fresh spin, show "already spun" UI
       if (!document.getElementById('alreadySpun').classList.contains('show')) {
         document.getElementById('spinBtnSection').style.display = 'none';
         document.getElementById('alreadySpun').classList.add('show');
@@ -653,7 +645,6 @@
       }
     }
 
-    // ── Confetti ──
     const confettiColors = ['#FFB5A7','#E9C46A','#A8C5A0','#B8D8E8','#DDB8D8','#FFC8A2'];
     function spawnConfetti() {
       const container = document.getElementById('confettiContainer');
@@ -673,7 +664,6 @@
       }
     }
 
-    // ── Share ──
     function shareMessage() {
       if (!currentMsgId) return;
       const msg = getMessageById(currentMsgId);
@@ -694,7 +684,6 @@
       a.click();
     }
 
-    // ── Toast ──
     let toastTimer;
     function showToast(msg) {
       let toast = document.getElementById('toast');
@@ -710,10 +699,11 @@
       toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
     }
 
-    // Click wheel to spin
     canvas.addEventListener('click', () => {
       if (!isSpinning && !hasSpunToday()) startSpin();
     });
+
+    initPage();
   </script>
 </body>
 </html>

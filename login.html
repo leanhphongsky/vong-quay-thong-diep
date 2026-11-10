@@ -94,7 +94,6 @@
       margin-bottom: 16px;
     }
     .btn-google:hover { border-color: #4285F4; box-shadow: 0 2px 12px rgba(66,133,244,0.15); }
-    .btn-google img { width: 20px; height: 20px; }
 
     .btn-submit {
       width: 100%;
@@ -196,12 +195,11 @@
           <label>Mật khẩu</label>
           <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" autocomplete="current-password">
         </div>
-        <div class="forgot-link"><a href="#">Quên mật khẩu?</a></div>
         <button class="btn-submit" onclick="handleLogin()" id="loginBtn">🎡 Đăng nhập</button>
         <div class="divider">hoặc</div>
         <button class="btn-google" onclick="handleGuestLogin()">
           <span style="font-size:1.2rem">👤</span>
-          Tiếp tục không cần tài khoản (Demo)
+          Tiếp tục dưới dạng Khách (Không lưu cloud)
         </button>
       </div>
 
@@ -221,7 +219,7 @@
           <input type="password" id="registerPassword" class="form-control" placeholder="Ít nhất 6 ký tự" autocomplete="new-password">
         </div>
         <button class="btn-submit" onclick="handleRegister()" id="registerBtn">✨ Tạo tài khoản</button>
-        <p class="terms">Bằng cách đăng ký, bạn đồng ý với điều khoản sử dụng của chúng tôi</p>
+        <p class="terms">Đăng ký tài khoản để đồng bộ vòng quay của bạn trên mọi thiết bị.</p>
       </div>
 
       <div class="back-home">
@@ -230,9 +228,11 @@
     </div>
   </div>
 
+  <!-- CDN Supabase JS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/storage.js"></script>
   <script>
-    // Switch tabs
     function switchTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
@@ -240,50 +240,65 @@
       document.getElementById(tab + 'Form').classList.add('active');
     }
 
-    // Check URL param for tab
     const urlTab = new URLSearchParams(location.search).get('tab');
     if (urlTab === 'register') switchTab('register');
 
-    // If already logged in
-    if (getUser()) location.href = 'spin.html';
+    // Kiểm tra đăng nhập
+    getCurrentUser().then(u => {
+      if (u) location.href = 'spin.html';
+    });
 
-    // Simple email/password auth (stored locally — will upgrade to Supabase)
     function showError(formId, msg) {
       const el = document.getElementById(formId);
       el.textContent = msg;
       el.classList.add('show');
-      setTimeout(() => el.classList.remove('show'), 4000);
+      setTimeout(() => el.classList.remove('show'), 5000);
     }
 
-    function handleLogin() {
+    async function handleLogin() {
       const email = document.getElementById('loginEmail').value.trim();
       const pwd   = document.getElementById('loginPassword').value;
       if (!email || !pwd) return showError('loginError', 'Vui lòng điền đầy đủ thông tin.');
 
-      // Check stored accounts
-      const accounts = JSON.parse(localStorage.getItem('vqtd_accounts') || '[]');
-      const account  = accounts.find(a => a.email === email && a.password === pwd);
-      if (!account) return showError('loginError', 'Email hoặc mật khẩu không đúng.');
+      const btn = document.getElementById('loginBtn');
+      btn.disabled = true;
+      btn.textContent = 'Đang đăng nhập...';
 
-      saveUser({ id: account.id, name: account.name, email: account.email });
-      location.href = 'spin.html';
+      try {
+        await loginWithEmail(email, pwd);
+        location.href = 'spin.html';
+      } catch (err) {
+        showError('loginError', err.message || 'Đăng nhập không thành công.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '🎡 Đăng nhập';
+      }
     }
 
-    function handleRegister() {
+    async function handleRegister() {
       const name  = document.getElementById('registerName').value.trim();
       const email = document.getElementById('registerEmail').value.trim();
       const pwd   = document.getElementById('registerPassword').value;
       if (!name || !email || !pwd) return showError('registerError', 'Vui lòng điền đầy đủ thông tin.');
       if (pwd.length < 6) return showError('registerError', 'Mật khẩu phải ít nhất 6 ký tự.');
 
-      const accounts = JSON.parse(localStorage.getItem('vqtd_accounts') || '[]');
-      if (accounts.find(a => a.email === email)) return showError('registerError', 'Email này đã được đăng ký.');
+      const btn = document.getElementById('registerBtn');
+      btn.disabled = true;
+      btn.textContent = 'Đang tạo tài khoản...';
 
-      const newUser = { id: Date.now().toString(), name, email, password: pwd };
-      accounts.push(newUser);
-      localStorage.setItem('vqtd_accounts', JSON.stringify(accounts));
-      saveUser({ id: newUser.id, name, email });
-      location.href = 'spin.html';
+      try {
+        await registerWithEmail(name, email, pwd);
+        // Tự động đăng nhập luôn sau khi đăng ký
+        try {
+          await loginWithEmail(email, pwd);
+        } catch (_) {}
+        location.href = 'spin.html';
+      } catch (err) {
+        showError('registerError', err.message || 'Tạo tài khoản thất bại.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = '✨ Tạo tài khoản';
+      }
     }
 
     function handleGuestLogin() {
@@ -291,7 +306,6 @@
       location.href = 'spin.html';
     }
 
-    // Enter key support
     document.addEventListener('keydown', e => {
       if (e.key !== 'Enter') return;
       const activeForm = document.querySelector('.auth-form.active').id;

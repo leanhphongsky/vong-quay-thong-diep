@@ -349,6 +349,9 @@
     <p>🌀 Vòng Quay Thông Điệp &nbsp;·&nbsp; Mỗi ngày một thông điệp từ vũ trụ</p>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
+  <script src="js/storage.js"></script>
   <script src="js/data.js"></script>
   <script>
     // Floating particles
@@ -381,9 +384,19 @@
         </div>`;
     });
 
-    // If already logged in, go to spin
-    const user = localStorage.getItem('vqtd_user');
-    if (user) location.href = 'spin.html';
+    // Check user session
+    getCurrentUser().then(u => {
+      if (u) {
+        const heroActions = document.querySelector('.hero-actions');
+        if (heroActions) {
+          heroActions.innerHTML = `
+            <a href="spin.html" class="btn btn-primary btn-lg">
+              🎡 Tiếp tục vòng quay hôm nay
+            </a>
+          `;
+        }
+      }
+    });
   </script>
 </body>
 </html>

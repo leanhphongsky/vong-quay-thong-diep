@@ -179,14 +179,9 @@
     <div class="section" style="margin-bottom:16px;">
       <div class="section-heading">Cài Đặt</div>
       <div class="settings-list">
-        <div class="settings-item" onclick="alert('Tính năng sắp ra mắt!')">
+        <div class="settings-item" onclick="alert('Tính năng nhắc nhở đang được hoàn thiện!')">
           <span class="settings-icon">🔔</span>
           <span class="settings-label">Nhắc nhở hàng ngày</span>
-          <span class="settings-arrow">›</span>
-        </div>
-        <div class="settings-item" onclick="alert('Tính năng sắp ra mắt!')">
-          <span class="settings-icon">🌙</span>
-          <span class="settings-label">Chế độ tối</span>
           <span class="settings-arrow">›</span>
         </div>
         <div class="settings-item" onclick="exportData()">
@@ -219,24 +214,29 @@
     </a>
   </nav>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/supabase-client.js"></script>
   <script src="js/data.js"></script>
   <script src="js/storage.js"></script>
   <script>
-    const user = getUser();
-    if (!user) location.href = 'login.html';
+    async function initProfile() {
+      const user = await getCurrentUser();
+      if (!user) {
+        location.href = 'login.html';
+        return;
+      }
 
-    document.getElementById('profileName').textContent = user.name || 'Người dùng';
-    document.getElementById('profileEmail').textContent = user.email || 'Demo mode';
-    document.getElementById('avatar').textContent = (user.name || 'U')[0].toUpperCase();
+      document.getElementById('profileName').textContent = user.name || 'Người dùng';
+      document.getElementById('profileEmail').textContent = user.email || 'Chế độ Khách';
+      document.getElementById('avatar').textContent = (user.name || 'U')[0].toUpperCase();
 
-    const h = getHistory();
-    const s = getStreak();
-    const u = uniqueMessagesCount();
-    document.getElementById('totalSpins').textContent = h.length;
-    document.getElementById('streakCount').textContent = s.count;
-    document.getElementById('uniqueCount').textContent = u;
+      if (user.id && user.id !== 'guest') {
+        await syncDataFromSupabase(user.id);
+      }
 
-    // Badges definition
+      renderStatsAndBadges();
+    }
+
     const BADGES = [
       { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu tiên' },
       { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày liên tiếp' },
@@ -249,51 +249,66 @@
     ];
 
     function getBadgeValue(badge) {
+      const h = getHistory();
+      const s = getStreak();
+      const u = uniqueMessagesCount();
       if (badge.type === 'spin') return h.length;
       if (badge.type === 'streak') return s.count;
       if (badge.type === 'unique') return u;
       return 0;
     }
 
-    // Render badges
-    const grid = document.getElementById('badgesGrid');
-    BADGES.forEach(b => {
-      const val = getBadgeValue(b);
-      const earned = val >= b.req;
-      grid.innerHTML += `
-        <div class="badge-item ${earned ? 'earned' : ''}" title="${b.desc}: ${val}/${b.req}">
-          <span class="badge-emoji">${b.emoji}</span>
-          <div class="badge-name">${b.name}</div>
-        </div>`;
-    });
+    function renderStatsAndBadges() {
+      const h = getHistory();
+      const s = getStreak();
+      const u = uniqueMessagesCount();
 
-    // Next badge
-    const nextBadge = BADGES.find(b => getBadgeValue(b) < b.req);
-    if (nextBadge) {
-      const val = getBadgeValue(nextBadge);
-      document.getElementById('nextBadgeEmoji').textContent = nextBadge.emoji;
-      document.getElementById('nextBadgeName').textContent = nextBadge.name + ' — ' + nextBadge.desc;
-      document.getElementById('nextBadgeProgress').style.width = Math.min(val/nextBadge.req*100, 100) + '%';
-      document.getElementById('nextBadgeLabel').textContent = `${val}/${nextBadge.req} — còn ${nextBadge.req - val} nữa`;
-    } else {
-      document.getElementById('nextBadgeBox').innerHTML = '<p style="text-align:center;color:var(--peach);font-weight:700;padding:10px;">🎉 Bạn đã mở khóa tất cả huy hiệu!</p>';
+      document.getElementById('totalSpins').textContent = h.length;
+      document.getElementById('streakCount').textContent = s.count;
+      document.getElementById('uniqueCount').textContent = u;
+
+      const grid = document.getElementById('badgesGrid');
+      grid.innerHTML = '';
+      BADGES.forEach(b => {
+        const val = getBadgeValue(b);
+        const earned = val >= b.req;
+        grid.innerHTML += `
+          <div class="badge-item ${earned ? 'earned' : ''}" title="${b.desc}: ${val}/${b.req}">
+            <span class="badge-emoji">${b.emoji}</span>
+            <div class="badge-name">${b.name}</div>
+          </div>`;
+      });
+
+      const nextBadge = BADGES.find(b => getBadgeValue(b) < b.req);
+      if (nextBadge) {
+        const val = getBadgeValue(nextBadge);
+        document.getElementById('nextBadgeEmoji').textContent = nextBadge.emoji;
+        document.getElementById('nextBadgeName').textContent = nextBadge.name + ' — ' + nextBadge.desc;
+        document.getElementById('nextBadgeProgress').style.width = Math.min(val/nextBadge.req*100, 100) + '%';
+        document.getElementById('nextBadgeLabel').textContent = `${val}/${nextBadge.req} — còn ${nextBadge.req - val} nữa`;
+      } else {
+        document.getElementById('nextBadgeBox').innerHTML = '<p style="text-align:center;color:var(--peach);font-weight:700;padding:10px;">🎉 Bạn đã mở khóa tất cả huy hiệu!</p>';
+      }
     }
 
-    function confirmLogout() {
+    async function confirmLogout() {
       if (confirm('Bạn có chắc muốn đăng xuất?')) {
-        clearUser();
+        await logoutUser();
         location.href = 'index.html';
       }
     }
 
     function exportData() {
-      const data = { user, history: h, streak: s, exported: new Date().toISOString() };
+      const user = getUser();
+      const data = { user, history: getHistory(), streak: getStreak(), exported: new Date().toISOString() };
       const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
       const a = document.createElement('a');
       a.href = URL.createObjectURL(blob);
       a.download = 'vong-quay-thong-diep-data.json';
       a.click();
     }
+
+    initProfile();
   </script>
 </body>
 </html>
