@@ -1,5 +1,5 @@
 // ============================================================
-// BACKGROUND LOFI MUSIC PLAYER (Tự động phát ngẫu nhiên & Chuyển bài)
+// BACKGROUND LOFI MUSIC PLAYER (Tự động phát ngẫu nhiên & Liền mạch)
 // ============================================================
 
 const SONG_LIST = [
@@ -29,38 +29,61 @@ class BackgroundMusicPlayer {
   }
 
   init() {
-    // Tự động chuyển sang bài random khác khi bài hiện tại kết thúc
+    // Tự động chuyển bài khi hết nhạc
     this.audio.addEventListener('ended', () => {
       this.playRandomNext();
     });
 
-    // Cập nhật trạng thái khi nhạc đang chạy hoặc dừng
     this.audio.addEventListener('play', () => {
       this.isPlaying = true;
+      sessionStorage.setItem('vqtd_music_playing', 'true');
       this.updateUI();
     });
 
     this.audio.addEventListener('pause', () => {
       this.isPlaying = false;
+      sessionStorage.setItem('vqtd_music_playing', 'false');
       this.updateUI();
     });
 
-    // Khởi tạo hàng đợi bài hát ngẫu nhiên
+    // Định kỳ lưu vị trí phát để khôi phục nếu trang reload
+    this.audio.addEventListener('timeupdate', () => {
+      if (this.currentSong && Math.floor(this.audio.currentTime) % 2 === 0) {
+        sessionStorage.setItem('vqtd_music_time', this.audio.currentTime.toString());
+        sessionStorage.setItem('vqtd_music_song_id', this.currentSong.id.toString());
+      }
+    });
+
     this.resetQueue();
 
-    // Chọn 1 bài hát ngẫu nhiên ngay khi khởi động
-    this.selectRandomSong();
+    // Khôi phục bài hát từ phiên trước nếu có
+    const savedSongId = parseInt(sessionStorage.getItem('vqtd_music_song_id') || '0');
+    const savedTime = parseFloat(sessionStorage.getItem('vqtd_music_time') || '0');
+    const wasPlaying = sessionStorage.getItem('vqtd_music_playing') === 'true';
 
-    // Render widget phát nhạc lên giao diện
+    const restoredSong = SONG_LIST.find(s => s.id === savedSongId);
+    if (restoredSong) {
+      this.currentSong = restoredSong;
+      this.audio.src = encodeURI(this.currentSong.file);
+      if (savedTime > 0) {
+        this.audio.currentTime = savedTime;
+      }
+    } else {
+      this.selectRandomSong();
+    }
+
     this.renderWidget();
 
-    // Thử phát nhạc (nếu trình duyệt cho phép) hoặc chờ tương tác đầu tiên của người dùng
-    this.attemptAutoPlay();
+    // Nếu người dùng không chủ động tắt, tự động phát
+    if (!this.isMutedByUser) {
+      this.attemptAutoPlay();
+    } else {
+      this.updateUI();
+    }
   }
 
   resetQueue() {
     this.unplayedIndices = SONG_LIST.map((_, i) => i);
-    // Shuffle mảng
     for (let i = this.unplayedIndices.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [this.unplayedIndices[i], this.unplayedIndices[j]] = [this.unplayedIndices[j], this.unplayedIndices[i]];
@@ -70,7 +93,6 @@ class BackgroundMusicPlayer {
   selectRandomSong() {
     if (this.unplayedIndices.length === 0) {
       this.resetQueue();
-      // Nếu bài đầu tiên trùng bài vừa phát thì đổi chỗ
       if (this.currentSong && SONG_LIST[this.unplayedIndices[0]].id === this.currentSong.id && this.unplayedIndices.length > 1) {
         [this.unplayedIndices[0], this.unplayedIndices[1]] = [this.unplayedIndices[1], this.unplayedIndices[0]];
       }
@@ -82,15 +104,11 @@ class BackgroundMusicPlayer {
 
   playRandomNext() {
     this.selectRandomSong();
+    sessionStorage.removeItem('vqtd_music_time');
     this.play();
   }
 
   attemptAutoPlay() {
-    if (this.isMutedByUser) {
-      this.updateUI();
-      return;
-    }
-
     const startPlay = () => {
       if (this.isPlaying || this.isMutedByUser) return;
       this.audio.play().then(() => {
@@ -98,14 +116,12 @@ class BackgroundMusicPlayer {
         this.updateUI();
         this.cleanupInteractionListeners();
       }).catch(() => {
-        // Trình duyệt chặn autoplay có tiếng -> chờ tương tác
+        // Trình duyệt chặn autoplay khi chưa click
       });
     };
 
-    // Thử phát ngay
     startPlay();
 
-    // Lắng nghe tương tác đầu tiên (click, chạm, nhấn phím) nếu autoplay bị chặn
     this.interactionHandler = () => {
       this.userInteracted = true;
       startPlay();
@@ -125,15 +141,13 @@ class BackgroundMusicPlayer {
   }
 
   play() {
-    if (this.isMutedByUser) {
-      this.isMutedByUser = false;
-      localStorage.setItem('vqtd_music_muted', 'false');
-    }
+    this.isMutedByUser = false;
+    localStorage.setItem('vqtd_music_muted', 'false');
     this.audio.play().then(() => {
       this.isPlaying = true;
       this.updateUI();
     }).catch(err => {
-      console.warn("Không thể phát nhạc:", err);
+      console.warn("Lỗi phát nhạc:", err);
     });
   }
 
@@ -148,18 +162,16 @@ class BackgroundMusicPlayer {
       this.pause();
       this.isMutedByUser = true;
       localStorage.setItem('vqtd_music_muted', 'true');
+      if (typeof showToast === 'function') showToast('Đã tạm dừng nhạc nền ⏸️');
     } else {
       this.play();
+      if (typeof showToast === 'function') showToast('Đang phát: ' + this.currentSong.title + ' 🎵');
     }
   }
 
-  setVolume(vol) {
-    this.audio.volume = Math.max(0, Math.min(1, vol));
-    localStorage.setItem('vqtd_music_vol', this.audio.volume.toString());
-  }
-
   renderWidget() {
-    // Chèn widget điều khiển nhạc ở góc trái dưới màn hình
+    if (document.getElementById('bgMusicWidget')) return;
+
     const widget = document.createElement('div');
     widget.id = 'bgMusicWidget';
     widget.className = 'bg-music-widget';
@@ -173,20 +185,19 @@ class BackgroundMusicPlayer {
           <div class="music-status" id="musicStatusText">${this.isPlaying ? 'Đang phát ngẫu nhiên' : 'Tạm dừng (Chạm để nghe)'}</div>
         </div>
       </div>
-      <button class="music-next-btn" onclick="bgMusic.playRandomNext()" title="Đổi bài khác ngẫu nhiên">
+      <button class="music-next-btn" onclick="bgMusic.playRandomNext()" title="Đổi bài ngẫu nhiên khác">
         ⏭️
       </button>
     `;
     document.body.appendChild(widget);
 
-    // CSS cho Music Widget
     const style = document.createElement('style');
     style.textContent = `
       .bg-music-widget {
         position: fixed;
         bottom: 74px;
-        left: 18px;
-        z-index: 90;
+        left: 16px;
+        z-index: 95;
         display: flex;
         align-items: center;
         gap: 6px;
@@ -270,11 +281,11 @@ class BackgroundMusicPlayer {
       @media (max-width: 480px) {
         .bg-music-widget {
           bottom: 74px;
-          left: 12px;
+          left: 10px;
           padding: 4px 6px 4px 5px;
         }
         .music-info {
-          max-width: 105px;
+          max-width: 100px;
         }
       }
     `;
@@ -299,5 +310,4 @@ class BackgroundMusicPlayer {
   }
 }
 
-// Khởi tạo singleton phát nhạc nền
 const bgMusic = new BackgroundMusicPlayer();

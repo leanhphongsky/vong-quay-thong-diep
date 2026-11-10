@@ -232,26 +232,61 @@ p  { color: var(--brown-mid); }
 .bottom-nav a.active { color: var(--peach); transform: translateY(-2px); }
 .bottom-nav .nav-icon { font-size: 1.35rem; }
 
-/* ── Toast ── */
+/* ── Toast Hoàn Toàn Ẩn Khi Hết Giờ ── */
 .toast {
   position: fixed;
-  bottom: 84px;
+  bottom: 86px;
   left: 50%;
-  transform: translateX(-50%) translateY(80px);
-  background: rgba(45, 25, 20, 0.92);
-  backdrop-filter: blur(8px);
-  color: white;
-  padding: 12px 26px;
+  transform: translateX(-50%) translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  background: rgba(30, 20, 18, 0.94);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  color: #FFFDF9;
+  padding: 10px 24px;
   border-radius: var(--radius-pill);
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  z-index: 999;
-  transition: transform 0.35s var(--transition);
+  z-index: 9999;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s;
   white-space: nowrap;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(233,196,106,0.3);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(233, 196, 106, 0.35);
 }
-.toast.show { transform: translateX(-50%) translateY(0); }
+.toast.show {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ── Bottom Nav Tab Buttons (SPA Support) ── */
+.bottom-nav button.nav-tab-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 9px 0;
+  gap: 3px;
+  color: var(--brown-light);
+  font-family: 'Nunito', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  transition: all 0.2s;
+  outline: none;
+}
+.bottom-nav button.nav-tab-btn.active {
+  color: var(--peach);
+  transform: translateY(-2px);
+}
+.bottom-nav button.nav-tab-btn:hover:not(.active) {
+  color: var(--brown-dark);
+}
 
 /* ── Wax Seal 3D (Con Dấu Sáp Hoàng Gia) ── */
 .wax-seal {

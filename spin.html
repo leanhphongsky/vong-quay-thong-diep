@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>La Bàn Thông Điệp — Vũ Trụ Gửi Bạn</title>
+  <title>Vòng Quay Thông Điệp — Vũ Trụ Dẫn Lối</title>
   <link rel="stylesheet" href="css/global.css">
   <style>
     body {
@@ -11,6 +11,10 @@
       padding-bottom: 90px;
       overflow-x: hidden;
     }
+
+    /* ── Tab Views ── */
+    .tab-view { display: none; }
+    .tab-view.active { display: block; animation: fadeIn 0.35s ease forwards; }
 
     /* ── Header ── */
     .spin-header {
@@ -92,7 +96,6 @@
       display: block;
     }
 
-    /* Kim chỉ vàng hoàng gia */
     .wheel-pointer {
       position: absolute;
       top: -18px;
@@ -106,7 +109,6 @@
     }
     .wheel-pointer svg { width: 100%; height: 100%; }
 
-    /* Tâm cầu pha lê */
     .wheel-center-orb {
       position: absolute;
       top: 50%;
@@ -126,7 +128,6 @@
       z-index: 5;
     }
 
-    /* ── Nút Quay ── */
     #spinBtn {
       width: min(280px, 82vw);
       height: 64px;
@@ -151,7 +152,7 @@
     #spinBtn:active:not(:disabled) { transform: translateY(0) scale(0.98); }
     #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    /* ── Trạng Thái Đã Quay Hôm Nay ── */
+    /* ── Đã Quay Hôm Nay ── */
     .already-spun {
       display: none;
       text-align: center;
@@ -216,7 +217,7 @@
       letter-spacing: 1px;
     }
 
-    /* ── MODAL NGHI THỨC MỞ THƯ PHONG BÌ SÁP ── */
+    /* ── Ritual Wax Seal Modal ── */
     .ritual-overlay {
       position: fixed;
       inset: 0;
@@ -236,7 +237,6 @@
     }
     .ritual-overlay.show { opacity: 1; pointer-events: all; }
 
-    /* Bước 1: Phong bì kín có con dấu sáp */
     .seal-step {
       text-align: center;
       animation: scaleIn 0.5s var(--transition) forwards;
@@ -269,7 +269,6 @@
       margin-bottom: 24px;
     }
 
-    /* Bước 2: Lá thư mở ra chi tiết */
     .letter-step {
       display: none;
       width: 100%;
@@ -295,9 +294,7 @@
       font-size: 1.1rem;
       cursor: pointer;
       display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s;
     }
-    .letter-close:hover { background: rgba(0,0,0,0.12); }
 
     .letter-img {
       width: 100%;
@@ -324,7 +321,6 @@
       margin-bottom: 18px;
     }
 
-    /* Khung Hành Động Tỉnh Thức */
     .action-box {
       background: #FFF9ED;
       border: 1.5px solid #F0D488;
@@ -358,7 +354,6 @@
       cursor: pointer;
     }
 
-    /* Khung Nhật Ký Cảm Nghĩ */
     .journal-box {
       background: var(--cream);
       border: 1.5px solid var(--border);
@@ -386,19 +381,160 @@
     }
     .journal-input:focus { border-color: var(--peach); }
 
-    /* Action buttons in letter */
     .letter-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
     }
 
-    /* ── Modal Story Preview ── */
+    /* ── Tab Thư Viện Styles ── */
+    .search-filter-box {
+      max-width: 520px;
+      margin: 0 auto 20px;
+      padding: 0 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .search-input {
+      width: 100%;
+      padding: 12px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-pill);
+      font-family: 'Nunito', sans-serif;
+      font-size: 0.92rem;
+      outline: none;
+      background: white;
+      box-shadow: var(--shadow-sm);
+    }
+    .search-input:focus { border-color: var(--peach); box-shadow: 0 0 0 4px rgba(224,122,95,0.12); }
+
+    .filter-tabs {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      scrollbar-width: none;
+    }
+    .filter-tabs::-webkit-scrollbar { display: none; }
+    .filter-tab {
+      padding: 7px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 0.82rem;
+      font-weight: 700;
+      cursor: pointer;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      color: var(--brown-light);
+      white-space: nowrap;
+      transition: all 0.2s;
+    }
+    .filter-tab.active {
+      background: var(--brown-dark);
+      border-color: var(--brown-dark);
+      color: #FFD700;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+    }
+
+    .library-grid {
+      max-width: 940px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+      gap: 14px;
+    }
+    .lib-card {
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+    }
+    .lib-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--gold);
+    }
+    .lib-card-img-box {
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      position: relative;
+      background: #FDF4ED;
+    }
+    .lib-card-img-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+    .lib-card:hover .lib-card-img-box img { transform: scale(1.05); }
+    .lib-card-info { padding: 10px 12px; flex: 1; display: flex; flex-direction: column; }
+    .lib-card-name {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--brown-dark);
+      line-height: 1.35;
+      margin-bottom: 6px;
+    }
+    .lib-card-meta {
+      margin-top: auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.68rem;
+      color: var(--brown-light);
+      font-weight: 600;
+    }
+
+    /* ── Tab Hồ Sơ Styles ── */
+    .profile-hero-card {
+      background: linear-gradient(135deg, #E07A5F 0%, #F4A47A 100%);
+      border-radius: var(--radius);
+      padding: 32px 20px;
+      text-align: center;
+      color: white;
+      margin: 0 16px 20px;
+      box-shadow: var(--shadow-md);
+    }
+    .profile-avatar-circle {
+      width: 80px; height: 80px;
+      background: rgba(255,255,255,0.25);
+      border: 3px solid rgba(255,255,255,0.7);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.2rem;
+      margin: 0 auto 12px;
+      backdrop-filter: blur(8px);
+    }
+    .badges-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      padding: 0 16px;
+    }
+    .badge-item {
+      text-align: center;
+      padding: 12px 6px;
+      background: var(--white);
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      transition: all 0.2s;
+    }
+    .badge-item.earned { border-color: var(--gold); background: #FFF9E6; }
+    .badge-item:not(.earned) { opacity: 0.4; filter: grayscale(1); }
+
+    /* Modal Story */
     .story-modal {
       position: fixed;
       inset: 0;
       z-index: 600;
-      background: rgba(0, 0, 0, 0.9);
+      background: rgba(0, 0, 0, 0.92);
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -416,9 +552,7 @@
       box-shadow: 0 10px 40px rgba(0,0,0,0.8);
       margin-bottom: 16px;
     }
-    .story-modal-actions { display: flex; gap: 12px; }
 
-    /* Confetti canvas */
     #confettiCanvas {
       position: fixed;
       inset: 0;
@@ -433,14 +567,14 @@
   <nav class="navbar">
     <div class="navbar-brand">
       <span style="color:var(--gold);font-size:1.4rem;">✦</span>
-      <span>Vòng Quay Thông Điệp</span>
+      <span id="navTitleText">Vòng Quay Thông Điệp</span>
     </div>
     <div class="navbar-actions">
-      <!-- Nút Âm Thanh Mute/Unmute -->
-      <button class="btn-icon" id="soundBtn" onclick="toggleSound()" title="Bật/Tắt âm thanh">
+      <!-- Nút âm thanh -->
+      <button class="btn-icon" id="soundBtn" onclick="toggleSoundFx()" title="Bật/Tắt hiệu ứng âm thanh">
         🔊
       </button>
-      <!-- Huy hiệu Streak -->
+      <!-- Streak -->
       <div class="streak-badge" id="streakBadge">
         <span>🔥</span>
         <span id="streakNum">0</span> ngày
@@ -452,83 +586,152 @@
   <canvas id="confettiCanvas"></canvas>
 
   <div class="page">
-    <div class="spin-header">
-      <div class="spin-eyebrow">
-        <span>🌀</span> La Bàn Vũ Trụ
-      </div>
-      <h2>Thông Điệp <span style="color:var(--peach);" id="greetingTime">Hôm Nay</span></h2>
-      <p id="todayDate"></p>
-    </div>
 
-    <!-- Mini stats bar -->
-    <div class="mini-stats">
-      <div class="mini-stat">
-        <span class="mini-stat-num" id="totalSpins">0</span>
-        <span class="mini-stat-label">Lần quay</span>
+    <!-- ========================================== -->
+    <!-- TAB 1: VÒNG QUAY (SPIN)                     -->
+    <!-- ========================================== -->
+    <div id="viewSpin" class="tab-view active">
+      <div class="spin-header">
+        <div class="spin-eyebrow">
+          <span>🌀</span> La Bàn Vũ Trụ
+        </div>
+        <h2>Thông Điệp <span style="color:var(--peach);" id="greetingTime">Hôm Nay</span></h2>
+        <p id="todayDate"></p>
       </div>
-      <div class="mini-stat">
-        <span class="mini-stat-num" id="uniqueCount">0</span>
-        <span class="mini-stat-label">Thông điệp</span>
-      </div>
-      <div class="mini-stat">
-        <span class="mini-stat-num" id="streakStat">0</span>
-        <span class="mini-stat-label">Ngày liên tiếp</span>
-      </div>
-    </div>
 
-    <!-- Khu vực Vòng Quay -->
-    <div class="wheel-section">
-      <div class="wheel-outer-glow">
-        <div class="wheel-wrapper" id="wheelWrapper">
-          <!-- Kim chỉ đỉnh vàng -->
-          <div class="wheel-pointer">
-            <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 44L0 8C0 3.58172 7.16344 0 16 0C24.8366 0 32 3.58172 32 8L16 44Z" fill="url(#goldGrad)"/>
-              <defs>
-                <linearGradient id="goldGrad" x1="0" y1="0" x2="32" y2="44" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#F6D365"/>
-                  <stop offset="1" stop-color="#E07A5F"/>
-                </linearGradient>
-              </defs>
-            </svg>
-          </div>
-
-          <canvas id="spinCanvas" width="450" height="450"></canvas>
-          <div class="wheel-center-orb">✦</div>
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <span class="mini-stat-num" id="totalSpins">0</span>
+          <span class="mini-stat-label">Lần quay</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-num" id="uniqueCount">0</span>
+          <span class="mini-stat-label">Thông điệp</span>
+        </div>
+        <div class="mini-stat">
+          <span class="mini-stat-num" id="streakStat">0</span>
+          <span class="mini-stat-label">Ngày liên tiếp</span>
         </div>
       </div>
 
-      <!-- Nút Quay -->
-      <div class="spin-btn-wrapper" id="spinBtnSection">
-        <button id="spinBtn" onclick="startSpin()">QUAY VÒNG QUAY</button>
-      </div>
-
-      <!-- Đã quay hôm nay -->
-      <div class="already-spun" id="alreadySpun">
-        <div class="today-card">
-          <div id="todayCatTag" style="margin-bottom:10px;"></div>
-          <img class="today-img" id="todayMsgImg" src="" alt="">
-          <div class="today-name" id="todayMsgName"></div>
-          <div class="today-desc" id="todayMsgDesc"></div>
-
-          <div class="countdown-box">
-            <div class="countdown-label">Lá thư tiếp theo sau</div>
-            <div class="countdown-time" id="countdown">--:--:--</div>
+      <div class="wheel-section">
+        <div class="wheel-outer-glow">
+          <div class="wheel-wrapper" id="wheelWrapper">
+            <div class="wheel-pointer">
+              <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M16 44L0 8C0 3.58172 7.16344 0 16 0C24.8366 0 32 3.58172 32 8L16 44Z" fill="url(#goldGrad)"/>
+                <defs>
+                  <linearGradient id="goldGrad" x1="0" y1="0" x2="32" y2="44" gradientUnits="userSpaceOnUse">
+                    <stop stop-color="#F6D365"/>
+                    <stop offset="1" stop-color="#E07A5F"/>
+                  </linearGradient>
+                </defs>
+              </svg>
+            </div>
+            <canvas id="spinCanvas" width="450" height="450"></canvas>
+            <div class="wheel-center-orb">✦</div>
           </div>
         </div>
 
-        <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-          <button class="btn btn-gold btn-sm" onclick="showLetterModal()">📜 Xem lại lá thư</button>
-          <button class="btn btn-primary btn-sm" onclick="exportInstagramStory()">📸 Tạo ảnh Story</button>
-          <a href="library.html" class="btn btn-secondary btn-sm">📚 Thư viện</a>
+        <div class="spin-btn-wrapper" id="spinBtnSection">
+          <button id="spinBtn" onclick="startSpin()">QUAY VÒNG QUAY</button>
+        </div>
+
+        <div class="already-spun" id="alreadySpun">
+          <div class="today-card">
+            <div id="todayCatTag" style="margin-bottom:10px;"></div>
+            <img class="today-img" id="todayMsgImg" src="" alt="">
+            <div class="today-name" id="todayMsgName"></div>
+            <div class="today-desc" id="todayMsgDesc"></div>
+
+            <div class="countdown-box">
+              <div class="countdown-label">Lá thư tiếp theo sau</div>
+              <div class="countdown-time" id="countdown">--:--:--</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-gold btn-sm" onclick="showLetterModal()">📜 Xem lại lá thư</button>
+            <button class="btn btn-primary btn-sm" onclick="exportInstagramStory()">📸 Tạo ảnh Story</button>
+            <button class="btn btn-secondary btn-sm" onclick="switchMainTab('library')">📚 Thư viện</button>
+          </div>
         </div>
       </div>
     </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 2: THƯ VIỆN 70 THÔNG ĐIỆP (LIBRARY)     -->
+    <!-- ========================================== -->
+    <div id="viewLibrary" class="tab-view">
+      <div class="spin-header" style="padding-bottom:12px;">
+        <h2>Kho Tàng Thông Điệp</h2>
+        <p>Bộ sưu tập những hạt mầm chánh niệm đã gửi đến bạn</p>
+      </div>
+
+      <div style="max-width:520px;margin:0 auto 16px;padding:0 16px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;margin-bottom:6px;">
+          <span>Tiến trình khai mở</span>
+          <span style="color:var(--peach);"><span id="libUniqueCount">0</span>/70</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="libProgressFill" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="search-filter-box">
+        <input type="text" id="libSearchInput" class="search-input" placeholder="🔍 Tìm kiếm thông điệp..." oninput="handleLibSearch()">
+        <div class="filter-tabs">
+          <div class="filter-tab active" onclick="filterLibCategory('all', this)">Tất cả (70)</div>
+          <div class="filter-tab" onclick="filterLibCategory('wisdom', this)">🧘 Trí Tuệ & Tĩnh Lặng</div>
+          <div class="filter-tab" onclick="filterLibCategory('love', this)">💖 Yêu Thương & Chữa Lành</div>
+          <div class="filter-tab" onclick="filterLibCategory('discipline', this)">⚡ Kỷ Luật & Hành Động</div>
+          <div class="filter-tab" onclick="filterLibCategory('flow', this)">🌊 Thuận Dòng & Tái Sinh</div>
+        </div>
+      </div>
+
+      <div class="library-grid" id="libGridContainer"></div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- TAB 3: HỒ SƠ & HUY HIỆU (PROFILE)          -->
+    <!-- ========================================== -->
+    <div id="viewProfile" class="tab-view">
+      <div class="profile-hero-card">
+        <div class="profile-avatar-circle" id="profAvatar">🌸</div>
+        <h2 style="font-size:1.4rem;margin-bottom:4px;color:white;" id="profName">—</h2>
+        <p style="font-size:0.85rem;color:rgba(255,255,255,0.85);" id="profEmail"></p>
+      </div>
+
+      <div style="padding:0 16px;max-width:520px;margin:0 auto 20px;">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--brown-light);text-transform:uppercase;margin-bottom:10px;">
+          Bộ Huy Hiệu Khai Sáng
+        </div>
+        <div class="badges-grid" id="profBadgesGrid"></div>
+      </div>
+
+      <div style="padding:0 16px;max-width:520px;margin:0 auto 30px;">
+        <div style="font-size:0.82rem;font-weight:800;color:var(--brown-light);text-transform:uppercase;margin-bottom:10px;">
+          Cài Đặt & Tài Khoản
+        </div>
+        <div style="background:white;border-radius:18px;border:1.5px solid var(--border);overflow:hidden;">
+          <div class="settings-item" onclick="exportData()" style="padding:15px;display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);cursor:pointer;">
+            <span>📤</span>
+            <span style="flex:1;font-weight:700;font-size:0.9rem;">Xuất bản sao lưu dữ liệu</span>
+            <span>›</span>
+          </div>
+          <div class="settings-item danger" onclick="confirmLogout()" style="padding:15px;display:flex;align-items:center;gap:12px;cursor:pointer;color:#E74C3C;">
+            <span>🚪</span>
+            <span style="flex:1;font-weight:700;font-size:0.9rem;">Đăng xuất</span>
+            <span>›</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 
-  <!-- NGHI THỨC MỞ PHONG BÌ SÁP NIÊM PHONG -->
+  <!-- NGHI THỨC PHONG BÌ SÁP NIÊM PHONG -->
   <div class="ritual-overlay" id="ritualOverlay">
-    <!-- Bước 1: Phong bì có tem sáp -->
     <div class="seal-step" id="sealStep">
       <div class="envelope-box">
         <div class="seal-text">Vũ Trụ Đã Gửi Một Lá Thư Đến Bạn</div>
@@ -541,17 +744,14 @@
       </div>
     </div>
 
-    <!-- Bước 2: Lá thư chi tiết -->
     <div class="letter-step" id="letterStep">
       <button class="letter-close" onclick="closeRitual()">✕</button>
-
       <div id="letterCatTag" style="text-align:center;margin-bottom:10px;"></div>
       <img id="letterImg" class="letter-img" src="" alt="">
       <div id="letterTitle" class="letter-title"></div>
       <div id="letterDesc" class="letter-desc"></div>
 
-      <!-- Gợi ý hành động hôm nay -->
-      <div class="action-box" id="actionBox">
+      <div class="action-box">
         <div class="action-badge">✨ Hành Động Tỉnh Thức Hôm Nay</div>
         <div class="action-text" id="actionText"></div>
         <label class="action-check-label">
@@ -560,7 +760,6 @@
         </label>
       </div>
 
-      <!-- Nhật ký cảm nhận -->
       <div class="journal-box">
         <div class="journal-title">✍️ Cảm nghĩ & Lời biết ơn của bạn hôm nay:</div>
         <textarea id="journalInput" class="journal-input" placeholder="Viết vài dòng suy ngẫm để lưu giữ khoảnh khắc này..."></textarea>
@@ -580,10 +779,10 @@
     </div>
   </div>
 
-  <!-- MODAL XEM & TẢI ẢNH STORY INSTAGRAM -->
+  <!-- MODAL XEM ẢNH STORY INSTAGRAM -->
   <div class="story-modal" id="storyModal">
     <img id="storyImgPreview" class="story-preview-img" src="" alt="Story Preview">
-    <div class="story-modal-actions">
+    <div style="display:flex;gap:12px;">
       <a id="downloadStoryBtn" class="btn btn-gold" download="thong-diep-story.png">
         ⬇️ Tải ảnh Story
       </a>
@@ -593,20 +792,20 @@
     </div>
   </div>
 
-  <!-- Bottom Nav -->
+  <!-- BOTTOM NAV (SPA TAB SWITCHING — KHÔNG RELOAD TRANG, NHẠC KHÔNG DỪNG) -->
   <nav class="bottom-nav">
-    <a href="spin.html" class="active">
+    <button class="nav-tab-btn active" id="tabBtnSpin" onclick="switchMainTab('spin')">
       <span class="nav-icon">🎡</span>
-      Quay
-    </a>
-    <a href="library.html">
+      <span>Quay</span>
+    </button>
+    <button class="nav-tab-btn" id="tabBtnLibrary" onclick="switchMainTab('library')">
       <span class="nav-icon">📚</span>
-      Thư viện
-    </a>
-    <a href="profile.html">
+      <span>Thư viện</span>
+    </button>
+    <button class="nav-tab-btn" id="tabBtnProfile" onclick="switchMainTab('profile')">
       <span class="nav-icon">👤</span>
-      Hồ sơ
-    </a>
+      <span>Hồ sơ</span>
+    </button>
   </nav>
 
   <!-- Script Modules -->
@@ -617,11 +816,58 @@
   <script src="js/storage.js"></script>
   <script src="js/story-generator.js"></script>
   <script src="js/bg-music.js"></script>
+
   <script>
     let currentMsgId = null;
     let currentUser = null;
+    let currentLibCategory = 'all';
+    let libSearchQuery = '';
+    let toastTimer = null;
 
-    // ── Khởi Tạo Trang ──
+    // ── TOAST THÔNG BÁO HOÀN TOÀN ẨN SAU 2.2S ──
+    function showToast(msg) {
+      let toast = document.getElementById('toast');
+      if (!toast) {
+        toast = document.createElement('div');
+        toast.id = 'toast';
+        toast.className = 'toast';
+        document.body.appendChild(toast);
+      }
+      toast.textContent = msg;
+      toast.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => {
+        toast.classList.remove('show');
+      }, 2200);
+    }
+
+    // ── CHUYỂN TAB SPA KHÔNG TẢI LẠI TRANG (NHẠC KHÔNG BỊ TẮT) ──
+    function switchMainTab(tabName) {
+      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+
+      if (tabName === 'library') {
+        document.getElementById('viewLibrary').classList.add('active');
+        document.getElementById('tabBtnLibrary').classList.add('active');
+        document.getElementById('navTitleText').textContent = 'Kho Tàng Thông Điệp';
+        renderLibraryGrid();
+        window.location.hash = 'library';
+      } else if (tabName === 'profile') {
+        document.getElementById('viewProfile').classList.add('active');
+        document.getElementById('tabBtnProfile').classList.add('active');
+        document.getElementById('navTitleText').textContent = 'Hồ Sơ & Huy Hiệu';
+        renderProfileTab();
+        window.location.hash = 'profile';
+      } else {
+        document.getElementById('viewSpin').classList.add('active');
+        document.getElementById('tabBtnSpin').classList.add('active');
+        document.getElementById('navTitleText').textContent = 'Vòng Quay Thông Điệp';
+        window.location.hash = 'spin';
+      }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // ── KHỞI TẠO TOÀN BỘ ỨNG DỤNG ──
     async function initPage() {
       currentUser = await getCurrentUser();
       if (!currentUser) {
@@ -630,7 +876,6 @@
       }
       document.getElementById('userName').textContent = currentUser.name || '';
 
-      // Cập nhật biểu tượng âm thanh
       updateSoundButton();
 
       if (currentUser.id && currentUser.id !== 'guest') {
@@ -639,12 +884,18 @@
 
       refreshStats();
       checkTodaySpin();
+
+      // Kiểm tra URL Hash để mở đúng tab nếu người dùng vào từ link
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'library' || hash === 'profile') {
+        switchMainTab(hash);
+      }
     }
 
-    function toggleSound() {
+    function toggleSoundFx() {
       const isMuted = sounds.toggleMute();
       updateSoundButton();
-      showToast(isMuted ? 'Đã tắt âm thanh 🔇' : 'Đã bật âm thanh 🔊');
+      showToast(isMuted ? 'Đã tắt tiếng hiệu ứng 🔇' : 'Đã bật tiếng hiệu ứng 🔊');
     }
 
     function updateSoundButton() {
@@ -663,10 +914,17 @@
     function refreshStats() {
       const h = getHistory();
       const s = getStreak();
+      const u = uniqueMessagesCount();
       document.getElementById('totalSpins').textContent = h.length;
-      document.getElementById('uniqueCount').textContent = uniqueMessagesCount();
+      document.getElementById('uniqueCount').textContent = u;
       document.getElementById('streakNum').textContent = s.count;
       document.getElementById('streakStat').textContent = s.count;
+
+      // Cập nhật tab Thư Viện
+      const libU = document.getElementById('libUniqueCount');
+      if (libU) libU.textContent = u;
+      const libBar = document.getElementById('libProgressFill');
+      if (libBar) libBar.style.width = (u / 70 * 100) + '%';
     }
 
     function checkTodaySpin() {
@@ -705,7 +963,7 @@
       setInterval(update, 1000);
     }
 
-    // ── CANVAS LA BÀN HOÀNG KIM (Celestial Compass Wheel) ──
+    // ── CANVAS LA BÀN HOÀNG KIM ──
     const canvas = document.getElementById('spinCanvas');
     const ctx    = canvas.getContext('2d');
     const W = 450, H = 450, CX = 225, CY = 225, R = 210;
@@ -728,7 +986,6 @@
       ctx.clearRect(0, 0, W, H);
       const segAngle = (Math.PI * 2) / SEGMENTS;
 
-      // 1. Viền ngoài La Bàn Kim Loại Vàng
       ctx.save();
       ctx.beginPath();
       ctx.arc(CX, CY, R + 6, 0, Math.PI * 2);
@@ -743,7 +1000,6 @@
       ctx.fill();
       ctx.restore();
 
-      // 2. Vẽ 12 ô màu pastel với ký tự cổ
       for (let i = 0; i < SEGMENTS; i++) {
         const start = rotation + i * segAngle;
         const end   = start + segAngle;
@@ -756,12 +1012,10 @@
         ctx.fillStyle = PALETTE[i];
         ctx.fill();
 
-        // Đường chỉ viền trắng kim
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // Cổ tự / Chòm sao
         const runeR = R * 0.72;
         const rx = CX + Math.cos(mid) * runeR;
         const ry = CY + Math.sin(mid) * runeR;
@@ -775,7 +1029,6 @@
         ctx.fillText(RUNES[i], 0, 0);
         ctx.restore();
 
-        // Tên ngắn năng lượng
         const labelR = R * 0.42;
         const lx = CX + Math.cos(mid) * labelR;
         const ly = CY + Math.sin(mid) * labelR;
@@ -790,7 +1043,6 @@
         ctx.restore();
       }
 
-      // Vành đai trong trang trí
       ctx.beginPath();
       ctx.arc(CX, CY, 52, 0, Math.PI * 2);
       ctx.strokeStyle = '#E9C46A';
@@ -800,12 +1052,10 @@
 
     drawWheel(0);
 
-    // ── Bắt đầu quay ──
     function startSpin() {
       if (isSpinning || hasSpunToday()) return;
       isSpinning = true;
 
-      // Khởi động Web Audio
       sounds.init();
 
       const btn = document.getElementById('spinBtn');
@@ -832,7 +1082,6 @@
         const progress = Math.min(elapsed / duration, 1);
         currentAngle = startAngle + (targetAngle - startAngle) * easeOutCubic(progress);
 
-        // Tính tiếng tick khi đi qua từng nấc
         const currentSegIndex = Math.floor((currentAngle % (Math.PI * 2)) / segAngle);
         if (currentSegIndex !== lastSegmentPassed) {
           sounds.playTick(1.0 + (1 - progress) * 0.5);
@@ -854,18 +1103,12 @@
     }
 
     async function onSpinFinished(msg) {
-      // Âm thanh chuông thiền định ngân vang
       sounds.playSingingBowl();
-
-      // Lưu kết quả vào Cloud và Local
       await recordSpinToCloud(msg.id);
       refreshStats();
-
-      // Mở nghi thức tem sáp
       setTimeout(() => openRitualEnvelope(msg), 500);
     }
 
-    // ── Nghi Thức Phong Bì Sáp ──
     function openRitualEnvelope(msg) {
       const overlay = document.getElementById('ritualOverlay');
       const sealStep = document.getElementById('sealStep');
@@ -876,7 +1119,6 @@
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      // Nạp trước dữ liệu vào lá thư
       const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
       document.getElementById('letterCatTag').innerHTML = `
         <span class="cat-tag ${cat.id}">${cat.icon} ${cat.name}</span>
@@ -886,7 +1128,6 @@
       document.getElementById('letterDesc').textContent = `"${msg.desc}"`;
       document.getElementById('actionText').textContent = msg.action || "Thở sâu và giữ nụ cười an lành.";
 
-      // Reset nhật ký
       const todayRecord = getTodaySpin();
       document.getElementById('journalInput').value = todayRecord?.note || '';
       document.getElementById('actionCheckbox').checked = todayRecord?.actionDone || false;
@@ -908,7 +1149,6 @@
       if (!currentMsgId) return;
       const msg = getMessageById(currentMsgId);
       openRitualEnvelope(msg);
-      // Nếu đã bóc tem rồi thì vào thẳng lá thư
       document.getElementById('sealStep').style.display = 'none';
       document.getElementById('letterStep').classList.add('show');
     }
@@ -917,14 +1157,11 @@
       const overlay = document.getElementById('ritualOverlay');
       overlay.classList.remove('show');
       document.body.style.overflow = '';
-
-      // Hiển thị trạng thái đã quay
       if (!document.getElementById('alreadySpun').classList.contains('show')) {
         checkTodaySpin();
       }
     }
 
-    // ── Lưu Nhật Ký & Check Hành Động ──
     function toggleActionDone() {
       const done = document.getElementById('actionCheckbox').checked;
       const note = document.getElementById('journalInput').value.trim();
@@ -939,7 +1176,6 @@
       showToast('Đã lưu nhật ký của bạn thành công! 💾');
     }
 
-    // ── Tạo Ảnh Story 9:16 Instagram ──
     async function exportInstagramStory() {
       if (!currentMsgId) return;
       const msg = getMessageById(currentMsgId);
@@ -965,7 +1201,6 @@
       document.getElementById('storyModal').classList.remove('show');
     }
 
-    // ── Chia sẻ Link ──
     function shareMessageDirect() {
       if (!currentMsgId) return;
       const msg = getMessageById(currentMsgId);
@@ -978,13 +1213,124 @@
       }
     }
 
-    // ── Bắn Confetti Hào Quang ──
+    // ── LOGIC TAB THƯ VIỆN ──
+    function renderLibraryGrid() {
+      const history = getHistory();
+      const grid = document.getElementById('libGridContainer');
+      if (!grid) return;
+
+      let items = MESSAGES.filter(m => {
+        const matchesCategory = currentLibCategory === 'all' || m.category === currentLibCategory;
+        const matchesSearch = !libSearchQuery ||
+          m.name.toLowerCase().includes(libSearchQuery) ||
+          m.desc.toLowerCase().includes(libSearchQuery);
+        return matchesCategory && matchesSearch;
+      });
+
+      grid.innerHTML = '';
+      items.forEach(msg => {
+        const unlockedRecord = history.find(h => h.messageId === msg.id);
+        const isUnlocked = !!unlockedRecord;
+        const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
+
+        grid.innerHTML += `
+          <div class="lib-card"
+               style="${isUnlocked ? '' : 'filter:grayscale(0.85);opacity:0.65;'}"
+               onclick="${isUnlocked ? `openLibDetail(${msg.id})` : `showToast('Lá thư này chưa được khai mở 🔒')`}">
+            <div class="lib-card-img-box">
+              <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
+              ${isUnlocked ? '' : '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🔒</div>'}
+            </div>
+            <div class="lib-card-info">
+              <div class="lib-card-name">${msg.name}</div>
+              <div class="lib-card-meta">
+                <span style="color:${cat.color};font-weight:700;">${cat.icon} ${cat.name.split(' ')[0]}</span>
+                <span>${isUnlocked ? '✓ Đã mở' : 'Chưa mở'}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    function filterLibCategory(catId, el) {
+      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+      el.classList.add('active');
+      currentLibCategory = catId;
+      renderLibraryGrid();
+    }
+
+    function handleLibSearch() {
+      libSearchQuery = document.getElementById('libSearchInput').value.trim().toLowerCase();
+      renderLibraryGrid();
+    }
+
+    function openLibDetail(msgId) {
+      currentMsgId = msgId;
+      showLetterModal();
+    }
+
+    // ── LOGIC TAB HỒ SƠ ──
+    const BADGES = [
+      { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu tiên' },
+      { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày liên tiếp' },
+      { emoji:'🌸', name:'Hoa Nở',     req: 10, type:'spin',   desc:'10 lần quay' },
+      { emoji:'🌟', name:'Ngôi Sao',   req: 14, type:'streak', desc:'14 ngày liên tiếp' },
+      { emoji:'🦋', name:'Bướm Bay',   req: 20, type:'unique', desc:'20 thông điệp' },
+      { emoji:'🌙', name:'Ánh Trăng',  req: 30, type:'spin',   desc:'30 lần quay' },
+      { emoji:'☀️', name:'Mặt Trời',   req: 30, type:'streak', desc:'30 ngày liên tiếp' },
+      { emoji:'💎', name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
+    ];
+
+    function renderProfileTab() {
+      const h = getHistory();
+      const s = getStreak();
+      const u = uniqueMessagesCount();
+
+      document.getElementById('profName').textContent = currentUser?.name || 'Bạn';
+      document.getElementById('profEmail').textContent = currentUser?.email || 'Chế độ trải nghiệm';
+      document.getElementById('profAvatar').textContent = (currentUser?.name || 'U')[0].toUpperCase();
+
+      const grid = document.getElementById('profBadgesGrid');
+      grid.innerHTML = '';
+      BADGES.forEach(b => {
+        let val = 0;
+        if (b.type === 'spin') val = h.length;
+        if (b.type === 'streak') val = s.count;
+        if (b.type === 'unique') val = u;
+        const earned = val >= b.req;
+
+        grid.innerHTML += `
+          <div class="badge-item ${earned ? 'earned' : ''}" title="${b.desc}: ${val}/${b.req}">
+            <div style="font-size:1.5rem;margin-bottom:4px;">${b.emoji}</div>
+            <div style="font-size:0.65rem;font-weight:700;">${b.name}</div>
+          </div>
+        `;
+      });
+    }
+
+    async function confirmLogout() {
+      if (confirm('Bạn có chắc muốn đăng xuất?')) {
+        await logoutUser();
+        location.href = 'index.html';
+      }
+    }
+
+    function exportData() {
+      const data = { user: currentUser, history: getHistory(), streak: getStreak(), exported: new Date().toISOString() };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'vong-quay-thong-diep-backup.json';
+      a.click();
+      showToast('Đã tải tệp sao lưu dữ liệu về máy! 💾');
+    }
+
     function launchConfetti() {
       const c = document.getElementById('confettiCanvas');
       c.width = window.innerWidth;
       c.height = window.innerHeight;
       const cCtx = c.getContext('2d');
-
       const pieces = [];
       const colors = ['#E9C46A', '#E07A5F', '#F4A47A', '#81B29A', '#9B89B3', '#FFFFFF'];
       for (let i = 0; i < 60; i++) {
@@ -1000,14 +1346,13 @@
           alpha: 1
         });
       }
-
       function render() {
         cCtx.clearRect(0, 0, c.width, c.height);
         let alive = false;
         pieces.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.4; // gravity
+          p.vy += 0.4;
           p.rot += p.vr;
           p.alpha -= 0.012;
           if (p.alpha > 0) {
@@ -1025,22 +1370,6 @@
         else cCtx.clearRect(0, 0, c.width, c.height);
       }
       requestAnimationFrame(render);
-    }
-
-    // Toast
-    let toastTimer;
-    function showToast(msg) {
-      let toast = document.getElementById('toast');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast';
-        toast.className = 'toast';
-        document.body.appendChild(toast);
-      }
-      toast.textContent = msg;
-      toast.classList.add('show');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
     }
 
     initPage();
