@@ -8,8 +8,11 @@
 </head>
 <body>
 
+  <!-- Ambient Cosmic Particles & Starlight Canvas -->
+  <canvas id="cosmicBgCanvas"></canvas>
+
   <!-- ======================================================================
-       1. TOP BAR (Fixed, Compact, Clean)
+       1. TOP BAR (Fixed, Compact, Glassmorphic)
        ====================================================================== -->
   <header class="top-bar">
     <a class="brand-link" onclick="switchTab('spin')">
@@ -23,7 +26,7 @@
       </button>
       <!-- Quick Profile / Sheet trigger -->
       <button class="icon-btn" onclick="openDrawer()" aria-label="Mở cài đặt và hồ sơ" title="Cài đặt & Hồ sơ">
-        <span id="topAvatarIcon">👤</span>
+        <span id="topAvatarIcon">🌟</span>
       </button>
     </div>
   </header>
@@ -39,23 +42,38 @@
         <div class="eyebrow-pill">✦ Trạm Sạc Tâm Hồn ✦</div>
         <h1 class="hero-title">Thông Điệp <span id="greetingTime" style="color:var(--accent);">Hôm Nay</span></h1>
         <p class="hero-subtitle" id="todayDateStr">Đang kết nối vũ trụ...</p>
+
+        <!-- Zen Breathe Interactive Guide -->
+        <div class="zen-breathe-guide" onclick="triggerZenBreathe()" id="zenBreathePill" title="Chạm để bắt đầu 1 nhịp thở sâu">
+          <div class="zen-breathe-orb"></div>
+          <span id="breatheText">Hít sâu và lắng đọng tâm trí (4s)</span>
+        </div>
       </div>
 
-      <!-- Wheel Section -->
+      <!-- Wheel Arena Section -->
       <div class="wheel-arena">
-        <div class="wheel-disc-container">
-          <div class="wheel-pointer-pin">
-            <svg viewBox="0 0 28 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M14 38L0 7C0 3.13 6.27 0 14 0C21.73 0 28 3.13 28 7L14 38Z" fill="url(#pinGoldGrad)"/>
+        <div class="wheel-disc-container" id="wheelDiscWrap">
+          <!-- Vành đai chòm sao thiên văn quay chậm -->
+          <div class="wheel-astral-ring"></div>
+
+          <!-- Kim chỉ la bàn với drop shadow & bump anim -->
+          <div class="wheel-pointer-pin" id="wheelPointerPin">
+            <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M16 44L0 8C0 3.58 7.16 0 16 0C24.84 0 32 3.58 32 8L16 44Z" fill="url(#pinGoldGradPro)"/>
               <defs>
-                <linearGradient id="pinGoldGrad" x1="0" y1="0" x2="28" y2="38" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#F6D365"/>
-                  <stop offset="1" stop-color="#D4714A"/>
+                <linearGradient id="pinGoldGradPro" x1="0" y1="0" x2="32" y2="44" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FDE68A"/>
+                  <stop offset="0.5" stop-color="#F59E0B"/>
+                  <stop offset="1" stop-color="#E06D44"/>
                 </linearGradient>
               </defs>
             </svg>
           </div>
-          <canvas id="spinCanvas" class="wheel-canvas" width="450" height="450"></canvas>
+
+          <!-- Main Wheel Canvas -->
+          <canvas id="spinCanvas" class="wheel-canvas" width="480" height="480"></canvas>
+          
+          <!-- Center Crystal Gem with Radiant Sheen -->
           <div class="wheel-center-gem">✦</div>
         </div>
 
@@ -64,13 +82,13 @@
           <button id="spinBtn" class="btn-cta-spin" onclick="handleSpinStart()">QUAY VÒNG QUAY</button>
         </div>
 
-        <!-- Conic Loader (only shown while wheel is spinning) -->
+        <!-- Conic Loader (when spinning) -->
         <div id="spinConicLoader" class="conic-loader-wrap" style="display:none;">
           <div class="conic-loader-ring"></div>
-          <p style="font-size:0.85rem;color:var(--text-muted);font-weight:600;">Đang kết nối năng lượng bình an...</p>
+          <p style="font-size:0.88rem;color:var(--text-primary);font-weight:700;">Đang kết nối năng lượng bình an...</p>
         </div>
 
-        <!-- Already Spun Today Preview Card -->
+        <!-- Already Spun Today Preview Card with 3D Holographic Glare -->
         <div id="alreadySpunBox" class="already-spun-card">
           <img id="todayThumbImg" class="today-thumb" src="" alt="Thông điệp">
           <h2 id="todayMsgTitle" class="today-title">--</h2>
@@ -100,25 +118,25 @@
         </div>
       </div>
 
-      <!-- 4 Compact Energy Pills -->
+      <!-- 4 Compact Energy Pills with 3D Tilt -->
       <div style="margin-top:var(--sp-2xl);text-align:center;">
-        <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:var(--sp-xs);">4 Nguồn Năng Lượng Tâm Thức</h3>
-        <p style="font-size:0.8rem;color:var(--text-muted);">Chạm vào nguồn năng lượng để xem các lá thư tương ứng</p>
+        <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:var(--sp-xs);">4 Nguồn Năng Lượng Tâm Thức</h3>
+        <p style="font-size:0.82rem;color:var(--text-muted);">Chạm vào nguồn năng lượng để khám phá các thông điệp tương ứng</p>
 
         <div class="energy-pills-row">
-          <div class="energy-pill" onclick="filterByEnergy('wisdom')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('wisdom')">
             <span class="energy-pill-icon">🧘</span>
             <div class="energy-pill-title">Trí Tuệ & Tĩnh Lặng</div>
           </div>
-          <div class="energy-pill" onclick="filterByEnergy('love')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('love')">
             <span class="energy-pill-icon">💖</span>
             <div class="energy-pill-title">Yêu Thương & Chữa Lành</div>
           </div>
-          <div class="energy-pill" onclick="filterByEnergy('discipline')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('discipline')">
             <span class="energy-pill-icon">⚡</span>
             <div class="energy-pill-title">Kỷ Luật & Hành Động</div>
           </div>
-          <div class="energy-pill" onclick="filterByEnergy('flow')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('flow')">
             <span class="energy-pill-icon">🌊</span>
             <div class="energy-pill-title">Thuận Dòng & Tái Sinh</div>
           </div>
@@ -130,7 +148,7 @@
     <section id="viewLibrary" class="view-panel">
       <div class="hero-header" style="padding-bottom:var(--sp-sm);">
         <div class="eyebrow-pill">📚 Bộ Sưu Tập</div>
-        <h1 class="hero-title" style="font-size:1.6rem;">70 Hạt Mầm Khai Sáng</h1>
+        <h1 class="hero-title" style="font-size:1.7rem;">70 Hạt Mầm Khai Sáng</h1>
       </div>
 
       <!-- Unlock Progress -->
@@ -165,12 +183,18 @@
   </main>
 
   <!-- ======================================================================
-       3. COMPACT MUSIC PLAYER BAR (Fixed 42px above bottom nav)
+       3. COMPACT MODERN MUSIC PLAYER BAR (48px Floating Pill with Live Visualizer)
        ====================================================================== -->
   <aside class="music-bar" id="musicPlayerBar">
     <div class="music-bar-left">
-      <span class="music-note-icon">🎵</span>
-      <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Vũ Trụ Dẫn Lối</span>
+      <!-- Live Visualizer Bars -->
+      <div class="music-visualizer-bars" id="musicEqBars">
+        <div class="eq-bar-item"></div>
+        <div class="eq-bar-item"></div>
+        <div class="eq-bar-item"></div>
+        <div class="eq-bar-item"></div>
+      </div>
+      <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Khởi Đầu Tĩnh Lặng</span>
     </div>
     <div class="music-bar-controls">
       <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước">⏮</button>
@@ -213,7 +237,7 @@
         <div class="sheet-section">
           <div class="sheet-section-title">👤 Hồ Sơ Của Bạn</div>
           <div class="profile-row">
-            <div class="profile-avatar-bubble" id="profileAvatarDisplay" onclick="cycleAvatarEmoji()" title="Chạm để đổi biểu tượng">
+            <div class="profile-avatar-bubble" id="profileAvatarDisplay" onclick="cycleAvatarEmoji()" title="Chạm để đổi diện mạo">
               🌟
             </div>
             <div class="profile-details">
@@ -252,11 +276,11 @@
         <!-- Section: Triết Lý & Về Dự Án -->
         <div class="sheet-section">
           <div class="sheet-section-title">📖 Về Dự Án</div>
-          <p style="font-size:0.85rem;color:var(--text-body);margin-bottom:8px;line-height:1.6;">
-            <strong>Vòng Quay Thông Điệp</strong> là trạm dừng chân tĩnh tại giúp bạn đón nhận một góc nhìn tươi sáng mỗi ngày, không mê tín, mà hướng tâm vào chánh niệm và nuôi dưỡng lòng biết ơn.
+          <p style="font-size:0.86rem;color:var(--text-body);margin-bottom:8px;line-height:1.65;">
+            <strong>Vòng Quay Thông Điệp</strong> là trạm sạc bình an mỗi sáng giúp bạn dành ra 2 phút lắng đọng, tiếp nhận bài học chữa lành và nuôi dưỡng năng lượng tích cực cho ngày dài.
           </p>
           <p style="font-size:0.8rem;color:var(--text-muted);">
-            Phiên bản v2.0 Celestial Zen Edition.
+            Phiên bản v2.5 Celestial Zen Sanctuary Pro Edition.
           </p>
         </div>
 
@@ -283,17 +307,17 @@
   </div>
 
   <!-- ======================================================================
-       6. RITUAL CEREMONY OVERLAY (Con Dấu Sáp & Thẻ Bài 3D Flip)
+       6. RITUAL CEREMONY OVERLAY (Con Dấu Sáp Hoàng Gia & 3D Flip Card)
        ====================================================================== -->
   <div class="ritual-modal-layer" id="ritualModal">
     
     <!-- Phase 1: Wax Seal Envelope -->
     <div class="seal-envelope-card" id="waxSealCard">
-      <div style="font-size:0.85rem;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:6px;">✦ LÁ THƯ TÂM THỨC ✦</div>
-      <h2 style="font-size:1.3rem;margin-bottom:8px;">Vũ Trụ Đã Gửi Lời Nhắn</h2>
-      <p style="font-size:0.85rem;color:var(--text-muted);">Chạm vào con dấu sáp để khai mở thông điệp của bạn</p>
+      <div style="font-size:0.85rem;font-weight:800;color:var(--accent);text-transform:uppercase;margin-bottom:6px;letter-spacing:1px;">✦ LÁ THƯ TÂM THỨC ✦</div>
+      <h2 style="font-size:1.4rem;margin-bottom:8px;font-family:'Playfair Display',serif;">Vũ Trụ Đã Gửi Lời Nhắn</h2>
+      <p style="font-size:0.88rem;color:var(--text-muted);">Chạm vào con dấu sáp để khai mở thông điệp của bạn</p>
       
-      <button class="wax-seal-btn" id="waxSealBtn" onclick="onCrackWaxSeal()">
+      <button class="wax-seal-btn" id="waxSealBtn" onclick="onCrackWaxSeal()" title="Chạm để bẻ khóa con dấu sáp">
         <span>🌀</span>
       </button>
     </div>
@@ -302,20 +326,21 @@
     <div class="letter-sheet-card" id="letterRevealCard">
       <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư">✕</button>
 
-      <!-- 3D Card Flip -->
-      <div class="card-flip-stage" id="flipStage" onclick="toggleCardFlip()">
+      <!-- 3D Card Flip with Holographic Tilt -->
+      <div class="card-flip-stage holo-tilt" id="flipStage" onclick="toggleCardFlip()">
         <div class="card-flip-body">
           <div class="card-flip-face card-flip-front">
-            <div style="font-size:2.2rem;margin-bottom:8px;">✦ 🌀 ✦</div>
-            <div style="font-family:'Cinzel',serif;font-weight:700;font-size:1.05rem;letter-spacing:1.5px;margin-bottom:6px;">VŨ TRỤ DẪN LỐI</div>
-            <p style="font-size:0.75rem;opacity:0.75;">Chạm để lật mặt tranh thông điệp</p>
+            <div style="font-size:2.4rem;margin-bottom:10px;">✦ 🌀 ✦</div>
+            <div style="font-family:'Cinzel',serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
+            <p style="font-size:0.8rem;opacity:0.8;">Chạm để lật mặt tranh thông điệp</p>
           </div>
           <div class="card-flip-face card-flip-back">
             <img id="letterCardImg" src="" alt="Thông điệp">
+            <div class="lib-card-glare"></div>
           </div>
         </div>
       </div>
-      <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-bottom:12px;">👆 Chạm vào thẻ bài để lật đổi mặt</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;">🔄 Chạm vào thẻ bài để lật đổi mặt tranh</p>
 
       <h3 class="letter-heading" id="letterTitle">--</h3>
       <p class="letter-quote-text" id="letterQuote">--</p>
@@ -323,16 +348,16 @@
       <!-- Hành động tỉnh thức -->
       <div class="action-card-callout">
         <div class="action-card-header">✨ Hành Động Gợi Ý Hôm Nay</div>
-        <p id="letterActionText" style="font-size:0.88rem;color:var(--text-primary);font-weight:600;">--</p>
+        <p id="letterActionText" style="font-size:0.9rem;color:var(--text-primary);font-weight:700;">--</p>
         <label class="action-checkbox-line">
           <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
-          <span>Tôi cam kết / đã thực hiện điều này</span>
+          <span>Tôi cam kết / đã hoàn thành điều này</span>
         </label>
       </div>
 
       <!-- Ô nhật ký -->
       <div class="journal-entry-box">
-        <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);">✍️ Cảm nghĩ & Lời tri ân:</div>
+        <div style="font-size:0.84rem;font-weight:800;color:var(--text-primary);">✍️ Cảm nghĩ & Lời tri ân:</div>
         <textarea id="journalInput" class="journal-textarea" placeholder="Viết vài dòng cảm nhận để neo lại khoảnh khắc bình yên này..."></textarea>
         <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()">💾 Lưu nhật ký này</button>
       </div>
@@ -384,7 +409,73 @@
     const AVATAR_EMOJIS = ['🌟', '🕊️', '🧘', '🌸', '🌊', '☀️', '🌙', '🍃', '🦋', '🔮', '✨', '💎'];
     let currentAvatarEmoji = localStorage.getItem('vqtd_avatar_emoji') || '🌟';
 
-    // ── TOAST NOTIFICATION ──
+    // ── 1. AMBIENT COSMIC PARTICLES CANVAS ──
+    (function initCosmicCanvas() {
+      const cvs = document.getElementById('cosmicBgCanvas');
+      if (!cvs) return;
+      const cctx = cvs.getContext('2d');
+      let w = cvs.width = window.innerWidth;
+      let h = cvs.height = window.innerHeight;
+
+      window.addEventListener('resize', () => {
+        w = cvs.width = window.innerWidth;
+        h = cvs.height = window.innerHeight;
+      });
+
+      const STAR_COUNT = 55;
+      const stars = [];
+      let mouseX = w / 2, mouseY = h / 2;
+
+      window.addEventListener('mousemove', e => {
+        mouseX = e.clientX;
+        mouseY = e.clientY;
+      });
+
+      for (let i = 0; i < STAR_COUNT; i++) {
+        stars.push({
+          x: Math.random() * w,
+          y: Math.random() * h,
+          r: 0.8 + Math.random() * 2.2,
+          alpha: 0.15 + Math.random() * 0.7,
+          va: (Math.random() - 0.5) * 0.015,
+          vx: (Math.random() - 0.5) * 0.35,
+          vy: -0.2 - Math.random() * 0.4
+        });
+      }
+
+      function draw() {
+        cctx.clearRect(0, 0, w, h);
+        const isDark = document.documentElement.classList.contains('dark');
+        const starColor = isDark ? '235, 183, 72' : '224, 109, 68';
+
+        stars.forEach(s => {
+          s.x += s.vx;
+          s.y += s.vy;
+          s.alpha += s.va;
+          if (s.alpha <= 0.1 || s.alpha >= 0.85) s.va *= -1;
+
+          if (s.y < -10) { s.y = h + 10; s.x = Math.random() * w; }
+          if (s.x < -10) s.x = w + 10;
+          if (s.x > w + 10) s.x = -10;
+
+          // Parallax nhẹ theo chuột
+          const dx = (mouseX - w / 2) * 0.015;
+          const dy = (mouseY - h / 2) * 0.015;
+
+          cctx.beginPath();
+          cctx.arc(s.x + dx, s.y + dy, s.r, 0, Math.PI * 2);
+          cctx.fillStyle = `rgba(${starColor}, ${s.alpha})`;
+          cctx.shadowBlur = s.r * 4;
+          cctx.shadowColor = `rgba(${starColor}, 0.5)`;
+          cctx.fill();
+        });
+
+        requestAnimationFrame(draw);
+      }
+      requestAnimationFrame(draw);
+    })();
+
+    // ── 2. TOAST NOTIFICATION ──
     function showToast(text) {
       const el = document.getElementById('toastNotification');
       if (!el) return;
@@ -394,7 +485,7 @@
       toastTimeout = setTimeout(() => el.classList.remove('show'), 2300);
     }
 
-    // ── THEME SWITCHER (Light / Dark) ──
+    // ── 3. THEME SWITCHER (Light / Dark) ──
     function initTheme() {
       const savedTheme = localStorage.getItem('vqtd_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
       applyTheme(savedTheme);
@@ -418,7 +509,31 @@
       localStorage.setItem('vqtd_theme', theme);
     }
 
-    // ── SPA TAB SWITCHING (Quay & Thư Viện) ──
+    // ── 4. ZEN BREATHE GUIDE (Hít thở sâu) ──
+    let isBreathing = false;
+    function triggerZenBreathe() {
+      if (isBreathing) return;
+      isBreathing = true;
+      const textEl = document.getElementById('breatheText');
+      sounds.playSingingBowl();
+
+      textEl.textContent = '🌬️ Hít vào thật sâu... (4s)';
+      setTimeout(() => {
+        textEl.textContent = '🕊️ Giữ lại sự bình an... (4s)';
+      }, 4000);
+      setTimeout(() => {
+        textEl.textContent = '🍃 Thở ra nhẹ nhàng, thả lỏng mọi âu lo... (4s)';
+      }, 8000);
+      setTimeout(() => {
+        textEl.textContent = '✨ Tâm bạn đã sẵn sàng đón nhận chỉ dẫn.';
+        isBreathing = false;
+        setTimeout(() => {
+          textEl.textContent = 'Hít sâu và lắng đọng tâm trí (4s)';
+        }, 3500);
+      }, 12000);
+    }
+
+    // ── 5. SPA TAB SWITCHING (Quay & Thư Viện) ──
     function switchTab(tabId) {
       activeTab = tabId;
       document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
@@ -437,7 +552,7 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ── DRAWER BOTTOM SHEET (Thêm) ──
+    // ── 6. DRAWER BOTTOM SHEET (Thêm) ──
     function openDrawer() {
       document.getElementById('drawerBackdrop').classList.add('show');
       document.body.style.overflow = 'hidden';
@@ -482,11 +597,10 @@
       }
     }
 
-    // ── KHỞI CHẠY TRANG ──
+    // ── 7. KHỞI CHẠY TRANG ──
     async function initApp() {
       initTheme();
 
-      // Kiểm tra đăng nhập
       currentUser = await getCurrentUser();
       if (!currentUser) {
         location.href = 'login.html';
@@ -495,14 +609,12 @@
 
       syncDrawerProfile();
 
-      // Đồng bộ cloud nếu có tài khoản
       if (currentUser.id && currentUser.id !== 'guest') {
         try {
           await syncDataFromSupabase(currentUser.id);
         } catch (_) {}
       }
 
-      // Khởi tạo ngày tháng và lời chào
       const hr = new Date().getHours();
       const greeting = hr < 12 ? 'Buổi Sáng' : hr < 18 ? 'Buổi Chiều' : 'Buổi Tối';
       document.getElementById('greetingTime').textContent = greeting;
@@ -515,23 +627,21 @@
       });
       document.getElementById('todayDateStr').textContent = viDateStr;
 
-      // Khởi tạo Wheel canvas
       drawWheel(0);
-
-      // Cập nhật stats & kiểm tra hôm nay
       refreshStatsStrip();
       checkTodaySpinStatus();
-
-      // Setup Music Bar
       initMusicBarUI();
 
-      // Kiểm tra hash trên URL
       if (window.location.hash === '#library') {
         switchTab('library');
+      } else if (window.location.hash === '#profile' || window.location.hash === '#settings') {
+        setTimeout(openDrawer, 300);
       }
+
+      initHoloTilt();
     }
 
-    // ── STATS STRIP ──
+    // ── 8. STATS STRIP ──
     function refreshStatsStrip() {
       const history = getHistory();
       const streak = getStreak();
@@ -547,7 +657,7 @@
       if (libFill) libFill.style.width = ((unique / 70) * 100).toFixed(1) + '%';
     }
 
-    // ── KIỂM TRA LƯỢT QUAY HÔM NAY ──
+    // ── 9. KIỂM TRA LƯỢT QUAY HÔM NAY ──
     function checkTodaySpinStatus() {
       const todayRecord = getTodaySpin();
       const spinBtnWrapper = document.getElementById('spinBtnWrapper');
@@ -585,16 +695,16 @@
       setInterval(tick, 1000);
     }
 
-    // ── VẼ VÒNG QUAY LA BÀN HOÀNG KIM ──
+    // ── 10. VẼ VÒNG QUAY LA BÀN HOÀNG KIM (PRO SHADER) ──
     const canvas = document.getElementById('spinCanvas');
     const ctx = canvas.getContext('2d');
-    const W = 450, H = 450, CX = 225, CY = 225, R = 210;
+    const W = 480, H = 480, CX = 240, CY = 240, R = 224;
     const SEGMENTS = 12;
 
     const SEGMENT_COLORS = [
-      '#FFDFC9', '#FFEAC9', '#FFF5C9', '#F1FFD4',
-      '#D8FCEB', '#D2F5F8', '#DBECFF', '#E4E2FF',
-      '#EFE2FF', '#FCE2F7', '#FFE0EA', '#FFE7DD'
+      '#FFDFD0', '#FFE9CE', '#FFF5CE', '#F1FFD6',
+      '#DCFCEE', '#D6F8FB', '#DEEDFF', '#E7E5FF',
+      '#F0E5FF', '#FCE5F9', '#FFE2EC', '#FFEAE0'
     ];
     const SEGMENT_RUNES = ['✦','✧','☽','☼','★','☆','☯','⚘','☘','❊','☸','࿏'];
     const SEGMENT_LABELS = ['Bình An','Trí Tuệ','Hy Vọng','Chữa Lành','Dồi Dào','Tình Yêu',
@@ -608,18 +718,18 @@
       ctx.clearRect(0, 0, W, H);
       const segAngle = (Math.PI * 2) / SEGMENTS;
 
-      // Outer gold rim
+      // Outer gold metallic border
       ctx.save();
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 6, 0, Math.PI * 2);
-      ctx.fillStyle = '#D4A84E';
-      ctx.shadowColor = 'rgba(212, 168, 78, 0.45)';
-      ctx.shadowBlur = 16;
+      ctx.arc(CX, CY, R + 8, 0, Math.PI * 2);
+      ctx.fillStyle = '#DDA73A';
+      ctx.shadowColor = 'rgba(221, 167, 58, 0.6)';
+      ctx.shadowBlur = 20;
       ctx.fill();
 
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#3D2625';
+      ctx.arc(CX, CY, R + 3, 0, Math.PI * 2);
+      ctx.fillStyle = '#2D1810';
       ctx.fill();
       ctx.restore();
 
@@ -636,31 +746,31 @@
         ctx.fillStyle = SEGMENT_COLORS[i];
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
+        ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        // Rune
-        const rx = CX + Math.cos(mid) * (R * 0.72);
-        const ry = CY + Math.sin(mid) * (R * 0.72);
+        // Rune Cổ Tự
+        const rx = CX + Math.cos(mid) * (R * 0.74);
+        const ry = CY + Math.sin(mid) * (R * 0.74);
         ctx.save();
         ctx.translate(rx, ry);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = 'bold 20px serif';
-        ctx.fillStyle = '#4A2A1A';
+        ctx.font = 'bold 22px serif';
+        ctx.fillStyle = '#4A2818';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(SEGMENT_RUNES[i], 0, 0);
         ctx.restore();
 
-        // Label
-        const lx = CX + Math.cos(mid) * (R * 0.42);
-        const ly = CY + Math.sin(mid) * (R * 0.42);
+        // Label Chữ
+        const lx = CX + Math.cos(mid) * (R * 0.44);
+        const ly = CY + Math.sin(mid) * (R * 0.44);
         ctx.save();
         ctx.translate(lx, ly);
         ctx.rotate(mid + Math.PI / 2);
         ctx.font = 'bold 11px Nunito, sans-serif';
-        ctx.fillStyle = '#3D2625';
+        ctx.fillStyle = '#2D1810';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(SEGMENT_LABELS[i], 0, 0);
@@ -669,13 +779,13 @@
 
       // Inner ring
       ctx.beginPath();
-      ctx.arc(CX, CY, 52, 0, Math.PI * 2);
-      ctx.strokeStyle = '#D4A84E';
+      ctx.arc(CX, CY, 56, 0, Math.PI * 2);
+      ctx.strokeStyle = '#DDA73A';
       ctx.lineWidth = 4;
       ctx.stroke();
     }
 
-    // ── THỰC HIỆN QUAY ──
+    // ── 11. THỰC HIỆN QUAY (Physics & Tactile Haptic) ──
     function handleSpinStart() {
       if (isWheelSpinning || hasSpunToday()) return;
       isWheelSpinning = true;
@@ -686,33 +796,45 @@
       btn.disabled = true;
       btn.textContent = 'ĐANG DẪN LỐI...';
 
+      const discWrap = document.getElementById('wheelDiscWrap');
+      discWrap.classList.add('spinning-active');
+
       const loader = document.getElementById('spinConicLoader');
       loader.style.display = 'flex';
 
       const chosenMessage = getRandomMessage();
       currentMessageId = chosenMessage.id;
 
-      const fullRotations = 6 + Math.random() * 3;
+      const fullRotations = 7 + Math.random() * 3;
       const targetAngle = currentRotationAngle + (Math.PI * 2 * fullRotations) + (Math.random() * Math.PI * 2);
 
-      const duration = 4600;
+      const duration = 4800;
       const startTime = performance.now();
       const startAngle = currentRotationAngle;
       const segAngle = (Math.PI * 2) / SEGMENTS;
+      const pointerPin = document.getElementById('wheelPointerPin');
 
-      function easeOutCubic(t) {
-        return 1 - Math.pow(1 - t, 3.5);
+      function easeOutQuart(t) {
+        return 1 - Math.pow(1 - t, 4);
       }
 
       function animateFrame(now) {
         const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        currentRotationAngle = startAngle + (targetAngle - startAngle) * easeOutCubic(progress);
+        currentRotationAngle = startAngle + (targetAngle - startAngle) * easeOutQuart(progress);
 
         const currentSeg = Math.floor((currentRotationAngle % (Math.PI * 2)) / segAngle);
         if (currentSeg !== lastSegmentIndex) {
-          sounds.playTick(1.0 + (1 - progress) * 0.5);
+          sounds.playTick(1.0 + (1 - progress) * 0.6);
           lastSegmentIndex = currentSeg;
+          
+          // Haptic vibration trên mobile
+          if (navigator.vibrate) navigator.vibrate(10);
+
+          // Nhịp kim chỉ la bàn
+          pointerPin.classList.remove('pin-bump');
+          void pointerPin.offsetWidth;
+          pointerPin.classList.add('pin-bump');
         }
 
         drawWheel(currentRotationAngle);
@@ -722,6 +844,7 @@
         } else {
           currentRotationAngle = targetAngle % (Math.PI * 2);
           isWheelSpinning = false;
+          discWrap.classList.remove('spinning-active');
           loader.style.display = 'none';
           onSpinDone(chosenMessage);
         }
@@ -732,12 +855,13 @@
 
     async function onSpinDone(msg) {
       sounds.playSingingBowl();
+      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
       await recordSpinToCloud(msg.id);
       refreshStatsStrip();
       setTimeout(() => openRitualModal(msg), 400);
     }
 
-    // ── RITUAL MODAL (Wax Seal & Flip Card) ──
+    // ── 12. RITUAL MODAL (Wax Seal & Holographic Flip Card) ──
     function openRitualModal(msg) {
       const modal = document.getElementById('ritualModal');
       const waxCard = document.getElementById('waxSealCard');
@@ -748,10 +872,8 @@
       modal.classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      // Reset Card Flip state
       document.getElementById('flipStage').classList.remove('flipped');
 
-      // Populate content
       document.getElementById('letterCardImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
       document.getElementById('letterTitle').textContent = msg.name;
       document.getElementById('letterQuote').textContent = `"${msg.desc}"`;
@@ -764,18 +886,20 @@
 
     function onCrackWaxSeal() {
       const btn = document.getElementById('waxSealBtn');
-      btn.style.animation = 'sealBreakAnim 0.55s ease forwards';
+      btn.style.animation = 'sealBreakAnim 0.6s ease forwards';
       sounds.playWaxCrack();
+      if (navigator.vibrate) navigator.vibrate([25, 40, 25]);
 
       setTimeout(() => {
         document.getElementById('waxSealCard').style.display = 'none';
         document.getElementById('letterRevealCard').classList.add('show');
         launchConfettiEffect();
-      }, 500);
+      }, 550);
     }
 
     function toggleCardFlip() {
       document.getElementById('flipStage').classList.toggle('flipped');
+      if (navigator.vibrate) navigator.vibrate(15);
     }
 
     function closeRitualModal() {
@@ -788,7 +912,6 @@
       if (!currentMessageId) return;
       const msg = getMessageById(currentMessageId);
       openRitualModal(msg);
-      // Bỏ qua bước tem sáp nếu xem lại
       document.getElementById('waxSealCard').style.display = 'none';
       document.getElementById('letterRevealCard').classList.add('show');
     }
@@ -797,7 +920,13 @@
       const isChecked = document.getElementById('actionCheckbox').checked;
       const note = document.getElementById('journalInput').value.trim();
       saveMessageNote(getTodayStr(), note, isChecked);
-      showToast(isChecked ? 'Tuyệt vời! Bạn đã hoàn thành hành động hôm nay ✨' : 'Đã bỏ dấu hoàn thành');
+      if (isChecked) {
+        sounds.playWaxCrack();
+        launchConfettiEffect();
+        showToast('Tuyệt vời! Bạn đã hoàn thành hành động hôm nay ✨');
+      } else {
+        showToast('Đã bỏ dấu hoàn thành');
+      }
     }
 
     function onSaveJournal() {
@@ -807,7 +936,7 @@
       showToast('Đã lưu nhật ký vào hành trình của bạn 💾');
     }
 
-    // ── THƯ VIỆN & BỘ LỌC ──
+    // ── 13. THƯ VIỆN & BỘ LỌC HOLOGRAPHIC ──
     function setLibCategory(cat, btn) {
       selectedLibCategory = cat;
       document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
@@ -848,16 +977,17 @@
         const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
 
         const card = document.createElement('div');
-        card.className = 'lib-card';
+        card.className = 'lib-card holo-tilt';
         card.innerHTML = `
           <div class="lib-card-art">
             <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
+            <div class="lib-card-glare"></div>
             ${isUnlocked ? '' : '<div class="lib-card-lock-mask">🔒</div>'}
           </div>
           <div class="lib-card-body">
             <div class="lib-card-name">${msg.name}</div>
             <div class="lib-card-meta">
-              <span style="color:${cat.color};font-weight:700;">${cat.icon} ${cat.name.split(' ')[0]}</span>
+              <span style="color:${cat.color};font-weight:800;">${cat.icon} ${cat.name.split(' ')[0]}</span>
               <span>${isUnlocked ? '✓ Đã mở' : 'Chưa mở'}</span>
             </div>
           </div>
@@ -874,9 +1004,44 @@
 
         grid.appendChild(card);
       });
+
+      initHoloTilt();
     }
 
-    // ── HUY HIỆU DANH DỰ (Trong Drawer) ──
+    // ── 14. HOLOGRAPHIC 3D CARD TILT ENGINE ──
+    function initHoloTilt() {
+      document.querySelectorAll('.holo-tilt').forEach(card => {
+        if (card.dataset.tiltInitialized) return;
+        card.dataset.tiltInitialized = 'true';
+
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = ((y - centerY) / centerY) * -10;
+          const rotateY = ((x - centerX) / centerX) * 10;
+
+          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.02)`;
+          
+          const glare = card.querySelector('.lib-card-glare');
+          if (glare) {
+            const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
+            glare.style.opacity = '0.9';
+            glare.style.background = `linear-gradient(${angle}deg, transparent 20%, rgba(255,255,255,0.4) 50%, transparent 80%)`;
+          }
+        });
+
+        card.addEventListener('mouseleave', () => {
+          card.style.transform = '';
+          const glare = card.querySelector('.lib-card-glare');
+          if (glare) glare.style.opacity = '0';
+        });
+      });
+    }
+
+    // ── 15. HUY HIỆU DANH DỰ (Trong Drawer) ──
     const BADGE_LIST = [
       { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu' },
       { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày streak' },
@@ -912,23 +1077,25 @@
       });
     }
 
-    // ── MUSIC BAR UI SYNC ──
+    // ── 16. MUSIC BAR UI SYNC ──
     function initMusicBarUI() {
       const toggleBtn = document.getElementById('musicToggleBtn');
       const titleEl = document.getElementById('musicTrackTitle');
+      const barEl = document.getElementById('musicPlayerBar');
       const volSlider = document.getElementById('drawerVolSlider');
 
       if (bgMusic) {
         if (volSlider) volSlider.value = bgMusic.audio.volume;
 
-        // Bắt sự kiện play/pause từ audio
         bgMusic.audio.addEventListener('play', () => {
           if (toggleBtn) toggleBtn.textContent = '⏸';
           if (titleEl) titleEl.textContent = bgMusic.currentTrackName || 'Lofi Thiền Định';
+          if (barEl) barEl.classList.add('playing');
         });
 
         bgMusic.audio.addEventListener('pause', () => {
           if (toggleBtn) toggleBtn.textContent = '▶';
+          if (barEl) barEl.classList.remove('playing');
         });
       }
     }
@@ -944,7 +1111,7 @@
       showToast(muted ? 'Đã tắt tiếng chuông & click 🔇' : 'Đã bật hiệu ứng âm thanh 🔊');
     }
 
-    // ── TẠO & CHIA SẺ STORY INSTAGRAM ──
+    // ── 17. TẠO & CHIA SẺ STORY INSTAGRAM ──
     async function exportTodayStory() {
       if (!currentMessageId) return;
       const msg = getMessageById(currentMessageId);
@@ -982,7 +1149,7 @@
       }
     }
 
-    // ── XUẤT SAO LƯU DỮ LIỆU & ĐĂNG XUẤT ──
+    // ── 18. XUẤT SAO LƯU DỮ LIỆU & ĐĂNG XUẤT ──
     function exportDataJson() {
       const backupData = {
         user: currentUser,
@@ -1006,25 +1173,25 @@
       }
     }
 
-    // ── HIỆU ỨNG CONFETTI (Tối ưu nhẹ nhàng) ──
+    // ── 19. HIỆU ỨNG CONFETTI HOÀNG KIM ──
     function launchConfettiEffect() {
       const c = document.getElementById('confettiCanvas');
       c.width = window.innerWidth;
       c.height = window.innerHeight;
       const cCtx = c.getContext('2d');
       const particles = [];
-      const colors = ['#D4A84E', '#D4714A', '#F4A47A', '#5B9279', '#FFFFFF'];
+      const colors = ['#DDA73A', '#E06D44', '#F79C74', '#4E9B79', '#FFFFFF', '#F6D365'];
 
-      for (let i = 0; i < 35; i++) {
+      for (let i = 0; i < 45; i++) {
         particles.push({
           x: c.width / 2,
           y: c.height / 2,
-          vx: (Math.random() - 0.5) * 14,
-          vy: (Math.random() - 0.75) * 16,
-          size: 6 + Math.random() * 6,
+          vx: (Math.random() - 0.5) * 16,
+          vy: (Math.random() - 0.75) * 18,
+          size: 6 + Math.random() * 8,
           color: colors[Math.floor(Math.random() * colors.length)],
           rot: Math.random() * 360,
-          vr: (Math.random() - 0.5) * 10,
+          vr: (Math.random() - 0.5) * 12,
           alpha: 1
         });
       }
@@ -1035,9 +1202,9 @@
         particles.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.35;
+          p.vy += 0.38;
           p.rot += p.vr;
-          p.alpha -= 0.015;
+          p.alpha -= 0.014;
           if (p.alpha > 0) {
             alive = true;
             cCtx.save();
