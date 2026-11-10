@@ -234,6 +234,11 @@
 </head>
 <body>
 
+  <!-- Kokonut Background Paths Ribbon Canvas -->
+  <div class="bg-paths-wrapper" id="bgPathsWrap" aria-hidden="true">
+    <canvas id="bgPathsCanvas" class="bg-paths-canvas"></canvas>
+  </div>
+
   <div class="auth-box">
     <!-- Header -->
     <div class="auth-header">
@@ -300,7 +305,15 @@
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/storage.js"></script>
+  <script src="js/background-paths.js"></script>
   <script>
+    window.initBackgroundPaths('bgPathsCanvas', {
+      count: 36,
+      spread: 0.9,
+      angle: -8,
+      speed: 0.8,
+      interactive: true
+    });
     function switchTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
