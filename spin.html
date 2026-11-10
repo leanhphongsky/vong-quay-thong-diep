@@ -9,106 +9,28 @@
   <style>
     body {
       background: radial-gradient(circle at 50% 10%, #FFFDF9 0%, #FFF3EB 55%, #FDE3D6 100%);
-      padding-top: 80px;
-      padding-bottom: 90px;
+      padding-top: 85px;
+      padding-bottom: 110px;
       overflow-x: hidden;
+      min-height: 100vh;
+      transition: background 0.4s ease;
     }
 
-    /* ── KOKONUT UI MORPHIC FLOATING NAVBAR ── */
-    .morphic-navbar-wrapper {
-      position: fixed;
-      top: 14px;
-      left: 0;
-      right: 0;
-      z-index: 300;
-      display: flex;
-      justify-content: center;
-      padding: 0 12px;
-      pointer-events: none;
-    }
-
-    .morphic-navbar {
-      pointer-events: auto;
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: rgba(18, 20, 31, 0.88);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      border-radius: 100px;
-      padding: 5px 6px;
-      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35), 0 0 1px rgba(255, 255, 255, 0.4);
-      user-select: none;
-      max-width: 95vw;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .morphic-navbar::-webkit-scrollbar { display: none; }
-
-    .morphic-nav-item {
-      position: relative;
-      background: transparent;
-      border: none;
-      color: rgba(255, 255, 255, 0.72);
-      font-family: 'Nunito', sans-serif;
-      font-size: 0.86rem;
-      font-weight: 700;
-      padding: 8px 16px;
-      border-radius: 100px;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      white-space: nowrap;
-      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-      outline: none;
-    }
-
-    .morphic-nav-item:hover {
-      color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.08);
-    }
-
-    .morphic-nav-item.active {
-      color: #FFFFFF;
-      background: rgba(255, 255, 255, 0.14);
-      box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25);
-    }
-
-    .morphic-nav-item.active::after {
-      content: '';
-      position: absolute;
-      bottom: 3px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 18px;
-      height: 2.5px;
-      background: linear-gradient(90deg, #E07A5F, #F4A47A);
-      border-radius: 2px;
-      box-shadow: 0 1px 4px rgba(224, 122, 95, 0.6);
-    }
-
-    @media (max-width: 600px) {
-      .morphic-nav-item {
-        padding: 6px 11px;
-        font-size: 0.78rem;
-        gap: 4px;
-      }
-      .morphic-nav-item .nav-label-long { display: none; }
+    .dark body {
+      background: radial-gradient(circle at 50% 10%, #18181b 0%, #0e101d 55%, #08090f 100%);
     }
 
     /* ── Tab Views System ── */
     .tab-view { display: none; }
     .tab-view.active { display: block; animation: fadeIn 0.35s ease forwards; }
 
-    .section-hero { text-align: center; padding: 24px 20px 10px; }
+    .section-hero { text-align: center; padding: 20px 20px 8px; }
     .badge-eyebrow {
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      background: rgba(224, 122, 95, 0.1);
-      border: 1px solid rgba(224, 122, 95, 0.2);
+      background: rgba(224, 122, 95, 0.12);
+      border: 1px solid rgba(224, 122, 95, 0.25);
       border-radius: var(--radius-pill);
       padding: 4px 16px;
       font-size: 0.8rem;
@@ -122,26 +44,36 @@
       background: radial-gradient(circle at 50% 30%, #FFFDF9 0%, #FFF2EA 50%, #FDE4D8 100%);
       border-radius: var(--radius);
       border: 1.5px solid var(--border);
-      padding: 48px 24px;
+      padding: 44px 24px 36px;
       text-align: center;
       box-shadow: var(--shadow-sm);
       margin-bottom: 28px;
       position: relative;
       overflow: hidden;
     }
+    .dark .home-hero-card {
+      background: radial-gradient(circle at 50% 30%, #27272a 0%, #18181b 60%, #0f1015 100%);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
     .home-hero-title {
       font-family: 'Cinzel', 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4.5vw, 2.8rem);
+      font-size: clamp(1.8rem, 4.5vw, 2.7rem);
       color: var(--brown-dark);
       margin-bottom: 14px;
       line-height: 1.25;
     }
+    .dark .home-hero-title {
+      color: #f4f4f5;
+    }
     .home-hero-desc {
-      font-size: 1.05rem;
+      font-size: 1.02rem;
       color: var(--brown-mid);
       max-width: 620px;
       margin: 0 auto 28px;
       line-height: 1.65;
+    }
+    .dark .home-hero-desc {
+      color: #a1a1aa;
     }
 
     .energy-grid {
@@ -158,10 +90,16 @@
       text-align: center;
       transition: all 0.25s ease;
     }
+    .dark .energy-card {
+      background: #18181b;
+      border-color: rgba(255, 255, 255, 0.1);
+    }
     .energy-card:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: var(--shadow-md); }
     .energy-icon { font-size: 2.2rem; margin-bottom: 10px; display: block; }
     .energy-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--brown-dark); }
+    .dark .energy-title { color: #f4f4f5; }
     .energy-desc { font-size: 0.84rem; color: var(--brown-light); line-height: 1.55; }
+    .dark .energy-desc { color: #a1a1aa; }
 
     /* ── TAB VÒNG QUAY STYLES ── */
     .mini-stats {
@@ -181,10 +119,14 @@
       text-align: center;
       box-shadow: var(--shadow-sm);
     }
+    .dark .mini-stat {
+      background: rgba(24, 24, 27, 0.85);
+      border-color: rgba(255, 255, 255, 0.1);
+    }
     .mini-stat-num { font-family: 'Cinzel', 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--peach); display: block; }
     .mini-stat-label { font-size: 0.68rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
 
-    .wheel-section { display: flex; flex-direction: column; align-items: center; padding: 20px 16px 0; gap: 20px; }
+    .wheel-section { display: flex; flex-direction: column; align-items: center; padding: 18px 16px 0; gap: 20px; }
     .wheel-outer-glow {
       position: relative;
       padding: 12px;
@@ -246,36 +188,45 @@
     .already-spun { display: none; text-align: center; animation: fadeIn 0.5s ease forwards; max-width: 440px; width: 100%; }
     .already-spun.show { display: block; }
     .today-card { background: var(--white); border-radius: var(--radius); border: 2px solid var(--peach-soft); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-md); position: relative; }
+    .dark .today-card { background: #18181b; border-color: rgba(255, 255, 255, 0.15); }
     .today-img { width: 100%; max-width: 220px; border-radius: var(--radius-sm); margin: 0 auto 14px; display: block; box-shadow: var(--shadow-sm); }
     .today-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 6px; }
+    .dark .today-name { color: #f4f4f5; }
     .today-desc { font-size: 0.88rem; color: var(--brown-mid); line-height: 1.6; margin-bottom: 16px; }
+    .dark .today-desc { color: #a1a1aa; }
     .countdown-box { background: #FFF9E6; border: 1px solid #F0D080; border-radius: var(--radius-sm); padding: 10px 18px; display: inline-block; margin-bottom: 14px; }
+    .dark .countdown-box { background: #27272a; border-color: #3f3f46; }
     .countdown-time { font-size: 1.4rem; font-weight: 800; color: var(--brown-dark); font-family: 'Cinzel', serif; }
+    .dark .countdown-time { color: #fbbf24; }
 
     /* ── TAB THƯ VIỆN STYLES ── */
     .search-filter-box { max-width: 520px; margin: 0 auto 20px; padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
     .search-input { width: 100%; padding: 12px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-pill); font-family: 'Nunito', sans-serif; font-size: 0.92rem; outline: none; background: white; }
+    .dark .search-input { background: #18181b; border-color: #3f3f46; color: white; }
     .filter-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
     .filter-tabs::-webkit-scrollbar { display: none; }
     .filter-tab { padding: 7px 16px; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; cursor: pointer; background: var(--white); border: 1.5px solid var(--border); color: var(--brown-light); white-space: nowrap; transition: all 0.2s; }
+    .dark .filter-tab { background: #18181b; border-color: #27272a; color: #a1a1aa; }
     .filter-tab.active { background: var(--brown-dark); border-color: var(--brown-dark); color: #FFD700; }
     .library-grid { max-width: 940px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
     .lib-card { background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.25s ease; }
+    .dark .lib-card { background: #18181b; border-color: rgba(255, 255, 255, 0.1); }
     .lib-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold); }
     .lib-card-img-box { width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative; background: #FDF4ED; }
     .lib-card-img-box img { width: 100%; height: 100%; object-fit: cover; }
 
-    /* ── TAB VỀ DỰ ÁN STYLES ── */
+    /* ── TAB VỀ DỰ ÁN & HỒ SƠ STYLES ── */
     .about-card {
       background: var(--white);
       border-radius: var(--radius);
       border: 1.5px solid var(--border);
-      padding: 32px 24px;
+      padding: 30px 24px;
       max-width: 720px;
       margin: 0 auto 24px;
       box-shadow: var(--shadow-sm);
       line-height: 1.75;
     }
+    .dark .about-card { background: #18181b; border-color: rgba(255, 255, 255, 0.1); color: #d4d4d8; }
     .about-card h3 { font-family: 'Cinzel', 'Playfair Display', serif; margin-bottom: 12px; color: var(--peach); font-size: 1.25rem; }
     .about-step { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
     .about-step-num { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #E07A5F, #E9C46A); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
@@ -290,23 +241,29 @@
       margin-bottom: 18px;
       box-shadow: var(--shadow-sm);
     }
+    .dark .settings-group { background: #18181b; border-color: rgba(255, 255, 255, 0.1); }
     .settings-group-title { font-size: 0.84rem; font-weight: 800; color: var(--brown-light); text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px; }
     .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
+    .dark .settings-row { border-bottom-color: #27272a; }
     .settings-row:last-child { border-bottom: none; }
     .settings-slider { width: 140px; accent-color: var(--peach); }
     .badges-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
     .badge-item { text-align: center; padding: 12px 6px; background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--border); }
+    .dark .badge-item { background: #18181b; border-color: #27272a; }
     .badge-item.earned { border-color: var(--gold); background: #FFF9E6; }
+    .dark .badge-item.earned { background: #27272a; border-color: #f59e0b; }
     .badge-item:not(.earned) { opacity: 0.4; filter: grayscale(1); }
 
     /* Modals */
-    .ritual-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(14, 17, 30, 0.94); backdrop-filter: blur(12px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; overflow-y: auto; }
+    .ritual-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(14, 17, 30, 0.94); backdrop-filter: blur(14px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; overflow-y: auto; }
     .ritual-overlay.show { opacity: 1; pointer-events: all; }
     .seal-step { text-align: center; animation: scaleIn 0.5s var(--transition) forwards; max-width: 360px; width: 100%; }
     .envelope-box { background: linear-gradient(145deg, #FFF0E4, #FFE3D1); border-radius: 20px; border: 2px solid #F5C7AF; padding: 45px 24px 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
+    .dark .envelope-box { background: linear-gradient(145deg, #27272a, #18181b); border-color: #3f3f46; color: white; }
     .letter-step { display: none; width: 100%; max-width: 480px; animation: scaleIn 0.5s var(--transition) forwards; background: #FFFDF9; border-radius: var(--radius); border: 2px solid #E9C46A; padding: 24px; position: relative; max-height: 88vh; overflow-y: auto; }
+    .dark .letter-step { background: #18181b; border-color: #f59e0b; color: white; }
     .letter-step.show { display: block; }
-    .letter-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.06); border: none; font-size: 1.1rem; cursor: pointer; }
+    .letter-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.06); border: none; font-size: 1.1rem; cursor: pointer; color: inherit; }
     .story-modal { position: fixed; inset: 0; z-index: 600; background: rgba(0, 0, 0, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
     .story-modal.show { opacity: 1; pointer-events: all; }
     .story-preview-img { max-height: 72vh; max-width: 90vw; border-radius: 18px; margin-bottom: 16px; }
@@ -315,30 +272,64 @@
 </head>
 <body>
 
-  <!-- KOKONUT UI MORPHIC FLOATING NAVBAR (SPLIT NAV) -->
-  <div class="morphic-navbar-wrapper">
-    <nav class="morphic-navbar">
-      <button class="morphic-nav-item" id="mNavHome" onclick="switchMainTab('home')">
-        <span>🏠</span>
-        <span class="nav-label-long">Trang Chủ</span>
-      </button>
-      <button class="morphic-nav-item active" id="mNavSpin" onclick="switchMainTab('spin')">
-        <span>🎡</span>
-        <span class="nav-label-long">Vòng Quay</span>
-      </button>
-      <button class="morphic-nav-item" id="mNavLibrary" onclick="switchMainTab('library')">
-        <span>📚</span>
-        <span class="nav-label-long">Bộ Sưu Tập</span>
-      </button>
-      <button class="morphic-nav-item" id="mNavAbout" onclick="switchMainTab('about')">
-        <span>📖</span>
-        <span class="nav-label-long">Về Dự Án</span>
-      </button>
-      <button class="morphic-nav-item" id="mNavSettings" onclick="switchMainTab('settings')">
-        <span>⚙️</span>
-        <span class="nav-label-long">Cài Đặt</span>
-      </button>
+  <!-- SVG Filter for Kokonut Liquid Glass Refraction -->
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;" focusable="false">
+    <defs>
+      <filter color-interpolation-filters="sRGB" height="200%" id="liquidGlassFilter" width="200%" x="-50%" y="-50%">
+        <feTurbulence baseFrequency="0.05 0.05" numOctaves="1" result="turbulence" seed="1" type="fractalNoise"/>
+        <feGaussianBlur in="turbulence" result="blurredNoise" stdDeviation="2"/>
+        <feDisplacementMap in="SourceGraphic" in2="blurredNoise" result="displaced" scale="30" xChannelSelector="R" yChannelSelector="B"/>
+        <feGaussianBlur in="displaced" stdDeviation="4"/>
+      </filter>
+    </defs>
+  </svg>
+
+  <!-- 1. KOKONUT MORPHIC NAVBAR (SPLIT NAV) & SWITCH BUTTON -->
+  <div class="kokonut-morphic-nav-wrap">
+    <nav class="kokonut-morphic-nav-row" id="kokonutMorphicNav">
+      <div class="kokonut-morphic-segment active" data-nav-index="0" data-tab="home" id="mNavHome">
+        <span>🏠 Trang Chủ</span>
+        <span class="kokonut-nav-indicator"></span>
+      </div>
+      <div class="kokonut-morphic-segment" data-nav-index="1" data-tab="spin" id="mNavSpin">
+        <span>🎡 Vòng Quay</span>
+        <span class="kokonut-nav-indicator"></span>
+      </div>
+      <div class="kokonut-morphic-segment" data-nav-index="2" data-tab="library" id="mNavLibrary">
+        <span>📚 Bộ Sưu Tập</span>
+        <span class="kokonut-nav-indicator"></span>
+      </div>
+      <div class="kokonut-morphic-segment" data-nav-index="3" data-tab="profile" id="mNavProfile">
+        <span>👤 Hồ Sơ</span>
+        <span class="kokonut-nav-indicator"></span>
+      </div>
+      <div class="kokonut-morphic-segment" data-nav-index="4" data-tab="about" id="mNavAbout">
+        <span>📖 Giới Thiệu</span>
+        <span class="kokonut-nav-indicator"></span>
+      </div>
+      <div class="kokonut-morphic-segment" data-nav-index="5" data-tab="settings" id="mNavSettings">
+        <span>⚙️ Cài Đặt</span>
+        <span class="kokonut-nav-indicator"></span>
+      </div>
     </nav>
+
+    <!-- Kokonut Switch Button (Sun/Moon Morph Theme Reveal) -->
+    <button id="kokonutSwitchThemeBtn" class="kokonut-switch-btn" aria-label="Đổi giao diện Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
+      <svg class="kokonut-switch-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="4"></circle>
+        <path d="M12 2v2"></path>
+        <path d="M12 20v2"></path>
+        <path d="m4.93 4.93 1.41 1.41"></path>
+        <path d="m17.66 17.66 1.41 1.41"></path>
+        <path d="M2 12h2"></path>
+        <path d="M20 12h2"></path>
+        <path d="m6.34 17.66-1.41 1.41"></path>
+        <path d="m19.07 4.93-1.41 1.41"></path>
+      </svg>
+      <svg class="kokonut-switch-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
+        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
+      </svg>
+    </button>
   </div>
 
   <canvas id="confettiCanvas"></canvas>
@@ -346,43 +337,45 @@
   <div class="page" style="padding-top:10px;">
 
     <!-- ========================================== -->
-    <!-- 1. TAB HOME (KOKONUT CARD STACK & MARKER)  -->
+    <!-- 1. TAB HOME (KOKONUT PLUCKED & CARD STACK) -->
     <!-- ========================================== -->
-    <div id="viewHome" class="tab-view">
+    <div id="viewHome" class="tab-view active">
       <div class="container">
         <div class="home-hero-card">
           <div class="badge-eyebrow">✦ Trạm Sạc Tâm Hồn & Chánh Niệm</div>
           <h1 class="home-hero-title">
-            Mỗi Ngày Một Lá Thư<br>
-            <span class="marker-highlight">Từ Vũ Trụ</span> Gửi Bạn
+            <span id="kokonutHeroPlucked" class="kokonut-pluck-stage">VÒNG QUAY THÔNG ĐIỆP</span><br>
+            <span class="kokonut-marker-target" data-mark="underline" data-mark-color="#f97316">Vũ Trụ Dẫn Lối</span>
           </h1>
           <p class="home-hero-desc">
-            Dành ra 2 phút bình an mỗi sáng để đón nhận thông điệp dẫn lối. 70 bài học chữa lành được chắt lọc để nuôi dưỡng nội lực và thắp sáng năng lượng tích cực trong bạn.
+            Dành ra 2 phút bình an mỗi sáng để đón nhận thông điệp dẫn lối. <span class="kokonut-marker-target" data-mark="highlight" data-mark-color="#facc15">70 bài học chữa lành</span> được chắt lọc để nuôi dưỡng nội lực và thắp sáng năng lượng tích cực trong bạn.
           </p>
           <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
             <button class="btn btn-gold btn-lg" onclick="switchMainTab('spin')">
               🎡 Quay Ngay Hôm Nay
             </button>
             <button class="btn btn-secondary btn-lg" onclick="switchMainTab('library')">
-              📚 Khám Phá 70 Thông Điệp
+              📚 Khám Phá Bộ Bài
             </button>
           </div>
         </div>
 
-        <!-- KOKONUT UI CARD STACK (THROW DECK) -->
+        <!-- KOKONUT CARD STACK (THROW DECK) -->
         <div style="margin: 36px auto 44px; text-align: center;">
-          <h3 style="font-family:'Cinzel',serif;font-size:1.3rem;margin-bottom:6px;">
-            Bộ Bài Thông Điệp Khởi Sắc ✦ Lướt Xem
+          <h3 style="font-family:'Cinzel',serif;font-size:1.35rem;margin-bottom:6px;">
+            Bộ Bài Thông Điệp Khởi Sắc ✦ Kokonut Throw Deck
           </h3>
           <p style="font-size:0.86rem;color:var(--brown-light);margin-bottom:18px;">
-            Trải nghiệm bộ bài Tarot thông điệp 3D — Lướt qua từng hạt mầm trí tuệ
+            Trải nghiệm kéo thả và ném thẻ bài 3D theo vật lý quán tính
           </p>
-          <div class="stack-deck-wrapper" id="homeStackDeck">
-            <!-- 3 lá bài xếp chồng động -->
+          
+          <div class="kokonut-deck-stage" id="kokonutHomeDeck">
+            <!-- 4 thẻ bài chồng vật lý được sinh động từ JS -->
           </div>
-          <div class="stack-controls">
-            <button class="btn btn-secondary btn-sm" onclick="prevStackDeck()">← Lá trước</button>
-            <button class="btn btn-gold btn-sm" onclick="nextStackDeck()">Lá tiếp theo →</button>
+
+          <div style="display:flex;justify-content:center;gap:12px;margin-top:12px;">
+            <button class="btn btn-secondary btn-sm" onclick="window.kokonutDeck?.prev()">← Lá Trước</button>
+            <button class="btn btn-gold btn-sm" onclick="window.kokonutDeck?.next()">Lá Tiếp Theo →</button>
           </div>
         </div>
 
@@ -416,9 +409,9 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 2. TAB VÒNG QUAY (KOKONUT LOADER & WHEEL)  -->
+    <!-- 2. TAB VÒNG QUAY (KOKONUT ORBITAL LOADER)  -->
     <!-- ========================================== -->
-    <div id="viewSpin" class="tab-view active">
+    <div id="viewSpin" class="tab-view">
       <div class="section-hero">
         <div class="badge-eyebrow">🌀 La Bàn Thông Điệp</div>
         <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.4rem, 4vw, 2rem);">
@@ -465,15 +458,19 @@
           <button id="spinBtn" onclick="startSpin()">QUAY VÒNG QUAY</button>
         </div>
 
-        <!-- KOKONUT ORBITAL LOADER (HIỆN KHI VÒNG ĐANG QUAY) -->
-        <div id="spinOrbitalLoader" style="display:none;text-align:center;">
-          <div class="orbital-loader">
-            <div class="orbital-ring"></div>
-            <div class="orbital-ring"></div>
-            <div class="orbital-core">✦</div>
-          </div>
-          <div style="font-size:0.86rem;font-weight:700;color:var(--peach);">
-            Đang kết nối năng lượng vũ trụ...
+        <!-- KOKONUT ORBITAL CONIC GRADIENT LOADER -->
+        <div id="spinOrbitalLoader" style="display:none;">
+          <div class="kokonut-loader-wrapper">
+            <div class="kokonut-loader-orbital" aria-hidden="true">
+              <div class="kokonut-ring kokonut-ring-outer"></div>
+              <div class="kokonut-ring kokonut-ring-primary"></div>
+              <div class="kokonut-ring kokonut-ring-counter"></div>
+              <div class="kokonut-ring kokonut-ring-accent"></div>
+            </div>
+            <div class="kokonut-loader-texts">
+              <span class="kokonut-loader-title">Đang kết nối năng lượng vũ trụ...</span>
+              <span class="kokonut-loader-subtitle">Giữ tâm tĩnh lặng đón nhận hạt mầm khai sáng</span>
+            </div>
           </div>
         </div>
 
@@ -536,7 +533,54 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 4. TAB VỀ DỰ ÁN (ABOUT)                    -->
+    <!-- 4. TAB HỒ SƠ (KOKONUT AVATAR PICKER)       -->
+    <!-- ========================================== -->
+    <div id="viewProfile" class="tab-view">
+      <div class="section-hero">
+        <div class="badge-eyebrow">👤 Diện Mạo & Hành Trình</div>
+        <h2 style="font-family:'Cinzel',serif;">Hồ Sơ Của Bạn</h2>
+        <p style="color:var(--brown-light);font-size:0.88rem;">Avatar thuật toán tạo hình vô cực từ Kokonut UI</p>
+      </div>
+
+      <div class="container" style="max-width:620px;">
+        <div style="background:var(--white);border-radius:var(--radius);border:1.5px solid var(--border);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-sm);">
+          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+            <div id="kokonutAvatarBox" style="width:100px;height:100px;border-radius:24px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.15);flex-shrink:0;">
+              <!-- Kokonut Avatar SVG Injected -->
+            </div>
+            <div style="flex:1;min-width:180px;">
+              <h3 style="font-family:'Cinzel',serif;font-size:1.25rem;color:var(--brown-dark);margin-bottom:4px;" id="profileUserName">Người Dùng</h3>
+              <div style="font-size:0.8rem;color:var(--brown-light);margin-bottom:12px;" id="profileSeedLabel">Mã tâm thức: cosmic-wanderer</div>
+              <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                <button class="btn btn-gold btn-sm" onclick="rollKokonutAvatar()">🎲 Tạo Diện Mạo Mới</button>
+                <button class="btn btn-secondary btn-sm" onclick="copyAvatarSeed()">📋 Sao Chép Mã</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-group">
+          <div class="settings-group-title">📊 Thống Kê Hành Trình</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">
+            <div style="padding:12px;background:#fdf6f0;border-radius:12px;">
+              <div style="font-size:1.4rem;font-weight:800;color:var(--peach);" id="profStatSpins">0</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Tổng lần quay</div>
+            </div>
+            <div style="padding:12px;background:#fdf6f0;border-radius:12px;">
+              <div style="font-size:1.4rem;font-weight:800;color:var(--peach);" id="profStatUnique">0</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Thông điệp mở</div>
+            </div>
+            <div style="padding:12px;background:#fdf6f0;border-radius:12px;">
+              <div style="font-size:1.4rem;font-weight:800;color:var(--peach);" id="profStatStreak">0</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Chuỗi ngày</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- 5. TAB VỀ DỰ ÁN (ABOUT)                    -->
     <!-- ========================================== -->
     <div id="viewAbout" class="tab-view">
       <div class="section-hero">
@@ -552,7 +596,7 @@
             Trong nhịp sống hiện đại hối hả, chúng ta thường bị cuốn vào những lo toan, thông báo và áp lực bên ngoài. <strong>Vòng Quay Thông Điệp</strong> ra đời như một điểm chạm tĩnh lặng — nơi mỗi ngày bạn dành ra đúng 2 phút để quay về lắng nghe chính mình.
           </p>
           <p>
-            Đây không phải là trò chơi may rủi hay bói toán mê tín, mà là một công cụ thực hành <span class="marker-highlight">chánh niệm & chữa lành</span> giúp hướng tâm trí bạn về những giá trị sống tích cực, tử tế và an yên.
+            Đây không phải là trò chơi may rủi hay bói toán mê tín, mà là một công cụ thực hành <span class="kokonut-marker-target" data-mark="highlight" data-mark-color="#facc15">chánh niệm & chữa lành</span> giúp hướng tâm trí bạn về những giá trị sống tích cực, tử tế và an yên.
           </p>
         </div>
 
@@ -584,73 +628,37 @@
     </div>
 
     <!-- ========================================== -->
-    <!-- 5. TAB CÀI ĐẶT (AVATAR PICKER & SWITCH)    -->
+    <!-- 6. TAB CÀI ĐẶT (SETTINGS)                  -->
     <!-- ========================================== -->
     <div id="viewSettings" class="tab-view">
       <div class="section-hero">
         <div class="badge-eyebrow">⚙️ Tùy Chỉnh & Tài Khoản</div>
         <h2 style="font-family:'Cinzel',serif;">Cài Đặt Ứng Dụng</h2>
-        <p style="color:var(--brown-light);font-size:0.88rem;">Quản lý âm thanh, linh vật và dữ liệu của bạn</p>
+        <p style="color:var(--brown-light);font-size:0.88rem;">Quản lý âm thanh, giao diện và dữ liệu cá nhân</p>
       </div>
 
       <div class="settings-container">
-
-        <!-- KOKONUT UI AVATAR PICKER (LINH VẬT TÂM THỨC) -->
+        <!-- Âm lượng Lofi & SFX -->
         <div class="settings-group">
-          <div class="settings-group-title">👤 Linh Vật Tâm Thức (Avatar Picker)</div>
-          <div class="avatar-picker-card">
-            <div class="avatar-display" id="settingsAvatarDisplay">🌸</div>
-            <div style="flex:1;">
-              <div style="font-weight:700;font-size:0.92rem;" id="setProfName">Đang tải...</div>
-              <div style="font-size:0.78rem;color:var(--brown-light);" id="spiritAnimalTitle">Linh vật: Hoa Sen Tĩnh Lặng</div>
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="rollRandomAvatar()" title="Lắc linh vật ngẫu nhiên">
-              🎲 Lắc Ngẫu Nhiên
-            </button>
-          </div>
-        </div>
-
-        <!-- KOKONUT UI LIQUID GLASS MUSIC CARD -->
-        <div class="settings-group">
-          <div class="settings-group-title">🎵 Trình Phát Nhạc Nền (Liquid Glass Card)</div>
-          <div class="liquid-music-card">
-            <div class="liquid-disc-box" id="liquidDiscBox">
-              <div class="liquid-disc-core"></div>
-            </div>
-            <div class="liquid-music-details">
-              <div class="liquid-music-title" id="liquidSongTitle">Lofi Thiền Định</div>
-              <div class="liquid-music-artist">Âm Hưởng Tĩnh Lặng Vũ Trụ</div>
-              <div class="liquid-progress-bar">
-                <div class="liquid-progress-fill" id="liquidProgressFill"></div>
-              </div>
-            </div>
-            <button class="music-next-btn" onclick="bgMusic.playRandomNext()" title="Đổi bài ngẫu nhiên khác">
-              ⏭️
-            </button>
-          </div>
-
-          <div class="settings-row" style="margin-top:14px;">
+          <div class="settings-group-title">🎵 Tùy Chỉnh Âm Thanh</div>
+          <div class="settings-row">
             <div>
               <div style="font-weight:700;font-size:0.92rem;">Âm lượng Lofi</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Điều chỉnh độ to nhỏ của nhạc nền</div>
+              <div style="font-size:0.75rem;color:var(--brown-light);">Điều chỉnh độ to nhỏ của 9 bản nhạc nền</div>
             </div>
             <input type="range" class="settings-slider" id="musicVolumeSlider" min="0" max="1" step="0.05" oninput="changeMusicVolume(this.value)">
           </div>
 
-          <!-- KOKONUT UI SWITCH BUTTON CHO HIỆU ỨNG ÂM THANH -->
           <div class="settings-row">
             <div>
               <div style="font-weight:700;font-size:0.92rem;">Hiệu ứng âm thanh (SFX)</div>
               <div style="font-size:0.75rem;color:var(--brown-light);">Tiếng khẩy kim & chuông xoay Tây Tạng</div>
             </div>
-            <label class="kokonut-switch">
-              <input type="checkbox" id="sfxSwitch" onchange="toggleSoundFxSwitch(this.checked)">
-              <span class="kokonut-slider"></span>
-            </label>
+            <button class="btn btn-secondary btn-sm" id="sfxToggleBtn" onclick="toggleSfx()">🔊 Đang Bật</button>
           </div>
         </div>
 
-        <!-- Huy hiệu mở khóa -->
+        <!-- 8 Huy hiệu danh dự -->
         <div class="settings-group">
           <div class="settings-group-title">🏅 8 Huy Hiệu Danh Dự</div>
           <div class="badges-grid" id="setBadgesGrid"></div>
@@ -683,7 +691,44 @@
 
   </div>
 
-  <!-- NGHI THỨC PHONG BÌ SÁP NIÊM PHONG (KOKONUT CARD FLIP 3D) -->
+  <!-- 2. KOKONUT LIQUID GLASS CARD & NOW PLAYING MUSIC PLAYER -->
+  <div class="kokonut-liquid-glass" style="position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:850;max-width:440px;width:calc(100% - 28px);">
+    <div class="kokonut-now-playing-wrap" id="kokonutNowPlayingCard">
+      <div class="kokonut-vinyl-box">
+        <div class="kokonut-vinyl-disc" id="kokonutVinylDisc" title="Đĩa than xoay theo quán tính">
+          <div class="kokonut-vinyl-center"></div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+          <div class="kokonut-np-title" style="font-weight:700;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit;">
+            Lofi Thiền Định
+          </div>
+          <div class="kokonut-eq-bars">
+            <div class="kokonut-eq-bar"></div>
+            <div class="kokonut-eq-bar"></div>
+            <div class="kokonut-eq-bar"></div>
+            <div class="kokonut-eq-bar"></div>
+            <div class="kokonut-eq-bar"></div>
+          </div>
+        </div>
+        <div class="kokonut-np-artist" style="font-size:0.74rem;color:var(--brown-light);margin-bottom:4px;">
+          Âm hưởng vũ trụ ngẫu nhiên
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.7rem;color:var(--brown-light);">
+          <span class="kokonut-np-current">0:00</span>
+          <div style="display:flex;gap:14px;align-items:center;">
+            <button onclick="bgMusic.prevTrack()" style="background:none;border:none;cursor:pointer;font-size:0.9rem;color:inherit;" title="Bài trước">⏮</button>
+            <button class="kokonut-np-play" onclick="bgMusic.togglePlay()" style="background:#f97316;color:white;border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;" title="Phát / Tạm dừng">▶</button>
+            <button onclick="bgMusic.nextTrack()" style="background:none;border:none;cursor:pointer;font-size:0.9rem;color:inherit;" title="Bài tiếp">⏭</button>
+          </div>
+          <span class="kokonut-np-total">3:00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. KOKONUT CARD FLIP (3D FLICK CARD REVEAL OVERLAY) -->
   <div class="ritual-overlay" id="ritualOverlay">
     <div class="seal-step" id="sealStep">
       <div class="envelope-box">
@@ -701,25 +746,25 @@
       <button class="letter-close" onclick="closeRitual()">✕</button>
       <div id="letterCatTag" style="text-align:center;margin-bottom:10px;"></div>
 
-      <!-- KOKONUT UI CARD FLIP 3D (LẬT MẶT THẺ BÀI) -->
-      <div class="card-flip-container" id="letterFlipContainer" onclick="toggleCardFlip()" title="Chạm để lật mặt thẻ bài">
-        <div class="card-flip-inner">
-          <div class="card-flip-front">
+      <!-- KOKONUT CARD FLIP CONTAINER -->
+      <div class="kokonut-card-flip-wrap" id="kokonutRevealCardWrap" title="Chạm hoặc vuốt để lật thẻ bài">
+        <div class="kokonut-card-flip-inner">
+          <div class="kokonut-card-face front">
             <div style="font-size:2.8rem;margin-bottom:12px;color:#E9C46A;">✦ 🌀 ✦</div>
             <div style="font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;letter-spacing:2px;color:#E9C46A;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
             <p style="font-size:0.8rem;color:rgba(255,255,255,0.7);max-width:200px;">Lá thư tâm thức dành riêng cho bạn hôm nay</p>
-            <div style="margin-top:20px;font-size:0.75rem;color:#E07A5F;font-weight:700;">🔄 Chạm để lật mặt tranh</div>
+            <div style="margin-top:20px;font-size:0.75rem;color:#E07A5F;font-weight:700;">🔄 Chạm hoặc vuốt để lật mặt tranh</div>
+            <div class="kokonut-card-light-band"></div>
           </div>
-          <div class="card-flip-back">
+          <div class="kokonut-card-face back">
             <img id="letterImg" src="" alt="Thông Điệp">
+            <div class="kokonut-card-light-band"></div>
           </div>
         </div>
+        <div class="kokonut-card-flip-shadow"></div>
       </div>
-      <p style="text-align:center;font-size:0.75rem;color:var(--brown-light);margin-top:6px;margin-bottom:14px;">
-        🔄 Chạm vào thẻ bài để lật mặt 3D
-      </p>
 
-      <div id="letterTitle" class="letter-title"></div>
+      <div id="letterTitle" class="letter-title" style="margin-top:14px;"></div>
       <div id="letterDesc" class="letter-desc"></div>
 
       <div class="action-box">
@@ -763,7 +808,7 @@
     </div>
   </div>
 
-  <!-- Script Modules -->
+  <!-- SCRIPTS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/sound.js"></script>
@@ -771,6 +816,7 @@
   <script src="js/storage.js"></script>
   <script src="js/story-generator.js"></script>
   <script src="js/bg-music.js"></script>
+  <script src="js/kokonut-components.js"></script>
 
   <script>
     let currentMsgId = null;
@@ -778,21 +824,7 @@
     let currentLibCategory = 'all';
     let libSearchQuery = '';
     let toastTimer = null;
-    let stackIndex = 0;
-
-    // Danh sách avatar linh vật cho Avatar Picker
-    const SPIRIT_AVATARS = [
-      { emoji: '🌸', name: 'Hoa Sen Tĩnh Lặng' },
-      { emoji: '🦋', name: 'Bướm Bay Tự Do' },
-      { emoji: '🕊️', name: 'Bồ Câu Bình An' },
-      { emoji: '🐬', name: 'Cá Heo Thuận Dòng' },
-      { emoji: '🦌', name: 'Nai Rừng Trong Sáng' },
-      { emoji: '🦉', name: 'Cú Mèo Trí Tuệ' },
-      { emoji: '🦁', name: 'Sư Tử Dũng Cảm' },
-      { emoji: '☀️', name: 'Mặt Trời Khai Sáng' },
-      { emoji: '🌙', name: 'Ánh Trăng Huyền Ảo' },
-      { emoji: '🌿', name: 'Mầm Xanh Bền Bỉ' }
-    ];
+    let currentAvatarSeed = localStorage.getItem('vqtd_avatar_seed') || 'cosmic-soul-77';
 
     // Toast
     function showToast(msg) {
@@ -811,26 +843,29 @@
       }, 2200);
     }
 
-    // ── CHUYỂN TAB MORPHIC NAVBAR (KOKONUT UI) ──
+    // ── CHUYỂN TAB MORPHIC NAVBAR ──
     function switchMainTab(tabName) {
       document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-      document.querySelectorAll('.morphic-nav-item').forEach(b => b.classList.remove('active'));
-
       const tabMap = {
-        home:     { view: 'viewHome',     btn: 'mNavHome' },
-        spin:     { view: 'viewSpin',     btn: 'mNavSpin' },
-        library:  { view: 'viewLibrary',  btn: 'mNavLibrary' },
-        about:    { view: 'viewAbout',    btn: 'mNavAbout' },
-        settings: { view: 'viewSettings', btn: 'mNavSettings' }
+        home:     { view: 'viewHome',     idx: 0 },
+        spin:     { view: 'viewSpin',     idx: 1 },
+        library:  { view: 'viewLibrary',  idx: 2 },
+        profile:  { view: 'viewProfile',  idx: 3 },
+        about:    { view: 'viewAbout',    idx: 4 },
+        settings: { view: 'viewSettings', idx: 5 }
       };
 
-      const target = tabMap[tabName] || tabMap.spin;
+      const target = tabMap[tabName] || tabMap.home;
       document.getElementById(target.view).classList.add('active');
-      document.getElementById(target.btn).classList.add('active');
       window.location.hash = tabName;
 
-      if (tabName === 'home') renderStackDeck();
+      if (window.kokonutNav) {
+        window.kokonutNav.setActiveIndex(target.idx);
+      }
+
+      if (tabName === 'home') initHomeDeck();
       if (tabName === 'library') renderLibraryGrid();
+      if (tabName === 'profile') renderProfileTab();
       if (tabName === 'settings') renderSettingsTab();
 
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -844,21 +879,39 @@
         return;
       }
 
-      // Slider volume & switches
+      // 1. Init Kokonut Morphic Navbar
+      window.kokonutNav = window.initKokonutMorphicNav('kokonutMorphicNav', {
+        defaultIndex: 0,
+        onSelect: (index, tabName) => {
+          switchMainTab(tabName);
+        }
+      });
+
+      // 2. Init Kokonut Switch Theme
+      window.initKokonutSwitchTheme('kokonutSwitchThemeBtn');
+
+      // 3. Init Kokonut Plucked Text
+      window.initKokonutPluckedText('kokonutHeroPlucked', 1.1);
+
+      // 4. Init Kokonut Marker Text
+      window.initKokonutMarkerText('.kokonut-marker-target');
+
+      // 5. Init Kokonut Now Playing with Liquid Glass
+      if (bgMusic && bgMusic.audio) {
+        window.kokonutNowPlaying = window.initKokonutNowPlaying('kokonutNowPlayingCard', bgMusic.audio);
+      }
+
+      // 6. Init Kokonut Card Flip
+      window.kokonutCardFlip = window.initKokonutCardFlip('kokonutRevealCardWrap');
+
+      // Slider volume
       const volSlider = document.getElementById('musicVolumeSlider');
       if (volSlider && bgMusic) {
         volSlider.value = bgMusic.audio.volume;
       }
-      const sfxSw = document.getElementById('sfxSwitch');
-      if (sfxSw) {
-        sfxSw.checked = !sounds.isMuted();
-      }
 
       // Avatar
-      initAvatar();
-
-      // Cập nhật liquid music player
-      updateLiquidMusicPlayer();
+      updateProfileAvatarView();
 
       if (currentUser.id && currentUser.id !== 'guest') {
         await syncDataFromSupabase(currentUser.id);
@@ -866,132 +919,88 @@
 
       refreshStats();
       checkTodaySpin();
-      renderStackDeck();
+      initHomeDeck();
 
-      // Kiểm tra URL Hash
+      // Check URL Hash
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'spin', 'library', 'about', 'settings'].includes(hash)) {
+      if (['home', 'spin', 'library', 'profile', 'about', 'settings'].includes(hash)) {
         switchMainTab(hash);
       }
     }
 
     // ── KOKONUT CARD STACK (THROW DECK) ──
-    const STACK_PREVIEWS = [
-      { id: 1, name: "Tri Tâm Khai Sáng" },
-      { id: 7, name: "Yêu Chính Mình" },
-      { id: 11, name: "Tái Sinh" },
-      { id: 29, name: "Chánh Niệm" },
-      { id: 54, name: "Hy Vọng" },
-      { id: 70, name: "Vùng Nước Lặng" }
+    const DECK_CARDS_DATA = [
+      { id: 1, title: "Tri Tâm Khai Sáng", subtitle: "Lắng nghe trực giác bên trong" },
+      { id: 7, title: "Yêu Chính Mình", subtitle: "Ôm ấp mọi góc cạnh tâm hồn" },
+      { id: 11, title: "Tái Sinh", subtitle: "Mỗi ngày là một khởi đầu mới" },
+      { id: 29, title: "Chánh Niệm", subtitle: "Hiện diện trọn vẹn ở giây phút này" }
     ];
 
-    function renderStackDeck() {
-      const container = document.getElementById('homeStackDeck');
-      if (!container) return;
-      container.innerHTML = '';
+    function initHomeDeck() {
+      const stage = document.getElementById('kokonutHomeDeck');
+      if (!stage) return;
+      stage.innerHTML = '';
 
-      for (let i = 0; i < 3; i++) {
-        const itemIdx = (stackIndex + i) % STACK_PREVIEWS.length;
-        const msg = getMessageById(STACK_PREVIEWS[itemIdx].id);
-        const card = document.createElement('div');
-        card.className = `stack-card-item pos-${i}`;
-        card.innerHTML = `
-          <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}">
-          <div style="padding:10px 14px;background:white;">
-            <div style="font-family:'Playfair Display',serif;font-weight:700;font-size:0.95rem;color:var(--brown-dark);">${msg.name}</div>
-            <div style="font-size:0.75rem;color:var(--brown-light);">${msg.desc.slice(0, 60)}...</div>
+      DECK_CARDS_DATA.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'kokonut-stack-card';
+        div.innerHTML = `
+          <div class="kokonut-stack-card-art">
+            <img src="images/${String(c.id).padStart(2,'0')}.png" alt="${c.title}">
+          </div>
+          <div style="padding:8px 6px;">
+            <div style="font-weight:700;font-size:0.92rem;color:var(--brown-dark);">${c.title}</div>
+            <div style="font-size:0.75rem;color:var(--brown-light);">${c.subtitle}</div>
           </div>
         `;
-        card.onclick = () => nextStackDeck();
-        container.appendChild(card);
-      }
+        stage.appendChild(div);
+      });
+
+      window.kokonutDeck = window.initKokonutCardStack('kokonutHomeDeck');
     }
 
-    function nextStackDeck() {
-      stackIndex = (stackIndex + 1) % STACK_PREVIEWS.length;
-      renderStackDeck();
+    // ── KOKONUT AVATAR PICKER ──
+    function updateProfileAvatarView() {
+      const box = document.getElementById('kokonutAvatarBox');
+      const seedLbl = document.getElementById('profileSeedLabel');
+      const nameLbl = document.getElementById('profileUserName');
+      if (box) box.innerHTML = window.generateKokonutAvatarSvg(currentAvatarSeed);
+      if (seedLbl) seedLbl.textContent = `Mã hạt giống: ${currentAvatarSeed}`;
+      if (nameLbl) nameLbl.textContent = currentUser?.name || 'Lữ Khách Vũ Trụ';
     }
 
-    function prevStackDeck() {
-      stackIndex = (stackIndex - 1 + STACK_PREVIEWS.length) % STACK_PREVIEWS.length;
-      renderStackDeck();
-    }
-
-    // ── KOKONUT CARD FLIP 3D ──
-    function toggleCardFlip() {
-      const container = document.getElementById('letterFlipContainer');
-      if (container) {
-        container.classList.toggle('flipped');
-        sounds.playTick(1.2);
-      }
-    }
-
-    // ── KOKONUT AVATAR PICKER (🎲 LẮC LINH VẬT) ──
-    function initAvatar() {
-      const saved = JSON.parse(localStorage.getItem('vqtd_spirit_avatar') || 'null');
-      if (saved) {
-        applyAvatar(saved);
-      } else {
-        applyAvatar(SPIRIT_AVATARS[0]);
-      }
-    }
-
-    function applyAvatar(avatar) {
-      const display = document.getElementById('settingsAvatarDisplay');
-      const title = document.getElementById('spiritAnimalTitle');
-      if (display) display.textContent = avatar.emoji;
-      if (title) title.textContent = `Linh vật: ${avatar.name}`;
-      localStorage.setItem('vqtd_spirit_avatar', JSON.stringify(avatar));
-    }
-
-    function rollRandomAvatar() {
-      const display = document.getElementById('settingsAvatarDisplay');
-      if (display) display.classList.add('rolling');
+    function rollKokonutAvatar() {
+      currentAvatarSeed = 'cosmic-' + Math.random().toString(36).substring(2, 9);
+      localStorage.setItem('vqtd_avatar_seed', currentAvatarSeed);
+      updateProfileAvatarView();
       sounds.playWaxCrack();
-
-      setTimeout(() => {
-        const random = SPIRIT_AVATARS[Math.floor(Math.random() * SPIRIT_AVATARS.length)];
-        applyAvatar(random);
-        if (display) display.classList.remove('rolling');
-        showToast(`Đã nhận linh vật mới: ${random.emoji} ${random.name}! ✨`);
-      }, 400);
+      showToast('Đã tạo diện mạo Kokonut mới thành công! ✨');
     }
 
-    // ── KOKONUT LIQUID GLASS MUSIC PLAYER ──
-    function updateLiquidMusicPlayer() {
-      const disc = document.getElementById('liquidDiscBox');
-      const title = document.getElementById('liquidSongTitle');
-      const fill = document.getElementById('liquidProgressFill');
+    function copyAvatarSeed() {
+      navigator.clipboard.writeText(currentAvatarSeed);
+      showToast('Đã sao chép mã hạt giống avatar! 📋');
+    }
 
-      if (bgMusic && bgMusic.currentSong) {
-        if (title) title.textContent = bgMusic.currentSong.title;
-        if (disc) {
-          if (bgMusic.isPlaying) disc.classList.add('spinning');
-          else disc.classList.remove('spinning');
-        }
-      }
-
-      if (bgMusic && bgMusic.audio && fill) {
-        bgMusic.audio.addEventListener('timeupdate', () => {
-          if (bgMusic.audio.duration) {
-            const pct = (bgMusic.audio.currentTime / bgMusic.audio.duration) * 100;
-            fill.style.width = pct + '%';
-          }
-        });
-      }
+    function renderProfileTab() {
+      updateProfileAvatarView();
+      const h = getHistory();
+      const s = getStreak();
+      const u = uniqueMessagesCount();
+      document.getElementById('profStatSpins').textContent = h.length;
+      document.getElementById('profStatUnique').textContent = u;
+      document.getElementById('profStatStreak').textContent = s.count;
     }
 
     function changeMusicVolume(val) {
       if (bgMusic) bgMusic.setVolume(parseFloat(val));
     }
 
-    function toggleSoundFxSwitch(checked) {
-      if (checked) {
-        if (sounds.isMuted()) sounds.toggleMute();
-      } else {
-        if (!sounds.isMuted()) sounds.toggleMute();
-      }
-      showToast(checked ? 'Đã bật hiệu ứng âm thanh 🔊' : 'Đã tắt hiệu ứng âm thanh 🔇');
+    function toggleSfx() {
+      const isMuted = sounds.toggleMute();
+      const btn = document.getElementById('sfxToggleBtn');
+      if (btn) btn.textContent = isMuted ? '🔇 Đã Tắt' : '🔊 Đang Bật';
+      showToast(isMuted ? 'Đã tắt hiệu ứng âm thanh 🔇' : 'Đã bật hiệu ứng âm thanh 🔊');
     }
 
     // ── Ngày tháng ──
@@ -1150,7 +1159,7 @@
       btn.disabled = true;
       btn.textContent = 'ĐANG DẪN LỐI...';
 
-      // Hiện Kokonut Orbital Loader
+      // Hiện Kokonut Orbital Conic Gradient Loader
       const loader = document.getElementById('spinOrbitalLoader');
       if (loader) loader.style.display = 'block';
 
@@ -1212,9 +1221,10 @@
       overlay.classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      // Đặt thẻ bài ở mặt lưng để người dùng lật
-      const flipContainer = document.getElementById('letterFlipContainer');
-      if (flipContainer) flipContainer.classList.add('flipped');
+      // Reset Kokonut Card Flip
+      if (window.kokonutCardFlip) {
+        window.kokonutCardFlip.setFlipped(false);
+      }
 
       const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
       document.getElementById('letterCatTag').innerHTML = `
@@ -1384,11 +1394,8 @@
       const s = getStreak();
       const u = uniqueMessagesCount();
 
-      document.getElementById('setProfName').textContent = currentUser?.name || 'Người dùng';
-
-      updateLiquidMusicPlayer();
-
       const grid = document.getElementById('setBadgesGrid');
+      if (!grid) return;
       grid.innerHTML = '';
       BADGES.forEach(b => {
         let val = 0;
