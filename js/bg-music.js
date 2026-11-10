@@ -1,5 +1,5 @@
 // ============================================================
-// BACKGROUND LOFI MUSIC PLAYER (Tự động phát ngẫu nhiên & Liền mạch)
+// BACKGROUND LOFI MUSIC PLAYER v2.0 (Liền Mạch · Random · Tinh Tế)
 // ============================================================
 
 const SONG_LIST = [
@@ -21,11 +21,15 @@ class BackgroundMusicPlayer {
     this.audio.volume = parseFloat(localStorage.getItem('vqtd_music_vol') || '0.35');
     this.isPlaying = false;
     this.currentSong = null;
+    this.currentIndex = 0;
     this.unplayedIndices = [];
-    this.userInteracted = false;
     this.isMutedByUser = localStorage.getItem('vqtd_music_muted') === 'true';
 
     this.init();
+  }
+
+  get currentTrackName() {
+    return this.currentSong ? this.currentSong.title : 'Lofi Thiền Định';
   }
 
   init() {
@@ -46,7 +50,7 @@ class BackgroundMusicPlayer {
       this.updateUI();
     });
 
-    // Định kỳ lưu vị trí phát để khôi phục nếu trang reload
+    // Lưu vị trí phát
     this.audio.addEventListener('timeupdate', () => {
       if (this.currentSong && Math.floor(this.audio.currentTime) % 2 === 0) {
         sessionStorage.setItem('vqtd_music_time', this.audio.currentTime.toString());
@@ -56,14 +60,14 @@ class BackgroundMusicPlayer {
 
     this.resetQueue();
 
-    // Khôi phục bài hát từ phiên trước nếu có
+    // Khôi phục bài hát từ session
     const savedSongId = parseInt(sessionStorage.getItem('vqtd_music_song_id') || '0');
     const savedTime = parseFloat(sessionStorage.getItem('vqtd_music_time') || '0');
-    const wasPlaying = sessionStorage.getItem('vqtd_music_playing') === 'true';
 
     const restoredSong = SONG_LIST.find(s => s.id === savedSongId);
     if (restoredSong) {
       this.currentSong = restoredSong;
+      this.currentIndex = SONG_LIST.findIndex(s => s.id === savedSongId);
       this.audio.src = encodeURI(this.currentSong.file);
       if (savedTime > 0) {
         this.audio.currentTime = savedTime;
@@ -72,11 +76,9 @@ class BackgroundMusicPlayer {
       this.selectRandomSong();
     }
 
-    this.renderWidget();
-
-    // Nếu người dùng không chủ động tắt, tự động phát
+    // Tự động phát khi người dùng tương tác lần đầu
     if (!this.isMutedByUser) {
-      this.attemptAutoPlay();
+      this.setupAutoPlayGesture();
     } else {
       this.updateUI();
     }
@@ -97,8 +99,8 @@ class BackgroundMusicPlayer {
         [this.unplayedIndices[0], this.unplayedIndices[1]] = [this.unplayedIndices[1], this.unplayedIndices[0]];
       }
     }
-    const nextIdx = this.unplayedIndices.pop();
-    this.currentSong = SONG_LIST[nextIdx];
+    this.currentIndex = this.unplayedIndices.pop();
+    this.currentSong = SONG_LIST[this.currentIndex];
     this.audio.src = encodeURI(this.currentSong.file);
   }
 
@@ -108,36 +110,55 @@ class BackgroundMusicPlayer {
     this.play();
   }
 
-  attemptAutoPlay() {
-    const startPlay = () => {
+  nextTrack() {
+    this.currentIndex = (this.currentIndex + 1) % SONG_LIST.length;
+    this.currentSong = SONG_LIST[this.currentIndex];
+    this.audio.src = encodeURI(this.currentSong.file);
+    sessionStorage.removeItem('vqtd_music_time');
+    this.play();
+    if (typeof showToast === 'function') {
+      showToast('Đang phát: ' + this.currentSong.title + ' 🎵');
+    }
+  }
+
+  prevTrack() {
+    this.currentIndex = (this.currentIndex - 1 + SONG_LIST.length) % SONG_LIST.length;
+    this.currentSong = SONG_LIST[this.currentIndex];
+    this.audio.src = encodeURI(this.currentSong.file);
+    sessionStorage.removeItem('vqtd_music_time');
+    this.play();
+    if (typeof showToast === 'function') {
+      showToast('Đang phát: ' + this.currentSong.title + ' 🎵');
+    }
+  }
+
+  setVolume(vol) {
+    this.audio.volume = Math.max(0, Math.min(1, vol));
+    localStorage.setItem('vqtd_music_vol', this.audio.volume.toString());
+  }
+
+  setupAutoPlayGesture() {
+    const tryPlay = () => {
       if (this.isPlaying || this.isMutedByUser) return;
       this.audio.play().then(() => {
         this.isPlaying = true;
         this.updateUI();
-        this.cleanupInteractionListeners();
-      }).catch(() => {
-        // Trình duyệt chặn autoplay khi chưa click
-      });
+        removeListeners();
+      }).catch(() => {});
     };
 
-    startPlay();
-
-    this.interactionHandler = () => {
-      this.userInteracted = true;
-      startPlay();
+    const removeListeners = () => {
+      window.removeEventListener('click', tryPlay);
+      window.removeEventListener('touchstart', tryPlay);
+      window.removeEventListener('keydown', tryPlay);
     };
 
-    window.addEventListener('click', this.interactionHandler, { once: true, passive: true });
-    window.addEventListener('touchstart', this.interactionHandler, { once: true, passive: true });
-    window.addEventListener('keydown', this.interactionHandler, { once: true, passive: true });
-  }
+    window.addEventListener('click', tryPlay, { once: true, passive: true });
+    window.addEventListener('touchstart', tryPlay, { once: true, passive: true });
+    window.addEventListener('keydown', tryPlay, { once: true, passive: true });
 
-  cleanupInteractionListeners() {
-    if (this.interactionHandler) {
-      window.removeEventListener('click', this.interactionHandler);
-      window.removeEventListener('touchstart', this.interactionHandler);
-      window.removeEventListener('keydown', this.interactionHandler);
-    }
+    // Thử phát ngay nếu trình duyệt cho phép
+    tryPlay();
   }
 
   play() {
@@ -165,147 +186,20 @@ class BackgroundMusicPlayer {
       if (typeof showToast === 'function') showToast('Đã tạm dừng nhạc nền ⏸️');
     } else {
       this.play();
-      if (typeof showToast === 'function') showToast('Đang phát: ' + this.currentSong.title + ' 🎵');
+      if (typeof showToast === 'function') showToast('Đang phát: ' + (this.currentSong?.title || 'Lofi') + ' 🎵');
     }
-  }
-
-  renderWidget() {
-    if (document.getElementById('bgMusicWidget')) return;
-
-    const widget = document.createElement('div');
-    widget.id = 'bgMusicWidget';
-    widget.className = 'bg-music-widget';
-    widget.innerHTML = `
-      <div class="music-pill" onclick="bgMusic.togglePlay()" title="Bật/Tắt nhạc nền Lofi">
-        <div class="music-disc ${this.isPlaying ? 'spinning' : ''}">
-          <span>🎵</span>
-        </div>
-        <div class="music-info">
-          <div class="music-title" id="musicTitleText">${this.currentSong?.title || 'Lofi Thiền Định'}</div>
-          <div class="music-status" id="musicStatusText">${this.isPlaying ? 'Đang phát ngẫu nhiên' : 'Tạm dừng (Chạm để nghe)'}</div>
-        </div>
-      </div>
-      <button class="music-next-btn" onclick="bgMusic.playRandomNext()" title="Đổi bài ngẫu nhiên khác">
-        ⏭️
-      </button>
-    `;
-    document.body.appendChild(widget);
-
-    const style = document.createElement('style');
-    style.textContent = `
-      .bg-music-widget {
-        position: fixed;
-        bottom: 74px;
-        left: 16px;
-        z-index: 95;
-        display: flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 252, 247, 0.94);
-        backdrop-filter: blur(14px);
-        -webkit-backdrop-filter: blur(14px);
-        border: 1.5px solid var(--border, #EED8C9);
-        border-radius: 100px;
-        padding: 5px 8px 5px 6px;
-        box-shadow: 0 4px 20px rgba(90, 45, 25, 0.12);
-        transition: transform 0.25s ease, box-shadow 0.25s ease;
-        user-select: none;
-      }
-      .bg-music-widget:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(90, 45, 25, 0.18);
-        border-color: var(--gold, #E9C46A);
-      }
-      .music-pill {
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        padding-right: 4px;
-      }
-      .music-disc {
-        width: 32px;
-        height: 32px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #E07A5F, #E9C46A);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 8px rgba(224, 122, 95, 0.35);
-      }
-      .music-disc.spinning {
-        animation: spin-disc 6s linear infinite;
-      }
-      @keyframes spin-disc {
-        from { transform: rotate(0deg); }
-        to   { transform: rotate(360deg); }
-      }
-      .music-info {
-        display: flex;
-        flex-direction: column;
-        max-width: 140px;
-      }
-      .music-title {
-        font-size: 0.72rem;
-        font-weight: 800;
-        color: var(--brown-dark, #3D2625);
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-      }
-      .music-status {
-        font-size: 0.62rem;
-        color: var(--brown-light, #A87B64);
-        font-weight: 600;
-      }
-      .music-next-btn {
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: none;
-        background: rgba(224, 122, 95, 0.12);
-        color: var(--peach, #E07A5F);
-        font-size: 0.82rem;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all 0.2s;
-      }
-      .music-next-btn:hover {
-        background: var(--peach, #E07A5F);
-        color: white;
-        transform: scale(1.1);
-      }
-      @media (max-width: 480px) {
-        .bg-music-widget {
-          bottom: 74px;
-          left: 10px;
-          padding: 4px 6px 4px 5px;
-        }
-        .music-info {
-          max-width: 100px;
-        }
-      }
-    `;
-    document.head.appendChild(style);
   }
 
   updateUI() {
-    const disc = document.querySelector('.music-disc');
-    const titleEl = document.getElementById('musicTitleText');
-    const statusEl = document.getElementById('musicStatusText');
+    const playBtn = document.getElementById('musicToggleBtn');
+    const titleEl = document.getElementById('musicTrackTitle');
 
-    if (disc) {
-      if (this.isPlaying) disc.classList.add('spinning');
-      else disc.classList.remove('spinning');
+    if (playBtn) {
+      playBtn.textContent = this.isPlaying ? '⏸' : '▶';
+      playBtn.title = this.isPlaying ? 'Tạm dừng nhạc' : 'Phát nhạc';
     }
     if (titleEl && this.currentSong) {
       titleEl.textContent = this.currentSong.title;
-    }
-    if (statusEl) {
-      statusEl.textContent = this.isPlaying ? 'Đang phát ngẫu nhiên' : 'Tạm dừng (Chạm để nghe)';
     }
   }
 }

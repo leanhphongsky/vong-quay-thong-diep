@@ -2,813 +2,368 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Vòng Quay Thông Điệp — Vũ Trụ Dẫn Lối</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vòng Quay Thông Điệp — Trạm Sạc Tâm Hồn</title>
   <link rel="stylesheet" href="css/global.css">
-  <link rel="stylesheet" href="css/kokonut.css">
-  <style>
-    body {
-      background: radial-gradient(circle at 50% 10%, #FFFDF9 0%, #FFF3EB 55%, #FDE3D6 100%);
-      padding-top: 85px;
-      padding-bottom: 110px;
-      overflow-x: hidden;
-      min-height: 100vh;
-      transition: background 0.4s ease;
-    }
-
-    .dark body {
-      background: radial-gradient(circle at 50% 10%, #18181b 0%, #0e101d 55%, #08090f 100%);
-    }
-
-    /* ── Tab Views System ── */
-    .tab-view { display: none; }
-    .tab-view.active { display: block; animation: fadeIn 0.35s ease forwards; }
-
-    .section-hero { text-align: center; padding: 20px 20px 8px; }
-    .badge-eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(224, 122, 95, 0.12);
-      border: 1px solid rgba(224, 122, 95, 0.25);
-      border-radius: var(--radius-pill);
-      padding: 4px 16px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      color: var(--peach);
-      margin-bottom: 8px;
-    }
-
-    /* ── TAB HOME STYLES ── */
-    .home-hero-card {
-      background: radial-gradient(circle at 50% 30%, #FFFDF9 0%, #FFF2EA 50%, #FDE4D8 100%);
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      padding: 44px 24px 36px;
-      text-align: center;
-      box-shadow: var(--shadow-sm);
-      margin-bottom: 28px;
-      position: relative;
-      overflow: hidden;
-    }
-    .dark .home-hero-card {
-      background: radial-gradient(circle at 50% 30%, #27272a 0%, #18181b 60%, #0f1015 100%);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-    .home-hero-title {
-      font-family: 'Cinzel', 'Playfair Display', serif;
-      font-size: clamp(1.8rem, 4.5vw, 2.7rem);
-      color: var(--brown-dark);
-      margin-bottom: 14px;
-      line-height: 1.25;
-    }
-    .dark .home-hero-title {
-      color: #f4f4f5;
-    }
-    .home-hero-desc {
-      font-size: 1.02rem;
-      color: var(--brown-mid);
-      max-width: 620px;
-      margin: 0 auto 28px;
-      line-height: 1.65;
-    }
-    .dark .home-hero-desc {
-      color: #a1a1aa;
-    }
-
-    .energy-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 30px;
-    }
-    .energy-card {
-      background: var(--white);
-      border-radius: var(--radius-sm);
-      border: 1.5px solid var(--border);
-      padding: 22px 18px;
-      text-align: center;
-      transition: all 0.25s ease;
-    }
-    .dark .energy-card {
-      background: #18181b;
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-    .energy-card:hover { transform: translateY(-4px); border-color: var(--gold); box-shadow: var(--shadow-md); }
-    .energy-icon { font-size: 2.2rem; margin-bottom: 10px; display: block; }
-    .energy-title { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 6px; color: var(--brown-dark); }
-    .dark .energy-title { color: #f4f4f5; }
-    .energy-desc { font-size: 0.84rem; color: var(--brown-light); line-height: 1.55; }
-    .dark .energy-desc { color: #a1a1aa; }
-
-    /* ── TAB VÒNG QUAY STYLES ── */
-    .mini-stats {
-      max-width: 440px;
-      margin: 10px auto 0;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      padding: 0 16px;
-    }
-    .mini-stat {
-      background: rgba(255, 252, 247, 0.85);
-      backdrop-filter: blur(8px);
-      border-radius: var(--radius-sm);
-      border: 1px solid var(--border);
-      padding: 10px 8px;
-      text-align: center;
-      box-shadow: var(--shadow-sm);
-    }
-    .dark .mini-stat {
-      background: rgba(24, 24, 27, 0.85);
-      border-color: rgba(255, 255, 255, 0.1);
-    }
-    .mini-stat-num { font-family: 'Cinzel', 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; color: var(--peach); display: block; }
-    .mini-stat-label { font-size: 0.68rem; color: var(--brown-light); font-weight: 700; text-transform: uppercase; }
-
-    .wheel-section { display: flex; flex-direction: column; align-items: center; padding: 18px 16px 0; gap: 20px; }
-    .wheel-outer-glow {
-      position: relative;
-      padding: 12px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(233,196,106,0.35) 0%, rgba(224,122,95,0.1) 65%, transparent 75%);
-    }
-    .wheel-wrapper {
-      position: relative;
-      width: min(350px, 86vw);
-      height: min(350px, 86vw);
-      border-radius: 50%;
-      box-shadow: 0 16px 50px rgba(90, 45, 25, 0.22), 0 0 35px rgba(233, 196, 106, 0.3);
-    }
-    #spinCanvas { width: 100%; height: 100%; border-radius: 50%; cursor: pointer; display: block; }
-    .wheel-pointer {
-      position: absolute;
-      top: -18px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 32px;
-      height: 44px;
-      z-index: 10;
-      pointer-events: none;
-      filter: drop-shadow(0 4px 10px rgba(211, 84, 0, 0.5));
-    }
-    .wheel-pointer svg { width: 100%; height: 100%; }
-    .wheel-center-orb {
-      position: absolute;
-      top: 50%; left: 50%;
-      transform: translate(-50%, -50%);
-      width: 68px; height: 68px;
-      background: radial-gradient(circle at 35% 35%, #FFFFFF 0%, #FFF3CD 35%, #F6D365 70%, #E07A5F 100%);
-      border-radius: 50%;
-      border: 3px solid #FFF8F0;
-      box-shadow: 0 4px 16px rgba(0,0,0,0.25), inset 0 2px 4px rgba(255,255,255,0.8);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.6rem;
-      pointer-events: none;
-      z-index: 5;
-    }
-    #spinBtn {
-      width: min(280px, 82vw);
-      height: 64px;
-      font-family: 'Cinzel', 'Playfair Display', serif;
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: 3px;
-      border-radius: var(--radius-pill);
-      background: linear-gradient(135deg, #E07A5F 0%, #F4A47A 50%, #E9C46A 100%);
-      color: white;
-      border: 2px solid rgba(255,255,255,0.6);
-      cursor: pointer;
-      box-shadow: 0 10px 30px rgba(224, 122, 95, 0.45), 0 0 20px rgba(233, 196, 106, 0.35);
-      transition: all 0.3s var(--transition);
-    }
-    #spinBtn:hover:not(:disabled) { transform: translateY(-3px) scale(1.02); }
-    #spinBtn:disabled { opacity: 0.6; cursor: not-allowed; }
-
-    .already-spun { display: none; text-align: center; animation: fadeIn 0.5s ease forwards; max-width: 440px; width: 100%; }
-    .already-spun.show { display: block; }
-    .today-card { background: var(--white); border-radius: var(--radius); border: 2px solid var(--peach-soft); padding: 22px; margin-bottom: 16px; box-shadow: var(--shadow-md); position: relative; }
-    .dark .today-card { background: #18181b; border-color: rgba(255, 255, 255, 0.15); }
-    .today-img { width: 100%; max-width: 220px; border-radius: var(--radius-sm); margin: 0 auto 14px; display: block; box-shadow: var(--shadow-sm); }
-    .today-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; color: var(--brown-dark); margin-bottom: 6px; }
-    .dark .today-name { color: #f4f4f5; }
-    .today-desc { font-size: 0.88rem; color: var(--brown-mid); line-height: 1.6; margin-bottom: 16px; }
-    .dark .today-desc { color: #a1a1aa; }
-    .countdown-box { background: #FFF9E6; border: 1px solid #F0D080; border-radius: var(--radius-sm); padding: 10px 18px; display: inline-block; margin-bottom: 14px; }
-    .dark .countdown-box { background: #27272a; border-color: #3f3f46; }
-    .countdown-time { font-size: 1.4rem; font-weight: 800; color: var(--brown-dark); font-family: 'Cinzel', serif; }
-    .dark .countdown-time { color: #fbbf24; }
-
-    /* ── TAB THƯ VIỆN STYLES ── */
-    .search-filter-box { max-width: 520px; margin: 0 auto 20px; padding: 0 16px; display: flex; flex-direction: column; gap: 12px; }
-    .search-input { width: 100%; padding: 12px 18px; border: 1.5px solid var(--border); border-radius: var(--radius-pill); font-family: 'Nunito', sans-serif; font-size: 0.92rem; outline: none; background: white; }
-    .dark .search-input { background: #18181b; border-color: #3f3f46; color: white; }
-    .filter-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 6px; scrollbar-width: none; }
-    .filter-tabs::-webkit-scrollbar { display: none; }
-    .filter-tab { padding: 7px 16px; border-radius: var(--radius-pill); font-size: 0.82rem; font-weight: 700; cursor: pointer; background: var(--white); border: 1.5px solid var(--border); color: var(--brown-light); white-space: nowrap; transition: all 0.2s; }
-    .dark .filter-tab { background: #18181b; border-color: #27272a; color: #a1a1aa; }
-    .filter-tab.active { background: var(--brown-dark); border-color: var(--brown-dark); color: #FFD700; }
-    .library-grid { max-width: 940px; margin: 0 auto; padding: 0 16px; display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 14px; }
-    .lib-card { background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--border); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: all 0.25s ease; }
-    .dark .lib-card { background: #18181b; border-color: rgba(255, 255, 255, 0.1); }
-    .lib-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: var(--gold); }
-    .lib-card-img-box { width: 100%; aspect-ratio: 3/4; overflow: hidden; position: relative; background: #FDF4ED; }
-    .lib-card-img-box img { width: 100%; height: 100%; object-fit: cover; }
-
-    /* ── TAB VỀ DỰ ÁN & HỒ SƠ STYLES ── */
-    .about-card {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      padding: 30px 24px;
-      max-width: 720px;
-      margin: 0 auto 24px;
-      box-shadow: var(--shadow-sm);
-      line-height: 1.75;
-    }
-    .dark .about-card { background: #18181b; border-color: rgba(255, 255, 255, 0.1); color: #d4d4d8; }
-    .about-card h3 { font-family: 'Cinzel', 'Playfair Display', serif; margin-bottom: 12px; color: var(--peach); font-size: 1.25rem; }
-    .about-step { display: flex; gap: 14px; margin-bottom: 18px; align-items: flex-start; }
-    .about-step-num { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #E07A5F, #E9C46A); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem; flex-shrink: 0; }
-
-    /* ── TAB CÀI ĐẶT STYLES ── */
-    .settings-container { max-width: 600px; margin: 0 auto 30px; padding: 0 16px; }
-    .settings-group {
-      background: var(--white);
-      border-radius: var(--radius);
-      border: 1.5px solid var(--border);
-      padding: 22px;
-      margin-bottom: 18px;
-      box-shadow: var(--shadow-sm);
-    }
-    .dark .settings-group { background: #18181b; border-color: rgba(255, 255, 255, 0.1); }
-    .settings-group-title { font-size: 0.84rem; font-weight: 800; color: var(--brown-light); text-transform: uppercase; margin-bottom: 14px; letter-spacing: 0.5px; }
-    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 12px 0; border-bottom: 1px solid var(--border); }
-    .dark .settings-row { border-bottom-color: #27272a; }
-    .settings-row:last-child { border-bottom: none; }
-    .settings-slider { width: 140px; accent-color: var(--peach); }
-    .badges-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 10px; }
-    .badge-item { text-align: center; padding: 12px 6px; background: var(--white); border-radius: var(--radius-sm); border: 1.5px solid var(--border); }
-    .dark .badge-item { background: #18181b; border-color: #27272a; }
-    .badge-item.earned { border-color: var(--gold); background: #FFF9E6; }
-    .dark .badge-item.earned { background: #27272a; border-color: #f59e0b; }
-    .badge-item:not(.earned) { opacity: 0.4; filter: grayscale(1); }
-
-    /* Modals */
-    .ritual-overlay { position: fixed; inset: 0; z-index: 500; background: rgba(14, 17, 30, 0.94); backdrop-filter: blur(14px); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.5s ease; overflow-y: auto; }
-    .ritual-overlay.show { opacity: 1; pointer-events: all; }
-    .seal-step { text-align: center; animation: scaleIn 0.5s var(--transition) forwards; max-width: 360px; width: 100%; }
-    .envelope-box { background: linear-gradient(145deg, #FFF0E4, #FFE3D1); border-radius: 20px; border: 2px solid #F5C7AF; padding: 45px 24px 35px; box-shadow: 0 20px 60px rgba(0,0,0,0.6); }
-    .dark .envelope-box { background: linear-gradient(145deg, #27272a, #18181b); border-color: #3f3f46; color: white; }
-    .letter-step { display: none; width: 100%; max-width: 480px; animation: scaleIn 0.5s var(--transition) forwards; background: #FFFDF9; border-radius: var(--radius); border: 2px solid #E9C46A; padding: 24px; position: relative; max-height: 88vh; overflow-y: auto; }
-    .dark .letter-step { background: #18181b; border-color: #f59e0b; color: white; }
-    .letter-step.show { display: block; }
-    .letter-close { position: absolute; top: 14px; right: 14px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.06); border: none; font-size: 1.1rem; cursor: pointer; color: inherit; }
-    .story-modal { position: fixed; inset: 0; z-index: 600; background: rgba(0, 0, 0, 0.92); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; opacity: 0; pointer-events: none; transition: opacity 0.3s; }
-    .story-modal.show { opacity: 1; pointer-events: all; }
-    .story-preview-img { max-height: 72vh; max-width: 90vw; border-radius: 18px; margin-bottom: 16px; }
-    #confettiCanvas { position: fixed; inset: 0; pointer-events: none; z-index: 550; }
-  </style>
 </head>
 <body>
 
-  <!-- SVG Filter for Kokonut Liquid Glass Refraction -->
-  <svg aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden;" focusable="false">
-    <defs>
-      <filter color-interpolation-filters="sRGB" height="200%" id="liquidGlassFilter" width="200%" x="-50%" y="-50%">
-        <feTurbulence baseFrequency="0.05 0.05" numOctaves="1" result="turbulence" seed="1" type="fractalNoise"/>
-        <feGaussianBlur in="turbulence" result="blurredNoise" stdDeviation="2"/>
-        <feDisplacementMap in="SourceGraphic" in2="blurredNoise" result="displaced" scale="30" xChannelSelector="R" yChannelSelector="B"/>
-        <feGaussianBlur in="displaced" stdDeviation="4"/>
-      </filter>
-    </defs>
-  </svg>
+  <!-- ======================================================================
+       1. TOP BAR (Fixed, Compact, Clean)
+       ====================================================================== -->
+  <header class="top-bar">
+    <a class="brand-link" onclick="switchTab('spin')">
+      <span class="brand-logo-icon">🌀</span>
+      <span>THÔNG ĐIỆP</span>
+    </a>
+    <div class="top-actions">
+      <!-- Dark/Light Mode Switcher -->
+      <button class="icon-btn" id="themeToggleBtn" aria-label="Đổi giao diện Sáng/Tối" title="Chuyển chế độ Sáng / Tối">
+        <span id="themeIcon">☀️</span>
+      </button>
+      <!-- Quick Profile / Sheet trigger -->
+      <button class="icon-btn" onclick="openDrawer()" aria-label="Mở cài đặt và hồ sơ" title="Cài đặt & Hồ sơ">
+        <span id="topAvatarIcon">👤</span>
+      </button>
+    </div>
+  </header>
 
-  <!-- 1. KOKONUT MORPHIC NAVBAR (SPLIT NAV) & SWITCH BUTTON -->
-  <div class="kokonut-morphic-nav-wrap">
-    <nav class="kokonut-morphic-nav-row" id="kokonutMorphicNav">
-      <div class="kokonut-morphic-segment active" data-nav-index="0" data-tab="home" id="mNavHome">
-        <span>🏠 Trang Chủ</span>
-        <span class="kokonut-nav-indicator"></span>
-      </div>
-      <div class="kokonut-morphic-segment" data-nav-index="1" data-tab="spin" id="mNavSpin">
-        <span>🎡 Vòng Quay</span>
-        <span class="kokonut-nav-indicator"></span>
-      </div>
-      <div class="kokonut-morphic-segment" data-nav-index="2" data-tab="library" id="mNavLibrary">
-        <span>📚 Bộ Sưu Tập</span>
-        <span class="kokonut-nav-indicator"></span>
-      </div>
-      <div class="kokonut-morphic-segment" data-nav-index="3" data-tab="profile" id="mNavProfile">
-        <span>👤 Hồ Sơ</span>
-        <span class="kokonut-nav-indicator"></span>
-      </div>
-      <div class="kokonut-morphic-segment" data-nav-index="4" data-tab="about" id="mNavAbout">
-        <span>📖 Giới Thiệu</span>
-        <span class="kokonut-nav-indicator"></span>
-      </div>
-      <div class="kokonut-morphic-segment" data-nav-index="5" data-tab="settings" id="mNavSettings">
-        <span>⚙️ Cài Đặt</span>
-        <span class="kokonut-nav-indicator"></span>
-      </div>
-    </nav>
+  <!-- ======================================================================
+       2. MAIN CONTENT (SPA 2 Views: Spin & Library)
+       ====================================================================== -->
+  <main class="container">
 
-    <!-- Kokonut Switch Button (Sun/Moon Morph Theme Reveal) -->
-    <button id="kokonutSwitchThemeBtn" class="kokonut-switch-btn" aria-label="Đổi giao diện Sáng / Tối" title="Chuyển chế độ Sáng / Tối">
-      <svg class="kokonut-switch-sun" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <circle cx="12" cy="12" r="4"></circle>
-        <path d="M12 2v2"></path>
-        <path d="M12 20v2"></path>
-        <path d="m4.93 4.93 1.41 1.41"></path>
-        <path d="m17.66 17.66 1.41 1.41"></path>
-        <path d="M2 12h2"></path>
-        <path d="M20 12h2"></path>
-        <path d="m6.34 17.66-1.41 1.41"></path>
-        <path d="m19.07 4.93-1.41 1.41"></path>
-      </svg>
-      <svg class="kokonut-switch-moon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;">
-        <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"></path>
-      </svg>
-    </button>
-  </div>
+    <!-- ── VIEW 1: QUAY & TRANG CHỦ ── -->
+    <section id="viewSpin" class="view-panel active">
+      <div class="hero-header">
+        <div class="eyebrow-pill">✦ Trạm Sạc Tâm Hồn ✦</div>
+        <h1 class="hero-title">Thông Điệp <span id="greetingTime" style="color:var(--accent);">Hôm Nay</span></h1>
+        <p class="hero-subtitle" id="todayDateStr">Đang kết nối vũ trụ...</p>
+      </div>
 
-  <canvas id="confettiCanvas"></canvas>
-
-  <div class="page" style="padding-top:10px;">
-
-    <!-- ========================================== -->
-    <!-- 1. TAB HOME (KOKONUT PLUCKED & CARD STACK) -->
-    <!-- ========================================== -->
-    <div id="viewHome" class="tab-view active">
-      <div class="container">
-        <div class="home-hero-card">
-          <div class="badge-eyebrow">✦ Trạm Sạc Tâm Hồn & Chánh Niệm</div>
-          <h1 class="home-hero-title">
-            <span id="kokonutHeroPlucked" class="kokonut-pluck-stage">VÒNG QUAY THÔNG ĐIỆP</span><br>
-            <span class="kokonut-marker-target" data-mark="underline" data-mark-color="#f97316">Vũ Trụ Dẫn Lối</span>
-          </h1>
-          <p class="home-hero-desc">
-            Dành ra 2 phút bình an mỗi sáng để đón nhận thông điệp dẫn lối. <span class="kokonut-marker-target" data-mark="highlight" data-mark-color="#facc15">70 bài học chữa lành</span> được chắt lọc để nuôi dưỡng nội lực và thắp sáng năng lượng tích cực trong bạn.
-          </p>
-          <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
-            <button class="btn btn-gold btn-lg" onclick="switchMainTab('spin')">
-              🎡 Quay Ngay Hôm Nay
-            </button>
-            <button class="btn btn-secondary btn-lg" onclick="switchMainTab('library')">
-              📚 Khám Phá Bộ Bài
-            </button>
+      <!-- Wheel Section -->
+      <div class="wheel-arena">
+        <div class="wheel-disc-container">
+          <div class="wheel-pointer-pin">
+            <svg viewBox="0 0 28 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M14 38L0 7C0 3.13 6.27 0 14 0C21.73 0 28 3.13 28 7L14 38Z" fill="url(#pinGoldGrad)"/>
+              <defs>
+                <linearGradient id="pinGoldGrad" x1="0" y1="0" x2="28" y2="38" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#F6D365"/>
+                  <stop offset="1" stop-color="#D4714A"/>
+                </linearGradient>
+              </defs>
+            </svg>
           </div>
+          <canvas id="spinCanvas" class="wheel-canvas" width="450" height="450"></canvas>
+          <div class="wheel-center-gem">✦</div>
         </div>
 
-        <!-- KOKONUT CARD STACK (THROW DECK) -->
-        <div style="margin: 36px auto 44px; text-align: center;">
-          <h3 style="font-family:'Cinzel',serif;font-size:1.35rem;margin-bottom:6px;">
-            Bộ Bài Thông Điệp Khởi Sắc ✦ Kokonut Throw Deck
-          </h3>
-          <p style="font-size:0.86rem;color:var(--brown-light);margin-bottom:18px;">
-            Trải nghiệm kéo thả và ném thẻ bài 3D theo vật lý quán tính
-          </p>
+        <!-- Spin CTA Button -->
+        <div id="spinBtnWrapper">
+          <button id="spinBtn" class="btn-cta-spin" onclick="handleSpinStart()">QUAY VÒNG QUAY</button>
+        </div>
+
+        <!-- Conic Loader (only shown while wheel is spinning) -->
+        <div id="spinConicLoader" class="conic-loader-wrap" style="display:none;">
+          <div class="conic-loader-ring"></div>
+          <p style="font-size:0.85rem;color:var(--text-muted);font-weight:600;">Đang kết nối năng lượng bình an...</p>
+        </div>
+
+        <!-- Already Spun Today Preview Card -->
+        <div id="alreadySpunBox" class="already-spun-card">
+          <img id="todayThumbImg" class="today-thumb" src="" alt="Thông điệp">
+          <h2 id="todayMsgTitle" class="today-title">--</h2>
+          <p id="todayMsgQuote" class="today-excerpt">--</p>
           
-          <div class="kokonut-deck-stage" id="kokonutHomeDeck">
-            <!-- 4 thẻ bài chồng vật lý được sinh động từ JS -->
-          </div>
-
-          <div style="display:flex;justify-content:center;gap:12px;margin-top:12px;">
-            <button class="btn btn-secondary btn-sm" onclick="window.kokonutDeck?.prev()">← Lá Trước</button>
-            <button class="btn btn-gold btn-sm" onclick="window.kokonutDeck?.next()">Lá Tiếp Theo →</button>
-          </div>
-        </div>
-
-        <h2 style="text-align:center;font-family:'Cinzel',serif;margin-bottom:8px;">4 Nguồn Năng Lượng Tỉnh Thức</h2>
-        <p style="text-align:center;color:var(--brown-light);margin-bottom:24px;font-size:0.92rem;">
-          Được thiết kế toàn diện để đồng hành cùng bạn trên mọi nẻo đường cuộc sống
-        </p>
-        <div class="energy-grid">
-          <div class="energy-card">
-            <span class="energy-icon">🧘</span>
-            <div class="energy-title">Trí Tuệ & Tĩnh Lặng</div>
-            <p class="energy-desc">Quay về bên trong, lắng nghe trực giác và tìm lại bình yên giữa ồn ào cuộc sống.</p>
-          </div>
-          <div class="energy-card">
-            <span class="energy-icon">💖</span>
-            <div class="energy-title">Yêu Thương & Chữa Lành</div>
-            <p class="energy-desc">Học cách yêu mình trọn vẹn, bao dung với tha nhân và chữa lành những tổn thương.</p>
-          </div>
-          <div class="energy-card">
-            <span class="energy-icon">⚡</span>
-            <div class="energy-title">Kỷ Luật & Hành Động</div>
-            <p class="energy-desc">Vững vàng với mục tiêu, kiến tạo thói quen tốt và bước qua mọi giới hạn cũ.</p>
-          </div>
-          <div class="energy-card">
-            <span class="energy-icon">🌊</span>
-            <div class="energy-title">Thuận Dòng & Tái Sinh</div>
-            <p class="energy-desc">Học nghệ thuật buông bỏ đúng lúc, đón nhận sự trù phú và để đời nở hoa.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 2. TAB VÒNG QUAY (KOKONUT ORBITAL LOADER)  -->
-    <!-- ========================================== -->
-    <div id="viewSpin" class="tab-view">
-      <div class="section-hero">
-        <div class="badge-eyebrow">🌀 La Bàn Thông Điệp</div>
-        <h2 style="font-family:'Cinzel',serif;font-size:clamp(1.4rem, 4vw, 2rem);">
-          Thông Điệp <span style="color:var(--peach);" id="greetingTime">Hôm Nay</span>
-        </h2>
-        <p id="todayDate" style="color:var(--brown-light);font-size:0.88rem;"></p>
-      </div>
-
-      <div class="mini-stats">
-        <div class="mini-stat">
-          <span class="mini-stat-num" id="totalSpins">0</span>
-          <span class="mini-stat-label">Lần quay</span>
-        </div>
-        <div class="mini-stat">
-          <span class="mini-stat-num" id="uniqueCount">0</span>
-          <span class="mini-stat-label">Thông điệp</span>
-        </div>
-        <div class="mini-stat">
-          <span class="mini-stat-num" id="streakStat">0</span>
-          <span class="mini-stat-label">Ngày liên tiếp</span>
-        </div>
-      </div>
-
-      <div class="wheel-section">
-        <div class="wheel-outer-glow">
-          <div class="wheel-wrapper">
-            <div class="wheel-pointer">
-              <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M16 44L0 8C0 3.58172 7.16344 0 16 0C24.8366 0 32 3.58172 32 8L16 44Z" fill="url(#goldGrad)"/>
-                <defs>
-                  <linearGradient id="goldGrad" x1="0" y1="0" x2="32" y2="44" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#F6D365"/>
-                    <stop offset="1" stop-color="#E07A5F"/>
-                  </linearGradient>
-                </defs>
-              </svg>
-            </div>
-            <canvas id="spinCanvas" width="450" height="450"></canvas>
-            <div class="wheel-center-orb">✦</div>
-          </div>
-        </div>
-
-        <div class="spin-btn-wrapper" id="spinBtnSection">
-          <button id="spinBtn" onclick="startSpin()">QUAY VÒNG QUAY</button>
-        </div>
-
-        <!-- KOKONUT ORBITAL CONIC GRADIENT LOADER -->
-        <div id="spinOrbitalLoader" style="display:none;">
-          <div class="kokonut-loader-wrapper">
-            <div class="kokonut-loader-orbital" aria-hidden="true">
-              <div class="kokonut-ring kokonut-ring-outer"></div>
-              <div class="kokonut-ring kokonut-ring-primary"></div>
-              <div class="kokonut-ring kokonut-ring-counter"></div>
-              <div class="kokonut-ring kokonut-ring-accent"></div>
-            </div>
-            <div class="kokonut-loader-texts">
-              <span class="kokonut-loader-title">Đang kết nối năng lượng vũ trụ...</span>
-              <span class="kokonut-loader-subtitle">Giữ tâm tĩnh lặng đón nhận hạt mầm khai sáng</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="already-spun" id="alreadySpun">
-          <div class="today-card">
-            <div id="todayCatTag" style="margin-bottom:10px;"></div>
-            <img class="today-img" id="todayMsgImg" src="" alt="">
-            <div class="today-name" id="todayMsgName"></div>
-            <div class="today-desc" id="todayMsgDesc"></div>
-
-            <div class="countdown-box">
-              <div style="font-size:0.72rem;font-weight:700;color:var(--brown-light);text-transform:uppercase;">
-                Lá thư tiếp theo sau
-              </div>
-              <div class="countdown-time" id="countdown">--:--:--</div>
+          <div>
+            <div class="countdown-badge">
+              <span>⏳ Lượt quay tiếp theo:</span>
+              <strong id="countdownTimer">--:--:--</strong>
             </div>
           </div>
 
-          <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-            <button class="btn btn-gold btn-sm" onclick="showLetterModal()">📜 Xem lại lá thư</button>
-            <button class="btn btn-primary btn-sm" onclick="exportInstagramStory()">📸 Tạo ảnh Story</button>
-            <button class="btn btn-secondary btn-sm" onclick="switchMainTab('library')">📚 Thư viện</button>
+          <div class="btn-group-tight">
+            <button class="btn btn-gold btn-sm" onclick="reopenTodayRitual()">📜 Xem lá thư</button>
+            <button class="btn btn-primary btn-sm" onclick="exportTodayStory()">📸 Tạo ảnh Story</button>
+            <button class="btn btn-secondary btn-sm" onclick="switchTab('library')">📚 Thư viện</button>
+          </div>
+        </div>
+
+        <!-- Inline Stats Strip -->
+        <div class="stats-inline-strip">
+          <span><strong id="statTotalSpins">0</strong> lần quay</span>
+          <span class="stats-dot-sep">·</span>
+          <span><strong id="statUnlockedCount">0</strong>/70 thông điệp</span>
+          <span class="stats-dot-sep">·</span>
+          <span>🔥 <strong id="statStreakDays">0</strong> ngày liên tiếp</span>
+        </div>
+      </div>
+
+      <!-- 4 Compact Energy Pills -->
+      <div style="margin-top:var(--sp-2xl);text-align:center;">
+        <h3 style="font-size:1.05rem;font-weight:700;margin-bottom:var(--sp-xs);">4 Nguồn Năng Lượng Tâm Thức</h3>
+        <p style="font-size:0.8rem;color:var(--text-muted);">Chạm vào nguồn năng lượng để xem các lá thư tương ứng</p>
+
+        <div class="energy-pills-row">
+          <div class="energy-pill" onclick="filterByEnergy('wisdom')">
+            <span class="energy-pill-icon">🧘</span>
+            <div class="energy-pill-title">Trí Tuệ & Tĩnh Lặng</div>
+          </div>
+          <div class="energy-pill" onclick="filterByEnergy('love')">
+            <span class="energy-pill-icon">💖</span>
+            <div class="energy-pill-title">Yêu Thương & Chữa Lành</div>
+          </div>
+          <div class="energy-pill" onclick="filterByEnergy('discipline')">
+            <span class="energy-pill-icon">⚡</span>
+            <div class="energy-pill-title">Kỷ Luật & Hành Động</div>
+          </div>
+          <div class="energy-pill" onclick="filterByEnergy('flow')">
+            <span class="energy-pill-icon">🌊</span>
+            <div class="energy-pill-title">Thuận Dòng & Tái Sinh</div>
           </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <!-- ========================================== -->
-    <!-- 3. TAB BỘ SƯU TẬP (LIBRARY)                -->
-    <!-- ========================================== -->
-    <div id="viewLibrary" class="tab-view">
-      <div class="section-hero">
-        <div class="badge-eyebrow">📚 Kho Tàng Chữa Lành</div>
-        <h2 style="font-family:'Cinzel',serif;">Bộ Sưu Tập 70 Thông Điệp</h2>
-        <p style="color:var(--brown-light);font-size:0.88rem;">Khám phá tất cả các hạt mầm trí tuệ bạn đã mở khóa</p>
+    <!-- ── VIEW 2: THƯ VIỆN 70 BÀI HỌC ── -->
+    <section id="viewLibrary" class="view-panel">
+      <div class="hero-header" style="padding-bottom:var(--sp-sm);">
+        <div class="eyebrow-pill">📚 Bộ Sưu Tập</div>
+        <h1 class="hero-title" style="font-size:1.6rem;">70 Hạt Mầm Khai Sáng</h1>
       </div>
 
-      <div style="max-width:520px;margin:0 auto 16px;padding:0 16px;">
-        <div style="display:flex;justify-content:space-between;font-size:0.85rem;font-weight:700;margin-bottom:6px;">
+      <!-- Unlock Progress -->
+      <div class="lib-progress-wrap">
+        <div class="lib-progress-meta">
           <span>Tiến trình mở khóa</span>
-          <span style="color:var(--peach);"><span id="libUniqueCount">0</span>/70</span>
+          <span><strong id="libProgressText" style="color:var(--accent);">0</strong>/70</span>
         </div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="libProgressFill" style="width:0%"></div>
-        </div>
-      </div>
-
-      <div class="search-filter-box">
-        <input type="text" id="libSearchInput" class="search-input" placeholder="🔍 Tìm kiếm thông điệp..." oninput="handleLibSearch()">
-        <div class="filter-tabs">
-          <div class="filter-tab active" onclick="filterLibCategory('all', this)">Tất cả (70)</div>
-          <div class="filter-tab" onclick="filterLibCategory('wisdom', this)">🧘 Trí Tuệ & Tĩnh Lặng</div>
-          <div class="filter-tab" onclick="filterLibCategory('love', this)">💖 Yêu Thương & Chữa Lành</div>
-          <div class="filter-tab" onclick="filterLibCategory('discipline', this)">⚡ Kỷ Luật & Hành Động</div>
-          <div class="filter-tab" onclick="filterLibCategory('flow', this)">🌊 Thuận Dòng & Tái Sinh</div>
+        <div class="lib-progress-bar">
+          <div id="libProgressBarFill" class="lib-progress-fill" style="width: 0%;"></div>
         </div>
       </div>
 
-      <div class="library-grid" id="libGridContainer"></div>
+      <!-- Search & Filters -->
+      <div class="lib-header-box">
+        <div class="search-input-box">
+          <input type="text" id="libSearchInput" class="search-field" placeholder="🔍 Tìm kiếm thông điệp hoặc bài học..." oninput="onSearchLib()">
+        </div>
+        <div class="category-filter-bar">
+          <button class="cat-filter-btn active" data-cat="all" onclick="setLibCategory('all', this)">Tất cả (70)</button>
+          <button class="cat-filter-btn" data-cat="wisdom" onclick="setLibCategory('wisdom', this)">🧘 Trí Tuệ</button>
+          <button class="cat-filter-btn" data-cat="love" onclick="setLibCategory('love', this)">💖 Yêu Thương</button>
+          <button class="cat-filter-btn" data-cat="discipline" onclick="setLibCategory('discipline', this)">⚡ Kỷ Luật</button>
+          <button class="cat-filter-btn" data-cat="flow" onclick="setLibCategory('flow', this)">🌊 Thuận Dòng</button>
+        </div>
+      </div>
+
+      <!-- Grid Cards -->
+      <div id="libCardGrid" class="library-grid"></div>
+    </section>
+
+  </main>
+
+  <!-- ======================================================================
+       3. COMPACT MUSIC PLAYER BAR (Fixed 42px above bottom nav)
+       ====================================================================== -->
+  <aside class="music-bar" id="musicPlayerBar">
+    <div class="music-bar-left">
+      <span class="music-note-icon">🎵</span>
+      <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Vũ Trụ Dẫn Lối</span>
     </div>
+    <div class="music-bar-controls">
+      <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước">⏮</button>
+      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc">▶</button>
+      <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau">⏭</button>
+    </div>
+  </aside>
 
-    <!-- ========================================== -->
-    <!-- 4. TAB HỒ SƠ (KOKONUT AVATAR PICKER)       -->
-    <!-- ========================================== -->
-    <div id="viewProfile" class="tab-view">
-      <div class="section-hero">
-        <div class="badge-eyebrow">👤 Diện Mạo & Hành Trình</div>
-        <h2 style="font-family:'Cinzel',serif;">Hồ Sơ Của Bạn</h2>
-        <p style="color:var(--brown-light);font-size:0.88rem;">Avatar thuật toán tạo hình vô cực từ Kokonut UI</p>
+  <!-- ======================================================================
+       4. BOTTOM NAVIGATION (Chỉ 3 tab: Quay, Thư Viện, Thêm)
+       ====================================================================== -->
+  <nav class="bottom-nav">
+    <button class="nav-tab-btn active" id="tabBtnSpin" onclick="switchTab('spin')">
+      <span class="tab-icon">🎡</span>
+      <span>Vòng Quay</span>
+    </button>
+    <button class="nav-tab-btn" id="tabBtnLibrary" onclick="switchTab('library')">
+      <span class="tab-icon">📚</span>
+      <span>Thư Viện</span>
+    </button>
+    <button class="nav-tab-btn" id="tabBtnMore" onclick="openDrawer()">
+      <span class="tab-icon">⚙️</span>
+      <span>Thêm</span>
+    </button>
+  </nav>
+
+  <!-- ======================================================================
+       5. BOTTOM SHEET DRAWER (Profile, Badges, Settings, About)
+       ====================================================================== -->
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer(event)">
+    <div class="drawer-sheet" onclick="event.stopPropagation()">
+      <div class="drawer-drag-handle"></div>
+      <div class="drawer-header">
+        <h3 class="drawer-title">Tùy Chọn & Hồ Sơ</h3>
+        <button class="icon-btn" onclick="closeDrawer()" aria-label="Đóng bảng">✕</button>
       </div>
 
-      <div class="container" style="max-width:620px;">
-        <div style="background:var(--white);border-radius:var(--radius);border:1.5px solid var(--border);padding:24px;margin-bottom:20px;box-shadow:var(--shadow-sm);">
-          <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
-            <div id="kokonutAvatarBox" style="width:100px;height:100px;border-radius:24px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.15);flex-shrink:0;">
-              <!-- Kokonut Avatar SVG Injected -->
+      <div class="drawer-body">
+        <!-- Section: Hồ sơ & Avatar Emoji -->
+        <div class="sheet-section">
+          <div class="sheet-section-title">👤 Hồ Sơ Của Bạn</div>
+          <div class="profile-row">
+            <div class="profile-avatar-bubble" id="profileAvatarDisplay" onclick="cycleAvatarEmoji()" title="Chạm để đổi biểu tượng">
+              🌟
             </div>
-            <div style="flex:1;min-width:180px;">
-              <h3 style="font-family:'Cinzel',serif;font-size:1.25rem;color:var(--brown-dark);margin-bottom:4px;" id="profileUserName">Người Dùng</h3>
-              <div style="font-size:0.8rem;color:var(--brown-light);margin-bottom:12px;" id="profileSeedLabel">Mã tâm thức: cosmic-wanderer</div>
-              <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                <button class="btn btn-gold btn-sm" onclick="rollKokonutAvatar()">🎲 Tạo Diện Mạo Mới</button>
-                <button class="btn btn-secondary btn-sm" onclick="copyAvatarSeed()">📋 Sao Chép Mã</button>
-              </div>
+            <div class="profile-details">
+              <div class="profile-name-text" id="drawerUserName">Người Dùng</div>
+              <div class="profile-sub-text" id="drawerUserEmail">Thành viên tĩnh tại</div>
             </div>
+            <button class="btn btn-secondary btn-sm" onclick="editUserName()">Sửa tên</button>
           </div>
         </div>
 
-        <div class="settings-group">
-          <div class="settings-group-title">📊 Thống Kê Hành Trình</div>
-          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;text-align:center;">
-            <div style="padding:12px;background:#fdf6f0;border-radius:12px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--peach);" id="profStatSpins">0</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Tổng lần quay</div>
+        <!-- Section: 8 Huy Hiệu Danh Dự -->
+        <div class="sheet-section">
+          <div class="sheet-section-title">🏅 8 Huy Hiệu Danh Dự</div>
+          <div class="badges-strip-grid" id="drawerBadgesGrid"></div>
+        </div>
+
+        <!-- Section: Âm Thanh & SFX -->
+        <div class="sheet-section">
+          <div class="sheet-section-title">🎵 Cài Đặt Âm Thanh</div>
+          <div class="setting-item-row">
+            <div>
+              <div class="setting-label-bold">Âm lượng Lofi</div>
+              <div class="setting-desc-sub">9 bản nhạc nền tĩnh tâm</div>
             </div>
-            <div style="padding:12px;background:#fdf6f0;border-radius:12px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--peach);" id="profStatUnique">0</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Thông điệp mở</div>
+            <input type="range" class="slider-range" id="drawerVolSlider" min="0" max="1" step="0.05" oninput="setMusicVol(this.value)">
+          </div>
+          <div class="setting-item-row">
+            <div>
+              <div class="setting-label-bold">Hiệu ứng chuông & kim</div>
+              <div class="setting-desc-sub">Chuông xoay Tây Tạng 432Hz</div>
             </div>
-            <div style="padding:12px;background:#fdf6f0;border-radius:12px;">
-              <div style="font-size:1.4rem;font-weight:800;color:var(--peach);" id="profStatStreak">0</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Chuỗi ngày</div>
-            </div>
+            <button class="btn btn-secondary btn-sm" id="sfxStateBtn" onclick="toggleSfxEngine()">🔊 Đang bật</button>
           </div>
         </div>
-      </div>
-    </div>
 
-    <!-- ========================================== -->
-    <!-- 5. TAB VỀ DỰ ÁN (ABOUT)                    -->
-    <!-- ========================================== -->
-    <div id="viewAbout" class="tab-view">
-      <div class="section-hero">
-        <div class="badge-eyebrow">✦ Triết Lý & Sứ Mệnh</div>
-        <h2 style="font-family:'Cinzel',serif;">Về Dự Án Vòng Quay</h2>
-        <p style="color:var(--brown-light);font-size:0.88rem;">Chiếc la bàn bình yên giúp bạn neo đậu tâm hồn mỗi ngày</p>
-      </div>
-
-      <div class="container">
-        <div class="about-card">
-          <h3>🌟 Ý Nghĩa Hình Thành</h3>
-          <p style="margin-bottom:16px;">
-            Trong nhịp sống hiện đại hối hả, chúng ta thường bị cuốn vào những lo toan, thông báo và áp lực bên ngoài. <strong>Vòng Quay Thông Điệp</strong> ra đời như một điểm chạm tĩnh lặng — nơi mỗi ngày bạn dành ra đúng 2 phút để quay về lắng nghe chính mình.
+        <!-- Section: Triết Lý & Về Dự Án -->
+        <div class="sheet-section">
+          <div class="sheet-section-title">📖 Về Dự Án</div>
+          <p style="font-size:0.85rem;color:var(--text-body);margin-bottom:8px;line-height:1.6;">
+            <strong>Vòng Quay Thông Điệp</strong> là trạm dừng chân tĩnh tại giúp bạn đón nhận một góc nhìn tươi sáng mỗi ngày, không mê tín, mà hướng tâm vào chánh niệm và nuôi dưỡng lòng biết ơn.
           </p>
-          <p>
-            Đây không phải là trò chơi may rủi hay bói toán mê tín, mà là một công cụ thực hành <span class="kokonut-marker-target" data-mark="highlight" data-mark-color="#facc15">chánh niệm & chữa lành</span> giúp hướng tâm trí bạn về những giá trị sống tích cực, tử tế và an yên.
+          <p style="font-size:0.8rem;color:var(--text-muted);">
+            Phiên bản v2.0 Celestial Zen Edition.
           </p>
         </div>
 
-        <div class="about-card">
-          <h3>🕯️ Nghi Thức 3 Bước Đón Nhận Hiệu Quả</h3>
-          <div class="about-step">
-            <div class="about-step-num">1</div>
+        <!-- Section: Dữ Liệu & Thoát -->
+        <div class="sheet-section">
+          <div class="sheet-section-title">🔒 Dữ Liệu & Tài Khoản</div>
+          <div class="setting-item-row">
             <div>
-              <strong>Thở Sâu & Khởi Tạo Tâm Tĩnh</strong>
-              <p style="font-size:0.88rem;color:var(--brown-light);margin-top:2px;">Trước khi nhấn quay, hãy nhắm mắt hít một hơi thật sâu, thả lỏng đôi vai và mở lòng đón nhận bài học ngày hôm nay.</p>
+              <div class="setting-label-bold">Sao lưu lịch sử</div>
+              <div class="setting-desc-sub">Tải tệp JSON về máy</div>
             </div>
+            <button class="btn btn-secondary btn-sm" onclick="exportDataJson()">📤 Tải JSON</button>
           </div>
-          <div class="about-step">
-            <div class="about-step-num">2</div>
+          <div class="setting-item-row">
             <div>
-              <strong>Đọc Lời Nhắn & Suy Ngẫm</strong>
-              <p style="font-size:0.88rem;color:var(--brown-light);margin-top:2px;">Đọc thông điệp không chỉ bằng mắt mà bằng trái tim. Tự hỏi bản thân: "Thông điệp này đang soi sáng điều gì trong đời sống mình lúc này?"</p>
+              <div class="setting-label-bold" style="color:#D9534F;">Đăng xuất</div>
+              <div class="setting-desc-sub">Thoát phiên đăng nhập</div>
             </div>
+            <button class="btn btn-sm" style="background:#FDE8E8;color:#D9534F;border:1px solid #F8B4B4;" onclick="doUserLogout()">🚪 Đăng xuất</button>
           </div>
-          <div class="about-step">
-            <div class="about-step-num">3</div>
-            <div>
-              <strong>Thực Hiện Hành Động Nhỏ & Viết Nhật Ký</strong>
-              <p style="font-size:0.88rem;color:var(--brown-light);margin-top:2px;">Làm ngay hành động gợi ý trong ngày và viết lại đôi dòng cảm xúc vào ô nhật ký để lưu giữ dấu ấn chặng đường.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- 6. TAB CÀI ĐẶT (SETTINGS)                  -->
-    <!-- ========================================== -->
-    <div id="viewSettings" class="tab-view">
-      <div class="section-hero">
-        <div class="badge-eyebrow">⚙️ Tùy Chỉnh & Tài Khoản</div>
-        <h2 style="font-family:'Cinzel',serif;">Cài Đặt Ứng Dụng</h2>
-        <p style="color:var(--brown-light);font-size:0.88rem;">Quản lý âm thanh, giao diện và dữ liệu cá nhân</p>
-      </div>
-
-      <div class="settings-container">
-        <!-- Âm lượng Lofi & SFX -->
-        <div class="settings-group">
-          <div class="settings-group-title">🎵 Tùy Chỉnh Âm Thanh</div>
-          <div class="settings-row">
-            <div>
-              <div style="font-weight:700;font-size:0.92rem;">Âm lượng Lofi</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Điều chỉnh độ to nhỏ của 9 bản nhạc nền</div>
-            </div>
-            <input type="range" class="settings-slider" id="musicVolumeSlider" min="0" max="1" step="0.05" oninput="changeMusicVolume(this.value)">
-          </div>
-
-          <div class="settings-row">
-            <div>
-              <div style="font-weight:700;font-size:0.92rem;">Hiệu ứng âm thanh (SFX)</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Tiếng khẩy kim & chuông xoay Tây Tạng</div>
-            </div>
-            <button class="btn btn-secondary btn-sm" id="sfxToggleBtn" onclick="toggleSfx()">🔊 Đang Bật</button>
-          </div>
-        </div>
-
-        <!-- 8 Huy hiệu danh dự -->
-        <div class="settings-group">
-          <div class="settings-group-title">🏅 8 Huy Hiệu Danh Dự</div>
-          <div class="badges-grid" id="setBadgesGrid"></div>
-        </div>
-
-        <!-- Dữ liệu & Đăng xuất -->
-        <div class="settings-group">
-          <div class="settings-group-title">🔒 Dữ Liệu & Thoát</div>
-          <div class="settings-row">
-            <div>
-              <div style="font-weight:700;font-size:0.92rem;">Xuất bản sao lưu dữ liệu</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Tải tệp JSON chứa toàn bộ lịch sử</div>
-            </div>
-            <button class="btn btn-secondary btn-sm" onclick="exportData()">
-              📤 Xuất JSON
-            </button>
-          </div>
-          <div class="settings-row">
-            <div>
-              <div style="font-weight:700;font-size:0.92rem;color:#E74C3C;">Đăng xuất tài khoản</div>
-              <div style="font-size:0.75rem;color:var(--brown-light);">Thoát phiên làm việc hiện tại</div>
-            </div>
-            <button class="btn btn-sm" style="background:#FDE8E8;color:#E74C3C;border:1px solid #F8B4B4;" onclick="confirmLogout()">
-              🚪 Đăng Xuất
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- 2. KOKONUT LIQUID GLASS CARD & NOW PLAYING MUSIC PLAYER -->
-  <div class="kokonut-liquid-glass" style="position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:850;max-width:440px;width:calc(100% - 28px);">
-    <div class="kokonut-now-playing-wrap" id="kokonutNowPlayingCard">
-      <div class="kokonut-vinyl-box">
-        <div class="kokonut-vinyl-disc" id="kokonutVinylDisc" title="Đĩa than xoay theo quán tính">
-          <div class="kokonut-vinyl-center"></div>
-        </div>
-      </div>
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
-          <div class="kokonut-np-title" style="font-weight:700;font-size:0.86rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:inherit;">
-            Lofi Thiền Định
-          </div>
-          <div class="kokonut-eq-bars">
-            <div class="kokonut-eq-bar"></div>
-            <div class="kokonut-eq-bar"></div>
-            <div class="kokonut-eq-bar"></div>
-            <div class="kokonut-eq-bar"></div>
-            <div class="kokonut-eq-bar"></div>
-          </div>
-        </div>
-        <div class="kokonut-np-artist" style="font-size:0.74rem;color:var(--brown-light);margin-bottom:4px;">
-          Âm hưởng vũ trụ ngẫu nhiên
-        </div>
-        <div style="display:flex;align-items:center;justify-content:space-between;font-size:0.7rem;color:var(--brown-light);">
-          <span class="kokonut-np-current">0:00</span>
-          <div style="display:flex;gap:14px;align-items:center;">
-            <button onclick="bgMusic.prevTrack()" style="background:none;border:none;cursor:pointer;font-size:0.9rem;color:inherit;" title="Bài trước">⏮</button>
-            <button class="kokonut-np-play" onclick="bgMusic.togglePlay()" style="background:#f97316;color:white;border:none;border-radius:50%;width:26px;height:26px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:0.75rem;" title="Phát / Tạm dừng">▶</button>
-            <button onclick="bgMusic.nextTrack()" style="background:none;border:none;cursor:pointer;font-size:0.9rem;color:inherit;" title="Bài tiếp">⏭</button>
-          </div>
-          <span class="kokonut-np-total">3:00</span>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- 3. KOKONUT CARD FLIP (3D FLICK CARD REVEAL OVERLAY) -->
-  <div class="ritual-overlay" id="ritualOverlay">
-    <div class="seal-step" id="sealStep">
-      <div class="envelope-box">
-        <div class="seal-text">Vũ Trụ Đã Gửi Một Lá Thư Đến Bạn</div>
-        <div class="wax-seal" id="waxSealBtn" onclick="crackWaxSeal()">
-          <span class="wax-seal-inner">🌀</span>
-        </div>
-        <p style="margin-top:16px;font-size:0.85rem;color:var(--brown-mid);font-weight:700;">
-          Chạm vào con dấu sáp để mở niêm phong
-        </p>
-      </div>
+  <!-- ======================================================================
+       6. RITUAL CEREMONY OVERLAY (Con Dấu Sáp & Thẻ Bài 3D Flip)
+       ====================================================================== -->
+  <div class="ritual-modal-layer" id="ritualModal">
+    
+    <!-- Phase 1: Wax Seal Envelope -->
+    <div class="seal-envelope-card" id="waxSealCard">
+      <div style="font-size:0.85rem;font-weight:700;color:var(--accent);text-transform:uppercase;margin-bottom:6px;">✦ LÁ THƯ TÂM THỨC ✦</div>
+      <h2 style="font-size:1.3rem;margin-bottom:8px;">Vũ Trụ Đã Gửi Lời Nhắn</h2>
+      <p style="font-size:0.85rem;color:var(--text-muted);">Chạm vào con dấu sáp để khai mở thông điệp của bạn</p>
+      
+      <button class="wax-seal-btn" id="waxSealBtn" onclick="onCrackWaxSeal()">
+        <span>🌀</span>
+      </button>
     </div>
 
-    <div class="letter-step" id="letterStep">
-      <button class="letter-close" onclick="closeRitual()">✕</button>
-      <div id="letterCatTag" style="text-align:center;margin-bottom:10px;"></div>
+    <!-- Phase 2: Card Flip Reveal & Journal -->
+    <div class="letter-sheet-card" id="letterRevealCard">
+      <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư">✕</button>
 
-      <!-- KOKONUT CARD FLIP CONTAINER -->
-      <div class="kokonut-card-flip-wrap" id="kokonutRevealCardWrap" title="Chạm hoặc vuốt để lật thẻ bài">
-        <div class="kokonut-card-flip-inner">
-          <div class="kokonut-card-face front">
-            <div style="font-size:2.8rem;margin-bottom:12px;color:#E9C46A;">✦ 🌀 ✦</div>
-            <div style="font-family:'Cinzel',serif;font-size:1.15rem;font-weight:700;letter-spacing:2px;color:#E9C46A;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
-            <p style="font-size:0.8rem;color:rgba(255,255,255,0.7);max-width:200px;">Lá thư tâm thức dành riêng cho bạn hôm nay</p>
-            <div style="margin-top:20px;font-size:0.75rem;color:#E07A5F;font-weight:700;">🔄 Chạm hoặc vuốt để lật mặt tranh</div>
-            <div class="kokonut-card-light-band"></div>
+      <!-- 3D Card Flip -->
+      <div class="card-flip-stage" id="flipStage" onclick="toggleCardFlip()">
+        <div class="card-flip-body">
+          <div class="card-flip-face card-flip-front">
+            <div style="font-size:2.2rem;margin-bottom:8px;">✦ 🌀 ✦</div>
+            <div style="font-family:'Cinzel',serif;font-weight:700;font-size:1.05rem;letter-spacing:1.5px;margin-bottom:6px;">VŨ TRỤ DẪN LỐI</div>
+            <p style="font-size:0.75rem;opacity:0.75;">Chạm để lật mặt tranh thông điệp</p>
           </div>
-          <div class="kokonut-card-face back">
-            <img id="letterImg" src="" alt="Thông Điệp">
-            <div class="kokonut-card-light-band"></div>
+          <div class="card-flip-face card-flip-back">
+            <img id="letterCardImg" src="" alt="Thông điệp">
           </div>
         </div>
-        <div class="kokonut-card-flip-shadow"></div>
       </div>
+      <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-bottom:12px;">👆 Chạm vào thẻ bài để lật đổi mặt</p>
 
-      <div id="letterTitle" class="letter-title" style="margin-top:14px;"></div>
-      <div id="letterDesc" class="letter-desc"></div>
+      <h3 class="letter-heading" id="letterTitle">--</h3>
+      <p class="letter-quote-text" id="letterQuote">--</p>
 
-      <div class="action-box">
-        <div class="action-badge">✨ Hành Động Tỉnh Thức Hôm Nay</div>
-        <div class="action-text" id="actionText"></div>
-        <label class="action-check-label">
-          <input type="checkbox" id="actionCheckbox" onchange="toggleActionDone()">
-          <span>Tôi đã hoàn thành hành động này hôm nay</span>
+      <!-- Hành động tỉnh thức -->
+      <div class="action-card-callout">
+        <div class="action-card-header">✨ Hành Động Gợi Ý Hôm Nay</div>
+        <p id="letterActionText" style="font-size:0.88rem;color:var(--text-primary);font-weight:600;">--</p>
+        <label class="action-checkbox-line">
+          <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
+          <span>Tôi cam kết / đã thực hiện điều này</span>
         </label>
       </div>
 
-      <div class="journal-box">
-        <div class="journal-title">✍️ Cảm nghĩ & Lời biết ơn của bạn hôm nay:</div>
-        <textarea id="journalInput" class="journal-input" placeholder="Viết vài dòng suy ngẫm để lưu giữ khoảnh khắc này..."></textarea>
-        <button class="btn btn-secondary btn-sm" style="margin-top:6px;width:100%;" onclick="saveTodayJournal()">
-          💾 Lưu nhật ký này
-        </button>
+      <!-- Ô nhật ký -->
+      <div class="journal-entry-box">
+        <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);">✍️ Cảm nghĩ & Lời tri ân:</div>
+        <textarea id="journalInput" class="journal-textarea" placeholder="Viết vài dòng cảm nhận để neo lại khoảnh khắc bình yên này..."></textarea>
+        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()">💾 Lưu nhật ký này</button>
       </div>
 
-      <div class="letter-actions">
-        <button class="btn btn-gold" onclick="exportInstagramStory()">
-          📸 Tạo Story Share
-        </button>
-        <button class="btn btn-secondary" onclick="shareMessageDirect()">
-          💌 Chia sẻ link
-        </button>
+      <div class="btn-group-tight" style="margin-top:var(--sp-md);">
+        <button class="btn btn-gold btn-sm" onclick="exportTodayStory()">📸 Tạo ảnh Story</button>
+        <button class="btn btn-secondary btn-sm" onclick="shareDirectLink()">💌 Chia sẻ</button>
       </div>
     </div>
   </div>
 
-  <!-- MODAL XEM ẢNH STORY INSTAGRAM -->
-  <div class="story-modal" id="storyModal">
-    <img id="storyImgPreview" class="story-preview-img" src="" alt="Story Preview">
-    <div style="display:flex;gap:12px;">
-      <a id="downloadStoryBtn" class="btn btn-gold" download="thong-diep-story.png">
-        ⬇️ Tải ảnh Story
-      </a>
-      <button class="btn btn-secondary" onclick="closeStoryModal()">
-        ✕ Đóng
-      </button>
+  <!-- ======================================================================
+       7. INSTAGRAM STORY MODAL
+       ====================================================================== -->
+  <div class="story-preview-modal" id="storyModal">
+    <img id="storyRenderPreview" class="story-render-img" src="" alt="Story Preview">
+    <div class="btn-group-tight">
+      <a id="storyDownloadBtn" class="btn btn-gold" download="thong-diep-story.png">⬇️ Tải Ảnh Về Máy</a>
+      <button class="btn btn-secondary" onclick="closeStoryModal()">✕ Đóng</button>
     </div>
   </div>
 
-  <!-- SCRIPTS -->
+  <!-- Toast Notification -->
+  <div id="toastNotification" class="toast-pill"></div>
+
+  <!-- Canvas Confetti -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- ======================================================================
+       SCRIPTS
+       ====================================================================== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/sound.js"></script>
@@ -816,289 +371,261 @@
   <script src="js/storage.js"></script>
   <script src="js/story-generator.js"></script>
   <script src="js/bg-music.js"></script>
-  <script src="js/kokonut-components.js"></script>
 
   <script>
-    let currentMsgId = null;
+    // ── BIẾN TOÀN CỤC & TRẠNG THÁI ──
     let currentUser = null;
-    let currentLibCategory = 'all';
-    let libSearchQuery = '';
-    let toastTimer = null;
-    let currentAvatarSeed = localStorage.getItem('vqtd_avatar_seed') || 'cosmic-soul-77';
+    let activeTab = 'spin';
+    let currentMessageId = null;
+    let selectedLibCategory = 'all';
+    let libSearchText = '';
+    let toastTimeout = null;
 
-    // Toast
-    function showToast(msg) {
-      let toast = document.getElementById('toast');
-      if (!toast) {
-        toast = document.createElement('div');
-        toast.id = 'toast';
-        toast.className = 'toast';
-        document.body.appendChild(toast);
-      }
-      toast.textContent = msg;
-      toast.classList.add('show');
-      if (toastTimer) clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.remove('show');
-      }, 2200);
+    const AVATAR_EMOJIS = ['🌟', '🕊️', '🧘', '🌸', '🌊', '☀️', '🌙', '🍃', '🦋', '🔮', '✨', '💎'];
+    let currentAvatarEmoji = localStorage.getItem('vqtd_avatar_emoji') || '🌟';
+
+    // ── TOAST NOTIFICATION ──
+    function showToast(text) {
+      const el = document.getElementById('toastNotification');
+      if (!el) return;
+      el.textContent = text;
+      el.classList.add('show');
+      if (toastTimeout) clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => el.classList.remove('show'), 2300);
     }
 
-    // ── CHUYỂN TAB MORPHIC NAVBAR ──
-    function switchMainTab(tabName) {
-      document.querySelectorAll('.tab-view').forEach(v => v.classList.remove('active'));
-      const tabMap = {
-        home:     { view: 'viewHome',     idx: 0 },
-        spin:     { view: 'viewSpin',     idx: 1 },
-        library:  { view: 'viewLibrary',  idx: 2 },
-        profile:  { view: 'viewProfile',  idx: 3 },
-        about:    { view: 'viewAbout',    idx: 4 },
-        settings: { view: 'viewSettings', idx: 5 }
-      };
+    // ── THEME SWITCHER (Light / Dark) ──
+    function initTheme() {
+      const savedTheme = localStorage.getItem('vqtd_theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+      applyTheme(savedTheme);
 
-      const target = tabMap[tabName] || tabMap.home;
-      document.getElementById(target.view).classList.add('active');
-      window.location.hash = tabName;
+      document.getElementById('themeToggleBtn').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.contains('dark');
+        const next = isDark ? 'light' : 'dark';
+        applyTheme(next);
+        showToast(next === 'dark' ? 'Đã bật chế độ Đêm tĩnh mịch 🌙' : 'Đã bật chế độ Ngày an lành ☀️');
+      });
+    }
 
-      if (window.kokonutNav) {
-        window.kokonutNav.setActiveIndex(target.idx);
+    function applyTheme(theme) {
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+        document.getElementById('themeIcon').textContent = '🌙';
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.getElementById('themeIcon').textContent = '☀️';
       }
+      localStorage.setItem('vqtd_theme', theme);
+    }
 
-      if (tabName === 'home') initHomeDeck();
-      if (tabName === 'library') renderLibraryGrid();
-      if (tabName === 'profile') renderProfileTab();
-      if (tabName === 'settings') renderSettingsTab();
+    // ── SPA TAB SWITCHING (Quay & Thư Viện) ──
+    function switchTab(tabId) {
+      activeTab = tabId;
+      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
 
+      if (tabId === 'spin') {
+        document.getElementById('viewSpin').classList.add('active');
+        document.getElementById('tabBtnSpin').classList.add('active');
+        window.location.hash = 'spin';
+      } else if (tabId === 'library') {
+        document.getElementById('viewLibrary').classList.add('active');
+        document.getElementById('tabBtnLibrary').classList.add('active');
+        window.location.hash = 'library';
+        renderLibrary();
+      }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    // ── KHỞI TẠO ỨNG DỤNG ──
-    async function initPage() {
+    // ── DRAWER BOTTOM SHEET (Thêm) ──
+    function openDrawer() {
+      document.getElementById('drawerBackdrop').classList.add('show');
+      document.body.style.overflow = 'hidden';
+      renderDrawerBadges();
+      syncDrawerProfile();
+    }
+
+    function closeDrawer(e) {
+      if (e && e.target !== document.getElementById('drawerBackdrop') && !e.target.classList.contains('icon-btn')) {
+        // Cho phép click nút đóng
+      }
+      document.getElementById('drawerBackdrop').classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function cycleAvatarEmoji() {
+      const idx = AVATAR_EMOJIS.indexOf(currentAvatarEmoji);
+      const nextIdx = (idx + 1) % AVATAR_EMOJIS.length;
+      currentAvatarEmoji = AVATAR_EMOJIS[nextIdx];
+      localStorage.setItem('vqtd_avatar_emoji', currentAvatarEmoji);
+      syncDrawerProfile();
+      sounds.playWaxCrack();
+      showToast('Đã đổi biểu tượng tâm thức! ' + currentAvatarEmoji);
+    }
+
+    function syncDrawerProfile() {
+      const name = currentUser?.name || 'Lữ Khách Bình An';
+      document.getElementById('drawerUserName').textContent = name;
+      document.getElementById('drawerUserEmail').textContent = currentUser?.email || 'Tài khoản khách';
+      document.getElementById('profileAvatarDisplay').textContent = currentAvatarEmoji;
+      document.getElementById('topAvatarIcon').textContent = currentAvatarEmoji;
+    }
+
+    async function editUserName() {
+      const current = currentUser?.name || '';
+      const newName = prompt('Nhập tên hiển thị mới của bạn:', current);
+      if (newName && newName.trim() && newName.trim() !== current) {
+        currentUser.name = newName.trim();
+        saveUser(currentUser);
+        syncDrawerProfile();
+        showToast('Đã cập nhật tên thành công! ✨');
+      }
+    }
+
+    // ── KHỞI CHẠY TRANG ──
+    async function initApp() {
+      initTheme();
+
+      // Kiểm tra đăng nhập
       currentUser = await getCurrentUser();
       if (!currentUser) {
         location.href = 'login.html';
         return;
       }
 
-      // 1. Init Kokonut Morphic Navbar
-      window.kokonutNav = window.initKokonutMorphicNav('kokonutMorphicNav', {
-        defaultIndex: 0,
-        onSelect: (index, tabName) => {
-          switchMainTab(tabName);
-        }
-      });
+      syncDrawerProfile();
 
-      // 2. Init Kokonut Switch Theme
-      window.initKokonutSwitchTheme('kokonutSwitchThemeBtn');
-
-      // 3. Init Kokonut Plucked Text
-      window.initKokonutPluckedText('kokonutHeroPlucked', 1.1);
-
-      // 4. Init Kokonut Marker Text
-      window.initKokonutMarkerText('.kokonut-marker-target');
-
-      // 5. Init Kokonut Now Playing with Liquid Glass
-      if (bgMusic && bgMusic.audio) {
-        window.kokonutNowPlaying = window.initKokonutNowPlaying('kokonutNowPlayingCard', bgMusic.audio);
-      }
-
-      // 6. Init Kokonut Card Flip
-      window.kokonutCardFlip = window.initKokonutCardFlip('kokonutRevealCardWrap');
-
-      // Slider volume
-      const volSlider = document.getElementById('musicVolumeSlider');
-      if (volSlider && bgMusic) {
-        volSlider.value = bgMusic.audio.volume;
-      }
-
-      // Avatar
-      updateProfileAvatarView();
-
+      // Đồng bộ cloud nếu có tài khoản
       if (currentUser.id && currentUser.id !== 'guest') {
-        await syncDataFromSupabase(currentUser.id);
+        try {
+          await syncDataFromSupabase(currentUser.id);
+        } catch (_) {}
       }
 
-      refreshStats();
-      checkTodaySpin();
-      initHomeDeck();
-
-      // Check URL Hash
-      const hash = window.location.hash.replace('#', '');
-      if (['home', 'spin', 'library', 'profile', 'about', 'settings'].includes(hash)) {
-        switchMainTab(hash);
-      }
-    }
-
-    // ── KOKONUT CARD STACK (THROW DECK) ──
-    const DECK_CARDS_DATA = [
-      { id: 1, title: "Tri Tâm Khai Sáng", subtitle: "Lắng nghe trực giác bên trong" },
-      { id: 7, title: "Yêu Chính Mình", subtitle: "Ôm ấp mọi góc cạnh tâm hồn" },
-      { id: 11, title: "Tái Sinh", subtitle: "Mỗi ngày là một khởi đầu mới" },
-      { id: 29, title: "Chánh Niệm", subtitle: "Hiện diện trọn vẹn ở giây phút này" }
-    ];
-
-    function initHomeDeck() {
-      const stage = document.getElementById('kokonutHomeDeck');
-      if (!stage) return;
-      stage.innerHTML = '';
-
-      DECK_CARDS_DATA.forEach(c => {
-        const div = document.createElement('div');
-        div.className = 'kokonut-stack-card';
-        div.innerHTML = `
-          <div class="kokonut-stack-card-art">
-            <img src="images/${String(c.id).padStart(2,'0')}.png" alt="${c.title}">
-          </div>
-          <div style="padding:8px 6px;">
-            <div style="font-weight:700;font-size:0.92rem;color:var(--brown-dark);">${c.title}</div>
-            <div style="font-size:0.75rem;color:var(--brown-light);">${c.subtitle}</div>
-          </div>
-        `;
-        stage.appendChild(div);
+      // Khởi tạo ngày tháng và lời chào
+      const hr = new Date().getHours();
+      const greeting = hr < 12 ? 'Buổi Sáng' : hr < 18 ? 'Buổi Chiều' : 'Buổi Tối';
+      document.getElementById('greetingTime').textContent = greeting;
+      
+      const viDateStr = new Date().toLocaleDateString('vi-VN', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
       });
+      document.getElementById('todayDateStr').textContent = viDateStr;
 
-      window.kokonutDeck = window.initKokonutCardStack('kokonutHomeDeck');
-    }
+      // Khởi tạo Wheel canvas
+      drawWheel(0);
 
-    // ── KOKONUT AVATAR PICKER ──
-    function updateProfileAvatarView() {
-      const box = document.getElementById('kokonutAvatarBox');
-      const seedLbl = document.getElementById('profileSeedLabel');
-      const nameLbl = document.getElementById('profileUserName');
-      if (box) box.innerHTML = window.generateKokonutAvatarSvg(currentAvatarSeed);
-      if (seedLbl) seedLbl.textContent = `Mã hạt giống: ${currentAvatarSeed}`;
-      if (nameLbl) nameLbl.textContent = currentUser?.name || 'Lữ Khách Vũ Trụ';
-    }
+      // Cập nhật stats & kiểm tra hôm nay
+      refreshStatsStrip();
+      checkTodaySpinStatus();
 
-    function rollKokonutAvatar() {
-      currentAvatarSeed = 'cosmic-' + Math.random().toString(36).substring(2, 9);
-      localStorage.setItem('vqtd_avatar_seed', currentAvatarSeed);
-      updateProfileAvatarView();
-      sounds.playWaxCrack();
-      showToast('Đã tạo diện mạo Kokonut mới thành công! ✨');
-    }
+      // Setup Music Bar
+      initMusicBarUI();
 
-    function copyAvatarSeed() {
-      navigator.clipboard.writeText(currentAvatarSeed);
-      showToast('Đã sao chép mã hạt giống avatar! 📋');
-    }
-
-    function renderProfileTab() {
-      updateProfileAvatarView();
-      const h = getHistory();
-      const s = getStreak();
-      const u = uniqueMessagesCount();
-      document.getElementById('profStatSpins').textContent = h.length;
-      document.getElementById('profStatUnique').textContent = u;
-      document.getElementById('profStatStreak').textContent = s.count;
-    }
-
-    function changeMusicVolume(val) {
-      if (bgMusic) bgMusic.setVolume(parseFloat(val));
-    }
-
-    function toggleSfx() {
-      const isMuted = sounds.toggleMute();
-      const btn = document.getElementById('sfxToggleBtn');
-      if (btn) btn.textContent = isMuted ? '🔇 Đã Tắt' : '🔊 Đang Bật';
-      showToast(isMuted ? 'Đã tắt hiệu ứng âm thanh 🔇' : 'Đã bật hiệu ứng âm thanh 🔊');
-    }
-
-    // ── Ngày tháng ──
-    const hour = new Date().getHours();
-    const greet = hour < 12 ? 'Buổi Sáng' : hour < 18 ? 'Buổi Chiều' : 'Buổi Tối';
-    document.getElementById('greetingTime').textContent = greet;
-
-    const dateOpts = { weekday:'long', year:'numeric', month:'long', day:'numeric' };
-    document.getElementById('todayDate').textContent = new Date().toLocaleDateString('vi-VN', dateOpts);
-
-    function refreshStats() {
-      const h = getHistory();
-      const s = getStreak();
-      const u = uniqueMessagesCount();
-      document.getElementById('totalSpins').textContent = h.length;
-      document.getElementById('uniqueCount').textContent = u;
-      document.getElementById('streakStat').textContent = s.count;
-
-      const libU = document.getElementById('libUniqueCount');
-      if (libU) libU.textContent = u;
-      const libBar = document.getElementById('libProgressFill');
-      if (libBar) libBar.style.width = (u / 70 * 100) + '%';
-    }
-
-    function checkTodaySpin() {
-      const spin = getTodaySpin();
-      if (spin) {
-        currentMsgId = spin.messageId;
-        document.getElementById('spinBtnSection').style.display = 'none';
-        const alreadySpun = document.getElementById('alreadySpun');
-        alreadySpun.classList.add('show');
-        const msg = getMessageById(spin.messageId);
-
-        document.getElementById('todayMsgImg').src = `images/${String(spin.messageId).padStart(2,'0')}.png`;
-        document.getElementById('todayMsgName').textContent = msg.name;
-        document.getElementById('todayMsgDesc').textContent = msg.desc;
-
-        const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
-        document.getElementById('todayCatTag').innerHTML = `
-          <span class="cat-tag ${cat.id}">${cat.icon} ${cat.name}</span>
-        `;
-        startCountdown();
+      // Kiểm tra hash trên URL
+      if (window.location.hash === '#library') {
+        switchTab('library');
       }
     }
 
-    function startCountdown() {
-      function update() {
-        const secs = secondsUntilMidnight();
-        const h = Math.floor(secs/3600);
-        const m = Math.floor((secs%3600)/60);
-        const s = secs%60;
-        document.getElementById('countdown').textContent =
+    // ── STATS STRIP ──
+    function refreshStatsStrip() {
+      const history = getHistory();
+      const streak = getStreak();
+      const unique = uniqueMessagesCount();
+
+      document.getElementById('statTotalSpins').textContent = history.length;
+      document.getElementById('statUnlockedCount').textContent = unique;
+      document.getElementById('statStreakDays').textContent = streak.count;
+
+      const libText = document.getElementById('libProgressText');
+      if (libText) libText.textContent = unique;
+      const libFill = document.getElementById('libProgressBarFill');
+      if (libFill) libFill.style.width = ((unique / 70) * 100).toFixed(1) + '%';
+    }
+
+    // ── KIỂM TRA LƯỢT QUAY HÔM NAY ──
+    function checkTodaySpinStatus() {
+      const todayRecord = getTodaySpin();
+      const spinBtnWrapper = document.getElementById('spinBtnWrapper');
+      const alreadySpunBox = document.getElementById('alreadySpunBox');
+
+      if (todayRecord) {
+        currentMessageId = todayRecord.messageId;
+        const msg = getMessageById(todayRecord.messageId);
+
+        spinBtnWrapper.style.display = 'none';
+        alreadySpunBox.classList.add('show');
+
+        document.getElementById('todayThumbImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
+        document.getElementById('todayMsgTitle').textContent = msg.name;
+        document.getElementById('todayMsgQuote').textContent = `"${msg.desc}"`;
+
+        startCountdownTimer();
+      } else {
+        spinBtnWrapper.style.display = 'block';
+        alreadySpunBox.classList.remove('show');
+      }
+    }
+
+    function startCountdownTimer() {
+      function tick() {
+        const remaining = secondsUntilMidnight();
+        const h = Math.floor(remaining / 3600);
+        const m = Math.floor((remaining % 3600) / 60);
+        const s = remaining % 60;
+        document.getElementById('countdownTimer').textContent =
           `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-        if (secs <= 0) location.reload();
+        if (remaining <= 0) location.reload();
       }
-      update();
-      setInterval(update, 1000);
+      tick();
+      setInterval(tick, 1000);
     }
 
-    // ── CANVAS LA BÀN HOÀNG KIM ──
+    // ── VẼ VÒNG QUAY LA BÀN HOÀNG KIM ──
     const canvas = document.getElementById('spinCanvas');
-    const ctx    = canvas.getContext('2d');
+    const ctx = canvas.getContext('2d');
     const W = 450, H = 450, CX = 225, CY = 225, R = 210;
     const SEGMENTS = 12;
 
-    const PALETTE = [
+    const SEGMENT_COLORS = [
       '#FFDFC9', '#FFEAC9', '#FFF5C9', '#F1FFD4',
       '#D8FCEB', '#D2F5F8', '#DBECFF', '#E4E2FF',
       '#EFE2FF', '#FCE2F7', '#FFE0EA', '#FFE7DD'
     ];
-    const RUNES = ['✦','✧','☽','☼','★','☆','☯','⚘','☘','❊','☸','࿏'];
-    const LABELS = ['Bình An','Trí Tuệ','Hy Vọng','Chữa Lành','Dồi Dào','Tình Yêu',
-                    'Kỷ Luật','Bền Bỉ','Khai Sáng','Chánh Niệm','Thong Dong','Phúc Lạc'];
+    const SEGMENT_RUNES = ['✦','✧','☽','☼','★','☆','☯','⚘','☘','❊','☸','࿏'];
+    const SEGMENT_LABELS = ['Bình An','Trí Tuệ','Hy Vọng','Chữa Lành','Dồi Dào','Tình Yêu',
+                            'Kỷ Luật','Bền Bỉ','Khai Sáng','Chánh Niệm','Thong Dong','Phúc Lạc'];
 
-    let currentAngle = 0;
-    let isSpinning   = false;
-    let lastSegmentPassed = -1;
+    let currentRotationAngle = 0;
+    let isWheelSpinning = false;
+    let lastSegmentIndex = -1;
 
-    function drawWheel(rotation) {
+    function drawWheel(angle) {
       ctx.clearRect(0, 0, W, H);
       const segAngle = (Math.PI * 2) / SEGMENTS;
 
+      // Outer gold rim
       ctx.save();
       ctx.beginPath();
       ctx.arc(CX, CY, R + 6, 0, Math.PI * 2);
-      ctx.fillStyle = '#E9C46A';
-      ctx.shadowColor = 'rgba(233,196,106,0.6)';
-      ctx.shadowBlur = 18;
+      ctx.fillStyle = '#D4A84E';
+      ctx.shadowColor = 'rgba(212, 168, 78, 0.45)';
+      ctx.shadowBlur = 16;
       ctx.fill();
 
       ctx.beginPath();
       ctx.arc(CX, CY, R + 2, 0, Math.PI * 2);
-      ctx.fillStyle = '#5A3828';
+      ctx.fillStyle = '#3D2625';
       ctx.fill();
       ctx.restore();
 
+      // Segments
       for (let i = 0; i < SEGMENTS; i++) {
-        const start = rotation + i * segAngle;
+        const start = angle + i * segAngle;
         const end   = start + segAngle;
         const mid   = start + segAngle / 2;
 
@@ -1106,52 +633,52 @@
         ctx.moveTo(CX, CY);
         ctx.arc(CX, CY, R, start, end);
         ctx.closePath();
-        ctx.fillStyle = PALETTE[i];
+        ctx.fillStyle = SEGMENT_COLORS[i];
         ctx.fill();
 
         ctx.strokeStyle = 'rgba(255, 255, 255, 0.9)';
         ctx.lineWidth = 2.5;
         ctx.stroke();
 
-        const runeR = R * 0.72;
-        const rx = CX + Math.cos(mid) * runeR;
-        const ry = CY + Math.sin(mid) * runeR;
+        // Rune
+        const rx = CX + Math.cos(mid) * (R * 0.72);
+        const ry = CY + Math.sin(mid) * (R * 0.72);
         ctx.save();
         ctx.translate(rx, ry);
         ctx.rotate(mid + Math.PI / 2);
         ctx.font = 'bold 20px serif';
-        ctx.fillStyle = '#6E4532';
+        ctx.fillStyle = '#4A2A1A';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(RUNES[i], 0, 0);
+        ctx.fillText(SEGMENT_RUNES[i], 0, 0);
         ctx.restore();
 
-        const labelR = R * 0.42;
-        const lx = CX + Math.cos(mid) * labelR;
-        const ly = CY + Math.sin(mid) * labelR;
+        // Label
+        const lx = CX + Math.cos(mid) * (R * 0.42);
+        const ly = CY + Math.sin(mid) * (R * 0.42);
         ctx.save();
         ctx.translate(lx, ly);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = 'bold 10px Nunito, sans-serif';
-        ctx.fillStyle = '#5A3828';
+        ctx.font = 'bold 11px Nunito, sans-serif';
+        ctx.fillStyle = '#3D2625';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(LABELS[i], 0, 0);
+        ctx.fillText(SEGMENT_LABELS[i], 0, 0);
         ctx.restore();
       }
 
+      // Inner ring
       ctx.beginPath();
       ctx.arc(CX, CY, 52, 0, Math.PI * 2);
-      ctx.strokeStyle = '#E9C46A';
+      ctx.strokeStyle = '#D4A84E';
       ctx.lineWidth = 4;
       ctx.stroke();
     }
 
-    drawWheel(0);
-
-    function startSpin() {
-      if (isSpinning || hasSpunToday()) return;
-      isSpinning = true;
+    // ── THỰC HIỆN QUAY ──
+    function handleSpinStart() {
+      if (isWheelSpinning || hasSpunToday()) return;
+      isWheelSpinning = true;
 
       sounds.init();
 
@@ -1159,145 +686,280 @@
       btn.disabled = true;
       btn.textContent = 'ĐANG DẪN LỐI...';
 
-      // Hiện Kokonut Orbital Conic Gradient Loader
-      const loader = document.getElementById('spinOrbitalLoader');
-      if (loader) loader.style.display = 'block';
+      const loader = document.getElementById('spinConicLoader');
+      loader.style.display = 'flex';
 
-      const msg = getRandomMessage();
-      currentMsgId = msg.id;
+      const chosenMessage = getRandomMessage();
+      currentMessageId = chosenMessage.id;
 
-      const extraSpins = 6 + Math.random() * 3;
-      const targetAngle = currentAngle + (Math.PI * 2 * extraSpins) + Math.random() * Math.PI * 2;
+      const fullRotations = 6 + Math.random() * 3;
+      const targetAngle = currentRotationAngle + (Math.PI * 2 * fullRotations) + (Math.random() * Math.PI * 2);
 
       const duration = 4600;
       const startTime = performance.now();
-      const startAngle = currentAngle;
+      const startAngle = currentRotationAngle;
       const segAngle = (Math.PI * 2) / SEGMENTS;
 
       function easeOutCubic(t) {
         return 1 - Math.pow(1 - t, 3.5);
       }
 
-      function animate(time) {
-        const elapsed = time - startTime;
+      function animateFrame(now) {
+        const elapsed = now - startTime;
         const progress = Math.min(elapsed / duration, 1);
-        currentAngle = startAngle + (targetAngle - startAngle) * easeOutCubic(progress);
+        currentRotationAngle = startAngle + (targetAngle - startAngle) * easeOutCubic(progress);
 
-        const currentSegIndex = Math.floor((currentAngle % (Math.PI * 2)) / segAngle);
-        if (currentSegIndex !== lastSegmentPassed) {
+        const currentSeg = Math.floor((currentRotationAngle % (Math.PI * 2)) / segAngle);
+        if (currentSeg !== lastSegmentIndex) {
           sounds.playTick(1.0 + (1 - progress) * 0.5);
-          lastSegmentPassed = currentSegIndex;
+          lastSegmentIndex = currentSeg;
         }
 
-        drawWheel(currentAngle);
+        drawWheel(currentRotationAngle);
 
         if (progress < 1) {
-          requestAnimationFrame(animate);
+          requestAnimationFrame(animateFrame);
         } else {
-          currentAngle = targetAngle % (Math.PI * 2);
-          isSpinning = false;
-          if (loader) loader.style.display = 'none';
-          onSpinFinished(msg);
+          currentRotationAngle = targetAngle % (Math.PI * 2);
+          isWheelSpinning = false;
+          loader.style.display = 'none';
+          onSpinDone(chosenMessage);
         }
       }
 
-      requestAnimationFrame(animate);
+      requestAnimationFrame(animateFrame);
     }
 
-    async function onSpinFinished(msg) {
+    async function onSpinDone(msg) {
       sounds.playSingingBowl();
       await recordSpinToCloud(msg.id);
-      refreshStats();
-      setTimeout(() => openRitualEnvelope(msg), 500);
+      refreshStatsStrip();
+      setTimeout(() => openRitualModal(msg), 400);
     }
 
-    function openRitualEnvelope(msg) {
-      const overlay = document.getElementById('ritualOverlay');
-      const sealStep = document.getElementById('sealStep');
-      const letterStep = document.getElementById('letterStep');
+    // ── RITUAL MODAL (Wax Seal & Flip Card) ──
+    function openRitualModal(msg) {
+      const modal = document.getElementById('ritualModal');
+      const waxCard = document.getElementById('waxSealCard');
+      const letterCard = document.getElementById('letterRevealCard');
 
-      sealStep.style.display = 'block';
-      letterStep.classList.remove('show');
-      overlay.classList.add('show');
+      waxCard.style.display = 'block';
+      letterCard.classList.remove('show');
+      modal.classList.add('show');
       document.body.style.overflow = 'hidden';
 
-      // Reset Kokonut Card Flip
-      if (window.kokonutCardFlip) {
-        window.kokonutCardFlip.setFlipped(false);
-      }
+      // Reset Card Flip state
+      document.getElementById('flipStage').classList.remove('flipped');
 
-      const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
-      document.getElementById('letterCatTag').innerHTML = `
-        <span class="cat-tag ${cat.id}">${cat.icon} ${cat.name}</span>
-      `;
-      document.getElementById('letterImg').src = `images/${String(msg.id).padStart(2,'0')}.png`;
+      // Populate content
+      document.getElementById('letterCardImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
       document.getElementById('letterTitle').textContent = msg.name;
-      document.getElementById('letterDesc').textContent = `"${msg.desc}"`;
-      document.getElementById('actionText').textContent = msg.action || "Thở sâu và giữ nụ cười an lành.";
+      document.getElementById('letterQuote').textContent = `"${msg.desc}"`;
+      document.getElementById('letterActionText').textContent = msg.action || "Hãy thở sâu, thả lỏng đôi vai và mỉm cười với chính mình.";
 
-      const todayRecord = getTodaySpin();
-      document.getElementById('journalInput').value = todayRecord?.note || '';
-      document.getElementById('actionCheckbox').checked = todayRecord?.actionDone || false;
+      const todayRec = getTodaySpin();
+      document.getElementById('journalInput').value = todayRec?.note || '';
+      document.getElementById('actionCheckbox').checked = todayRec?.actionDone || false;
     }
 
-    function crackWaxSeal() {
-      const sealBtn = document.getElementById('waxSealBtn');
-      sealBtn.style.animation = 'sealCrack 0.6s ease forwards';
+    function onCrackWaxSeal() {
+      const btn = document.getElementById('waxSealBtn');
+      btn.style.animation = 'sealBreakAnim 0.55s ease forwards';
       sounds.playWaxCrack();
 
       setTimeout(() => {
-        document.getElementById('sealStep').style.display = 'none';
-        document.getElementById('letterStep').classList.add('show');
-        launchConfetti();
-      }, 550);
+        document.getElementById('waxSealCard').style.display = 'none';
+        document.getElementById('letterRevealCard').classList.add('show');
+        launchConfettiEffect();
+      }, 500);
     }
 
-    function showLetterModal() {
-      if (!currentMsgId) return;
-      const msg = getMessageById(currentMsgId);
-      openRitualEnvelope(msg);
-      document.getElementById('sealStep').style.display = 'none';
-      document.getElementById('letterStep').classList.add('show');
+    function toggleCardFlip() {
+      document.getElementById('flipStage').classList.toggle('flipped');
     }
 
-    function closeRitual() {
-      const overlay = document.getElementById('ritualOverlay');
-      overlay.classList.remove('show');
+    function closeRitualModal() {
+      document.getElementById('ritualModal').classList.remove('show');
       document.body.style.overflow = '';
-      if (!document.getElementById('alreadySpun').classList.contains('show')) {
-        checkTodaySpin();
+      checkTodaySpinStatus();
+    }
+
+    function reopenTodayRitual() {
+      if (!currentMessageId) return;
+      const msg = getMessageById(currentMessageId);
+      openRitualModal(msg);
+      // Bỏ qua bước tem sáp nếu xem lại
+      document.getElementById('waxSealCard').style.display = 'none';
+      document.getElementById('letterRevealCard').classList.add('show');
+    }
+
+    function onActionCheckboxToggle() {
+      const isChecked = document.getElementById('actionCheckbox').checked;
+      const note = document.getElementById('journalInput').value.trim();
+      saveMessageNote(getTodayStr(), note, isChecked);
+      showToast(isChecked ? 'Tuyệt vời! Bạn đã hoàn thành hành động hôm nay ✨' : 'Đã bỏ dấu hoàn thành');
+    }
+
+    function onSaveJournal() {
+      const note = document.getElementById('journalInput').value.trim();
+      const isChecked = document.getElementById('actionCheckbox').checked;
+      saveMessageNote(getTodayStr(), note, isChecked);
+      showToast('Đã lưu nhật ký vào hành trình của bạn 💾');
+    }
+
+    // ── THƯ VIỆN & BỘ LỌC ──
+    function setLibCategory(cat, btn) {
+      selectedLibCategory = cat;
+      document.querySelectorAll('.cat-filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderLibrary();
+    }
+
+    function onSearchLib() {
+      libSearchText = document.getElementById('libSearchInput').value.trim().toLowerCase();
+      renderLibrary();
+    }
+
+    function filterByEnergy(cat) {
+      switchTab('library');
+      const targetBtn = document.querySelector(`.cat-filter-btn[data-cat="${cat}"]`);
+      if (targetBtn) {
+        setLibCategory(cat, targetBtn);
       }
     }
 
-    function toggleActionDone() {
-      const done = document.getElementById('actionCheckbox').checked;
-      const note = document.getElementById('journalInput').value.trim();
-      saveMessageNote(getTodayStr(), note, done);
-      showToast(done ? 'Tuyệt vời! Bạn đã hoàn thành hành động hôm nay ✨' : 'Đã bỏ dấu hoàn thành');
+    function renderLibrary() {
+      const grid = document.getElementById('libCardGrid');
+      if (!grid) return;
+
+      const history = getHistory();
+
+      const filtered = MESSAGES.filter(m => {
+        const matchCategory = selectedLibCategory === 'all' || m.category === selectedLibCategory;
+        const matchSearch = !libSearchText ||
+          m.name.toLowerCase().includes(libSearchText) ||
+          m.desc.toLowerCase().includes(libSearchText);
+        return matchCategory && matchSearch;
+      });
+
+      grid.innerHTML = '';
+      filtered.forEach(msg => {
+        const isUnlocked = history.some(h => h.messageId === msg.id);
+        const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
+
+        const card = document.createElement('div');
+        card.className = 'lib-card';
+        card.innerHTML = `
+          <div class="lib-card-art">
+            <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
+            ${isUnlocked ? '' : '<div class="lib-card-lock-mask">🔒</div>'}
+          </div>
+          <div class="lib-card-body">
+            <div class="lib-card-name">${msg.name}</div>
+            <div class="lib-card-meta">
+              <span style="color:${cat.color};font-weight:700;">${cat.icon} ${cat.name.split(' ')[0]}</span>
+              <span>${isUnlocked ? '✓ Đã mở' : 'Chưa mở'}</span>
+            </div>
+          </div>
+        `;
+
+        card.addEventListener('click', () => {
+          if (isUnlocked) {
+            currentMessageId = msg.id;
+            reopenTodayRitual();
+          } else {
+            showToast('Lá thư này chưa được khai mở từ vòng quay 🔒');
+          }
+        });
+
+        grid.appendChild(card);
+      });
     }
 
-    function saveTodayJournal() {
-      const note = document.getElementById('journalInput').value.trim();
-      const done = document.getElementById('actionCheckbox').checked;
-      saveMessageNote(getTodayStr(), note, done);
-      showToast('Đã lưu nhật ký của bạn thành công! 💾');
+    // ── HUY HIỆU DANH DỰ (Trong Drawer) ──
+    const BADGE_LIST = [
+      { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu' },
+      { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày streak' },
+      { emoji:'🌸', name:'Hoa Nở',     req: 10, type:'spin',   desc:'10 lần quay' },
+      { emoji:'🌟', name:'Ngôi Sao',   req: 14, type:'streak', desc:'14 ngày streak' },
+      { emoji:'🦋', name:'Bướm Bay',   req: 20, type:'unique', desc:'20 thông điệp' },
+      { emoji:'🌙', name:'Ánh Trăng',  req: 30, type:'spin',   desc:'30 lần quay' },
+      { emoji:'☀️', name:'Mặt Trời',   req: 30, type:'streak', desc:'30 ngày streak' },
+      { emoji:'💎', name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
+    ];
+
+    function renderDrawerBadges() {
+      const grid = document.getElementById('drawerBadgesGrid');
+      if (!grid) return;
+      const history = getHistory();
+      const streak = getStreak();
+      const unique = uniqueMessagesCount();
+
+      grid.innerHTML = '';
+      BADGE_LIST.forEach(b => {
+        let count = 0;
+        if (b.type === 'spin') count = history.length;
+        if (b.type === 'streak') count = streak.count;
+        if (b.type === 'unique') count = unique;
+        const earned = count >= b.req;
+
+        grid.innerHTML += `
+          <div class="badge-tile ${earned ? 'earned' : ''}" title="${b.desc}: ${count}/${b.req}">
+            <span class="badge-emoji">${b.emoji}</span>
+            <div class="badge-label">${b.name}</div>
+          </div>
+        `;
+      });
     }
 
-    async function exportInstagramStory() {
-      if (!currentMsgId) return;
-      const msg = getMessageById(currentMsgId);
+    // ── MUSIC BAR UI SYNC ──
+    function initMusicBarUI() {
+      const toggleBtn = document.getElementById('musicToggleBtn');
+      const titleEl = document.getElementById('musicTrackTitle');
+      const volSlider = document.getElementById('drawerVolSlider');
+
+      if (bgMusic) {
+        if (volSlider) volSlider.value = bgMusic.audio.volume;
+
+        // Bắt sự kiện play/pause từ audio
+        bgMusic.audio.addEventListener('play', () => {
+          if (toggleBtn) toggleBtn.textContent = '⏸';
+          if (titleEl) titleEl.textContent = bgMusic.currentTrackName || 'Lofi Thiền Định';
+        });
+
+        bgMusic.audio.addEventListener('pause', () => {
+          if (toggleBtn) toggleBtn.textContent = '▶';
+        });
+      }
+    }
+
+    function setMusicVol(val) {
+      if (bgMusic) bgMusic.setVolume(parseFloat(val));
+    }
+
+    function toggleSfxEngine() {
+      const muted = sounds.toggleMute();
+      const btn = document.getElementById('sfxStateBtn');
+      if (btn) btn.textContent = muted ? '🔇 Đã tắt' : '🔊 Đang bật';
+      showToast(muted ? 'Đã tắt tiếng chuông & click 🔇' : 'Đã bật hiệu ứng âm thanh 🔊');
+    }
+
+    // ── TẠO & CHIA SẺ STORY INSTAGRAM ──
+    async function exportTodayStory() {
+      if (!currentMessageId) return;
+      const msg = getMessageById(currentMessageId);
       const note = document.getElementById('journalInput')?.value || '';
 
-      showToast('Đang tạo ảnh Story tuyệt đẹp...');
+      showToast('Đang kết xuất ảnh Story 9:16...');
       const dataUrl = await generateStoryCard({
         message: msg,
         userName: currentUser?.name || 'Bạn',
-        dateStr: document.getElementById('todayDate').textContent,
+        dateStr: document.getElementById('todayDateStr').textContent,
         note
       });
 
-      document.getElementById('storyImgPreview').src = dataUrl;
-      const dlBtn = document.getElementById('downloadStoryBtn');
+      document.getElementById('storyRenderPreview').src = dataUrl;
+      const dlBtn = document.getElementById('storyDownloadBtn');
       dlBtn.href = dataUrl;
       dlBtn.download = `thong-diep-${msg.id}-story.png`;
 
@@ -1308,157 +970,74 @@
       document.getElementById('storyModal').classList.remove('show');
     }
 
-    function shareMessageDirect() {
-      if (!currentMsgId) return;
-      const msg = getMessageById(currentMsgId);
-      const text = `🌀 Thông điệp hôm nay của tôi: "${msg.name}" — ${msg.desc}`;
+    function shareDirectLink() {
+      if (!currentMessageId) return;
+      const msg = getMessageById(currentMessageId);
+      const shareText = `🌀 Hôm nay tôi nhận được thông điệp: "${msg.name}" — ${msg.desc}`;
       if (navigator.share) {
-        navigator.share({ title: 'Vòng Quay Thông Điệp', text, url: window.location.href });
+        navigator.share({ title: 'Vòng Quay Thông Điệp', text: shareText, url: window.location.href });
       } else {
-        navigator.clipboard.writeText(text);
-        showToast('Đã copy thông điệp vào bộ nhớ tạm! ✅');
+        navigator.clipboard.writeText(shareText);
+        showToast('Đã sao chép lời nhắn vào bộ nhớ tạm! 📋');
       }
     }
 
-    // ── THƯ VIỆN GRID ──
-    function renderLibraryGrid() {
-      const history = getHistory();
-      const grid = document.getElementById('libGridContainer');
-      if (!grid) return;
-
-      let items = MESSAGES.filter(m => {
-        const matchesCategory = currentLibCategory === 'all' || m.category === currentLibCategory;
-        const matchesSearch = !libSearchQuery ||
-          m.name.toLowerCase().includes(libSearchQuery) ||
-          m.desc.toLowerCase().includes(libSearchQuery);
-        return matchesCategory && matchesSearch;
-      });
-
-      grid.innerHTML = '';
-      items.forEach(msg => {
-        const unlockedRecord = history.find(h => h.messageId === msg.id);
-        const isUnlocked = !!unlockedRecord;
-        const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
-
-        grid.innerHTML += `
-          <div class="lib-card"
-               style="${isUnlocked ? '' : 'filter:grayscale(0.85);opacity:0.65;'}"
-               onclick="${isUnlocked ? `openLibDetail(${msg.id})` : `showToast('Lá thư này chưa được khai mở 🔒')`}">
-            <div class="lib-card-img-box">
-              <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
-              ${isUnlocked ? '' : '<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);display:flex;align-items:center;justify-content:center;font-size:1.8rem;">🔒</div>'}
-            </div>
-            <div style="padding:10px 12px;">
-              <div style="font-size:0.82rem;font-weight:700;color:var(--brown-dark);margin-bottom:4px;">${msg.name}</div>
-              <div style="display:flex;justify-content:space-between;font-size:0.68rem;color:var(--brown-light);font-weight:600;">
-                <span style="color:${cat.color};font-weight:700;">${cat.icon} ${cat.name.split(' ')[0]}</span>
-                <span>${isUnlocked ? '✓ Đã mở' : 'Chưa mở'}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      });
+    // ── XUẤT SAO LƯU DỮ LIỆU & ĐĂNG XUẤT ──
+    function exportDataJson() {
+      const backupData = {
+        user: currentUser,
+        history: getHistory(),
+        streak: getStreak(),
+        avatarEmoji: currentAvatarEmoji,
+        exportedAt: new Date().toISOString()
+      };
+      const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `vong-quay-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      showToast('Đã tải tệp JSON sao lưu về máy! 💾');
     }
 
-    function filterLibCategory(catId, el) {
-      document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
-      el.classList.add('active');
-      currentLibCategory = catId;
-      renderLibraryGrid();
-    }
-
-    function handleLibSearch() {
-      libSearchQuery = document.getElementById('libSearchInput').value.trim().toLowerCase();
-      renderLibraryGrid();
-    }
-
-    function openLibDetail(msgId) {
-      currentMsgId = msgId;
-      showLetterModal();
-    }
-
-    // ── CÀI ĐẶT & HUY HIỆU ──
-    const BADGES = [
-      { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu tiên' },
-      { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày liên tiếp' },
-      { emoji:'🌸', name:'Hoa Nở',     req: 10, type:'spin',   desc:'10 lần quay' },
-      { emoji:'🌟', name:'Ngôi Sao',   req: 14, type:'streak', desc:'14 ngày liên tiếp' },
-      { emoji:'🦋', name:'Bướm Bay',   req: 20, type:'unique', desc:'20 thông điệp' },
-      { emoji:'🌙', name:'Ánh Trăng',  req: 30, type:'spin',   desc:'30 lần quay' },
-      { emoji:'☀️', name:'Mặt Trời',   req: 30, type:'streak', desc:'30 ngày liên tiếp' },
-      { emoji:'💎', name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
-    ];
-
-    function renderSettingsTab() {
-      const h = getHistory();
-      const s = getStreak();
-      const u = uniqueMessagesCount();
-
-      const grid = document.getElementById('setBadgesGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
-      BADGES.forEach(b => {
-        let val = 0;
-        if (b.type === 'spin') val = h.length;
-        if (b.type === 'streak') val = s.count;
-        if (b.type === 'unique') val = u;
-        const earned = val >= b.req;
-
-        grid.innerHTML += `
-          <div class="badge-item ${earned ? 'earned' : ''}" title="${b.desc}: ${val}/${b.req}">
-            <div style="font-size:1.5rem;margin-bottom:4px;">${b.emoji}</div>
-            <div style="font-size:0.65rem;font-weight:700;">${b.name}</div>
-          </div>
-        `;
-      });
-    }
-
-    async function confirmLogout() {
+    async function doUserLogout() {
       if (confirm('Bạn có chắc muốn đăng xuất?')) {
         await logoutUser();
         location.href = 'login.html';
       }
     }
 
-    function exportData() {
-      const data = { user: currentUser, history: getHistory(), streak: getStreak(), exported: new Date().toISOString() };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'vong-quay-thong-diep-backup.json';
-      a.click();
-      showToast('Đã tải tệp sao lưu dữ liệu về máy! 💾');
-    }
-
-    function launchConfetti() {
+    // ── HIỆU ỨNG CONFETTI (Tối ưu nhẹ nhàng) ──
+    function launchConfettiEffect() {
       const c = document.getElementById('confettiCanvas');
       c.width = window.innerWidth;
       c.height = window.innerHeight;
       const cCtx = c.getContext('2d');
-      const pieces = [];
-      const colors = ['#E9C46A', '#E07A5F', '#F4A47A', '#81B29A', '#9B89B3', '#FFFFFF'];
-      for (let i = 0; i < 60; i++) {
-        pieces.push({
+      const particles = [];
+      const colors = ['#D4A84E', '#D4714A', '#F4A47A', '#5B9279', '#FFFFFF'];
+
+      for (let i = 0; i < 35; i++) {
+        particles.push({
           x: c.width / 2,
           y: c.height / 2,
-          vx: (Math.random() - 0.5) * 16,
-          vy: (Math.random() - 0.8) * 18,
-          size: 6 + Math.random() * 8,
+          vx: (Math.random() - 0.5) * 14,
+          vy: (Math.random() - 0.75) * 16,
+          size: 6 + Math.random() * 6,
           color: colors[Math.floor(Math.random() * colors.length)],
           rot: Math.random() * 360,
-          vr: (Math.random() - 0.5) * 12,
+          vr: (Math.random() - 0.5) * 10,
           alpha: 1
         });
       }
-      function render() {
+
+      function loop() {
         cCtx.clearRect(0, 0, c.width, c.height);
         let alive = false;
-        pieces.forEach(p => {
+        particles.forEach(p => {
           p.x += p.vx;
           p.y += p.vy;
-          p.vy += 0.4;
+          p.vy += 0.35;
           p.rot += p.vr;
-          p.alpha -= 0.012;
+          p.alpha -= 0.015;
           if (p.alpha > 0) {
             alive = true;
             cCtx.save();
@@ -1470,13 +1049,14 @@
             cCtx.restore();
           }
         });
-        if (alive) requestAnimationFrame(render);
+        if (alive) requestAnimationFrame(loop);
         else cCtx.clearRect(0, 0, c.width, c.height);
       }
-      requestAnimationFrame(render);
+      requestAnimationFrame(loop);
     }
 
-    initPage();
+    // Khởi chạy khi tài liệu tải xong
+    document.addEventListener('DOMContentLoaded', initApp);
   </script>
 </body>
 </html>
