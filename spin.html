@@ -13,6 +13,11 @@
     <canvas id="bgPathsCanvas" class="bg-paths-canvas"></canvas>
   </div>
 
+  <!-- Rain Glass WebGL Background Canvas -->
+  <div class="rainglass-wrapper" id="rainGlassWrap" style="display:none;" aria-hidden="true">
+    <canvas id="rainGlassCanvas" class="rainglass-canvas"></canvas>
+  </div>
+
   <!-- ======================================================================
        1. TOP BAR (Fixed, Compact, Glassmorphic)
        ====================================================================== -->
@@ -256,6 +261,22 @@
           <div class="badges-strip-grid" id="drawerBadgesGrid"></div>
         </div>
 
+        <!-- Section: Tùy Chỉnh Hình Nền (Backgrounds) -->
+        <div class="sheet-section">
+          <div class="sheet-section-title">🎨 Tùy Chọn Hình Nền</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <button class="btn btn-secondary btn-sm" id="bgChoicePaths" onclick="switchActiveBg('paths')" style="border-width:2px;border-color:var(--accent);">
+              〰️ Dải Lụa Vũ Trụ
+            </button>
+            <button class="btn btn-secondary btn-sm" id="bgChoiceRain" onclick="switchActiveBg('rainglass')" style="border-width:1.5px;">
+              🌧️ Mưa Kính Mờ (Wipe)
+            </button>
+          </div>
+          <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;">
+            ✦ Với nền <strong>Mưa Kính Mờ</strong>, bạn có thể vuốt ngón tay hoặc giữ chuột để lau vết sương mờ trên cửa sổ!
+          </p>
+        </div>
+
         <!-- Section: Âm Thanh & SFX -->
         <div class="sheet-section">
           <div class="sheet-section-title">🎵 Cài Đặt Âm Thanh</div>
@@ -399,6 +420,7 @@
   <script src="js/story-generator.js"></script>
   <script src="js/bg-music.js"></script>
   <script src="js/background-paths.js"></script>
+  <script src="js/rainglass-background.js"></script>
 
   <script>
     // ── BIẾN TOÀN CỤC & TRẠNG THÁI ──
@@ -412,14 +434,84 @@
     const AVATAR_EMOJIS = ['🌟', '🕊️', '🧘', '🌸', '🌊', '☀️', '🌙', '🍃', '🦋', '🔮', '✨', '💎'];
     let currentAvatarEmoji = localStorage.getItem('vqtd_avatar_emoji') || '🌟';
 
-    // ── 1. KOKONUT BACKGROUND PATHS RIBBON ──
-    window.initBackgroundPaths('bgPathsCanvas', {
-      count: 42,
-      spread: 0.95,
-      angle: -8,
-      speed: 0.85,
-      interactive: true
-    });
+    // ── TÙY BIẾN HÌNH NỀN (BACKGROUND CHANGER) ──
+    let pathsInstance = null;
+    let rainGlassInstance = null;
+    let currentBgChoice = localStorage.getItem('vqtd_bg_choice') || 'paths';
+
+    function initBackgroundEngine() {
+      // 1. Khởi tạo Background Paths
+      pathsInstance = window.initBackgroundPaths('bgPathsCanvas', {
+        count: 42,
+        spread: 0.95,
+        angle: -8,
+        speed: 0.85,
+        interactive: true
+      });
+
+      // 2. Khởi tạo Rain Glass (nếu đã chọn)
+      if (currentBgChoice === 'rainglass') {
+        applyBgChoice('rainglass');
+      } else {
+        applyBgChoice('paths');
+      }
+    }
+
+    function switchActiveBg(choice) {
+      currentBgChoice = choice;
+      localStorage.setItem('vqtd_bg_choice', choice);
+      applyBgChoice(choice);
+      showToast(choice === 'rainglass' ? 'Đã đổi nền Mưa Kính Mờ 🌧️' : 'Đã đổi nền Dải Lụa Vũ Trụ 〰️');
+    }
+
+    function applyBgChoice(choice) {
+      const pathsWrap = document.getElementById('bgPathsWrap');
+      const rainWrap = document.getElementById('rainGlassWrap');
+      const btnPaths = document.getElementById('bgChoicePaths');
+      const btnRain = document.getElementById('bgChoiceRain');
+
+      if (choice === 'rainglass') {
+        if (pathsWrap) pathsWrap.style.display = 'none';
+        if (rainWrap) {
+          rainWrap.style.display = 'block';
+          rainWrap.style.pointerEvents = 'auto'; // Cho phép lau kính
+        }
+        if (!rainGlassInstance && window.initRainGlassBackground) {
+          rainGlassInstance = window.initRainGlassBackground('rainGlassCanvas', {
+            rain: 0.65,
+            interactive: true
+          });
+        }
+        if (btnRain) {
+          btnRain.style.borderColor = 'var(--accent)';
+          btnRain.style.borderWidth = '2px';
+          btnRain.style.fontWeight = '800';
+        }
+        if (btnPaths) {
+          btnPaths.style.borderColor = 'var(--border)';
+          btnPaths.style.borderWidth = '1.5px';
+          btnPaths.style.fontWeight = '600';
+        }
+      } else {
+        if (rainWrap) {
+          rainWrap.style.display = 'none';
+          rainWrap.style.pointerEvents = 'none';
+        }
+        if (pathsWrap) pathsWrap.style.display = 'block';
+        if (btnPaths) {
+          btnPaths.style.borderColor = 'var(--accent)';
+          btnPaths.style.borderWidth = '2px';
+          btnPaths.style.fontWeight = '800';
+        }
+        if (btnRain) {
+          btnRain.style.borderColor = 'var(--border)';
+          btnRain.style.borderWidth = '1.5px';
+          btnRain.style.fontWeight = '600';
+        }
+      }
+    }
+
+    initBackgroundEngine();
 
     // ── 2. TOAST NOTIFICATION ──
     function showToast(text) {
