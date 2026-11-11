@@ -461,10 +461,20 @@
         <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()"><span class="svg-icon-sm" data-svg="save"></span> Lưu nhật ký này</button>
       </div>
 
+      <!-- Banner Đánh Giá Fanpage Sunny trực tiếp trong UI Thông Điệp -->
+      <div class="review-inline-banner" onclick="openSunnyReviewPromptModal()">
+        <div class="review-inline-stars">⭐⭐⭐⭐⭐</div>
+        <div class="review-inline-text">
+          <div class="review-inline-title">Bạn yêu thích thông điệp hôm nay?</div>
+          <div class="review-inline-sub">Gửi tặng Sunny một lượt Đánh giá 5 sao trên Fanpage Facebook nhé!</div>
+        </div>
+        <button class="btn btn-gold btn-xs"><span class="svg-icon-xs" data-svg="star"></span> Review</button>
+      </div>
+
       <div class="btn-group-tight" style="margin-top:var(--sp-md);">
         <button class="btn btn-gold btn-sm" onclick="openCustomShareModal(currentMessageId)"><span class="svg-icon-sm" data-svg="share2"></span> Chia sẻ ảnh</button>
         <button class="btn btn-primary btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
-        <button class="btn btn-secondary btn-sm" onclick="openSunnyReview()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
+        <button class="btn btn-secondary btn-sm" onclick="openSunnyReviewPromptModal()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
       </div>
     </div>
   </div>
@@ -628,7 +638,45 @@
 
       <div class="share-footer-links">
         <button class="share-link-pill" onclick="copyShareQuoteText()"><span class="svg-icon-sm" data-svg="fileText"></span> Sao chép lời trích dẫn</button>
-        <button class="share-link-pill" onclick="openSunnyReview()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Fanpage</button>
+        <button class="share-link-pill" onclick="openSunnyReviewPromptModal()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Fanpage</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       11. SUNNY FANPAGE REVIEW PROMPT MODAL (Jump UI Đánh giá sau khi thoát thông điệp)
+       ====================================================================== -->
+  <div class="modal-layer" id="sunnyReviewPromptModal" onclick="closeSunnyReviewPrompt(event)">
+    <div class="modal-card review-prompt-card" onclick="event.stopPropagation()">
+      <button class="modal-close-round" onclick="closeSunnyReviewPrompt()" aria-label="Đóng"><span class="svg-icon-sm" data-svg="close"></span></button>
+
+      <div class="review-prompt-glow"></div>
+      
+      <div class="review-prompt-header">
+        <div class="review-prompt-avatar">
+          <img src="images/01.png" alt="Sunny">
+          <span class="review-verified-badge"><span class="svg-icon-xs" data-svg="check"></span></span>
+        </div>
+        <div class="review-stars-row" id="interactiveReviewStars" title="Đánh giá 5 sao cho Sunny">
+          <span class="review-star" onclick="rateSunny(1)">⭐</span>
+          <span class="review-star" onclick="rateSunny(2)">⭐</span>
+          <span class="review-star" onclick="rateSunny(3)">⭐</span>
+          <span class="review-star" onclick="rateSunny(4)">⭐</span>
+          <span class="review-star active" onclick="rateSunny(5)">⭐</span>
+        </div>
+        <h3 class="review-prompt-title">Bạn cảm thấy thông điệp hôm nay thế nào?</h3>
+        <p class="review-prompt-desc">
+          Nếu thông điệp mang lại cho bạn chút bình an, niềm tin và năng lượng tích cực, hãy dành tặng Sunny <strong>1 đánh giá / review</strong> trên Fanpage Facebook nhé! Mỗi lời tri ân của bạn là nguồn động lực vô cùng lớn.
+        </p>
+      </div>
+
+      <div class="review-prompt-actions">
+        <button class="btn btn-gold btn-lg" onclick="confirmOpenSunnyReview()" style="width:100%;font-weight:800;box-shadow:0 8px 24px rgba(221,167,58,0.45);display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span class="svg-icon-sm" data-svg="star"></span> Đánh Giá Ngay Trên Fanpage Facebook
+        </button>
+        <button class="btn btn-secondary btn-sm" onclick="closeSunnyReviewPrompt()" style="width:100%;margin-top:10px;">
+          Để sau nhé
+        </button>
       </div>
     </div>
   </div>
@@ -1442,15 +1490,29 @@
       if (navigator.vibrate) navigator.vibrate(15);
     }
 
+    let hasPromptedReviewSession = false;
+
     function closeRitualModal() {
       const modal = document.getElementById('ritualModal');
+      const onClosed = () => {
+        checkTodaySpinStatus();
+        triggerReviewPromptAfterSpin();
+      };
       if (window.AppAnimations && typeof AppAnimations.closeModal === 'function') {
-        AppAnimations.closeModal(modal, '.modal-card', () => checkTodaySpinStatus());
+        AppAnimations.closeModal(modal, '.modal-card', onClosed);
       } else {
         modal.classList.remove('show');
         document.body.style.overflow = '';
-        checkTodaySpinStatus();
+        onClosed();
       }
+    }
+
+    function triggerReviewPromptAfterSpin() {
+      if (hasPromptedReviewSession) return;
+      hasPromptedReviewSession = true;
+      setTimeout(() => {
+        openSunnyReviewPromptModal();
+      }, 350);
     }
 
     function reopenTodayRitual() {
@@ -1728,6 +1790,55 @@
     // ── 17B. ĐÁNH GIÁ FANPAGE SUNNY ──
     function openSunnyReview() {
       window.open('https://www.facebook.com/chuyengiatamlysunny/reviews', '_blank', 'noopener,noreferrer');
+    }
+
+    function openSunnyReviewPromptModal() {
+      const modal = document.getElementById('sunnyReviewPromptModal');
+      if (!modal) {
+        openSunnyReview();
+        return;
+      }
+      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
+        AppAnimations.openModal(modal, '.review-prompt-card');
+      } else {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+      Icons.renderAll();
+    }
+
+    function closeSunnyReviewPrompt(e) {
+      if (e && e.target !== document.getElementById('sunnyReviewPromptModal') && !e.target.closest('.modal-close-round') && !e.target.closest('.btn-secondary')) return;
+      const modal = document.getElementById('sunnyReviewPromptModal');
+      if (!modal) return;
+      if (window.AppAnimations && typeof AppAnimations.closeModal === 'function') {
+        AppAnimations.closeModal(modal, '.review-prompt-card');
+      } else {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function rateSunny(stars) {
+      const row = document.getElementById('interactiveReviewStars');
+      if (row) {
+        const starEls = row.querySelectorAll('.review-star');
+        starEls.forEach((s, idx) => {
+          if (idx < stars) s.classList.add('active');
+          else s.classList.remove('active');
+        });
+      }
+      sounds.playClick();
+      if (window.gsap && row) {
+        gsap.fromTo(row, { scale: 1.15 }, { scale: 1, duration: 0.3, ease: 'back.out(2)' });
+      }
+    }
+
+    function confirmOpenSunnyReview() {
+      sounds.playClick();
+      openSunnyReview();
+      closeSunnyReviewPrompt();
+      showToast('Sunny xin chân thành cảm ơn lời tri ân quý giá của bạn! 💖');
     }
 
     // ── 17C. QUẢN LÝ QUYỀN ADMIN & HÒM THƯ TÂM SỰ CHO SUNNY ──

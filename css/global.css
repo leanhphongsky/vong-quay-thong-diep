@@ -2835,3 +2835,147 @@ p {
 .share-link-pill:hover {
   color: var(--accent);
 }
+
+/* ── E. JUMP UI ĐÁNH GIÁ SUNNY FANPAGE ── */
+.review-prompt-card {
+  max-width: 460px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 1.5px solid var(--accent-gold);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4), 0 0 40px rgba(221, 167, 58, 0.25);
+}
+
+.review-prompt-glow {
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 260px;
+  height: 160px;
+  background: radial-gradient(ellipse, rgba(221, 167, 58, 0.35) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.review-prompt-header {
+  padding: 32px 24px 16px;
+  position: relative;
+  z-index: 2;
+}
+
+.review-prompt-avatar {
+  position: relative;
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 12px;
+}
+
+.review-prompt-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2.5px solid var(--accent-gold);
+  box-shadow: 0 6px 20px rgba(221, 167, 58, 0.35);
+}
+
+.review-verified-badge {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #1877F2;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg-card);
+}
+
+.review-stars-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 1.6rem;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.review-star {
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.2s ease;
+  user-select: none;
+}
+
+.review-star:hover, .review-star.active {
+  transform: scale(1.24);
+  filter: drop-shadow(0 2px 8px rgba(251, 191, 36, 0.6));
+}
+
+.review-prompt-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 10px;
+  line-height: 1.35;
+}
+
+.review-prompt-desc {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+.review-prompt-actions {
+  padding: 10px 24px 26px;
+  position: relative;
+  z-index: 2;
+}
+
+/* Review Inline Banner inside Letter Reveal Card */
+.review-inline-banner {
+  margin: var(--sp-md) 0;
+  padding: 14px 16px;
+  background: linear-gradient(135deg, rgba(221, 167, 58, 0.12) 0%, rgba(224, 109, 68, 0.08) 100%);
+  border: 1.5px solid rgba(221, 167, 58, 0.35);
+  border-radius: var(--r-md);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  text-align: left;
+}
+
+.review-inline-banner:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent-gold);
+  box-shadow: 0 6px 20px rgba(221, 167, 58, 0.25);
+}
+
+.review-inline-stars {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.review-inline-text {
+  flex: 1;
+}
+
+.review-inline-title {
+  font-size: 0.88rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  margin-bottom: 2px;
+}
+
+.review-inline-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
