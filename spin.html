@@ -427,15 +427,16 @@
       <div class="letter-modal-layout">
         <!-- Cột 1: Tranh Thẻ Bài Gần Như Full Hình -->
         <div class="letter-art-col">
-          <div class="card-flip-stage holo-tilt" id="flipStage" onclick="toggleCardFlip()" title="Chạm để lật mặt thẻ">
+          <div class="card-flip-stage holo-tilt" id="flipStage" onclick="onCardStageClick(event)" title="Chạm để tương tác (Lật thẻ / Phóng to ảnh)">
             <div class="card-flip-body">
               <div class="card-flip-face card-flip-front">
                 <div style="margin-bottom:10px;"><span data-svg="astrolabe" class="svg-icon-xl" style="color:var(--accent-gold);"></span></div>
                 <div style="font-family:'Plus Jakarta Sans','Be Vietnam Pro',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
                 <p style="font-size:0.8rem;opacity:0.8;">Chạm để lật mặt tranh thông điệp</p>
               </div>
-              <div class="card-flip-face card-flip-back">
+              <div class="card-flip-face card-flip-back" title="Chạm vào hình để xem to trọn vẹn (không bị cắt)">
                 <img id="letterCardImg" src="" alt="Thông điệp">
+                <div class="card-zoom-badge"><span class="svg-icon-xs" data-svg="search"></span> Phóng to ảnh</div>
                 <div class="lib-card-glare"></div>
               </div>
             </div>
@@ -499,6 +500,21 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       6B. IMAGE LIGHTBOX MODAL (Xem Ảnh Phóng To 100% Không Bị Crops)
+       ====================================================================== -->
+  <div class="image-lightbox-layer" id="imageLightboxModal" onclick="closeImageLightbox(event)" title="Chạm ra ngoài để đóng">
+    <button class="lightbox-close-btn" onclick="closeImageLightbox(event)" aria-label="Đóng xem to">
+      <span class="svg-icon-md" data-svg="close"></span>
+    </button>
+    <div class="lightbox-container" onclick="event.stopPropagation()">
+      <img id="lightboxImg" class="lightbox-img" src="" alt="Thông điệp phóng to không bị cắt">
+      <div class="lightbox-caption">
+        <span class="svg-icon-xs" data-svg="sparkles"></span> Chạm ra ngoài hoặc bấm ✕ để quay lại
       </div>
     </div>
   </div>
@@ -1552,6 +1568,53 @@
       document.getElementById('flipStage').classList.toggle('flipped');
       if (navigator.vibrate) navigator.vibrate(15);
     }
+
+    function onCardStageClick(event) {
+      const flipStage = document.getElementById('flipStage');
+      const isFlipped = flipStage?.classList.contains('flipped');
+      if (isFlipped) {
+        // Khi thẻ đang ở mặt tranh hình ảnh: click vào hình -> Phóng to toàn màn hình không bị crops!
+        const img = document.getElementById('letterCardImg');
+        if (img && img.src) {
+          openImageLightbox(img.src);
+        }
+      } else {
+        // Khi thẻ đang ở mặt trước ("VŨ TRỤ DẪN LỐI"): click để lật mặt tranh
+        toggleCardFlip();
+      }
+    }
+
+    function openImageLightbox(src) {
+      if (!src) return;
+      const modal = document.getElementById('imageLightboxModal');
+      const img = document.getElementById('lightboxImg');
+      if (!modal || !img) return;
+      img.src = src;
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      if (navigator.vibrate) navigator.vibrate(20);
+    }
+
+    function closeImageLightbox(event) {
+      if (event) event.stopPropagation();
+      const modal = document.getElementById('imageLightboxModal');
+      if (modal) {
+        modal.classList.remove('show');
+        const ritualModal = document.getElementById('ritualModal');
+        if (!ritualModal || !ritualModal.classList.contains('show')) {
+          document.body.style.overflow = '';
+        }
+      }
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const lightbox = document.getElementById('imageLightboxModal');
+        if (lightbox && lightbox.classList.contains('show')) {
+          closeImageLightbox();
+        }
+      }
+    });
 
     let hasPromptedReviewSession = false;
 

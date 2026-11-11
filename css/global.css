@@ -1449,7 +1449,7 @@ p {
 
 .lib-card-art {
   width: 100%;
-  aspect-ratio: 3/4.2;
+  aspect-ratio: 2133 / 3764;
   position: relative;
   overflow: hidden;
   background: var(--bg-subtle);
@@ -1458,7 +1458,7 @@ p {
 .lib-card-art img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
   transition: transform 0.3s ease;
 }
@@ -2094,10 +2094,10 @@ p {
 .letter-art-col .card-flip-stage {
   perspective: 1400px;
   width: 100%;
-  max-width: 420px;
+  max-width: 380px;
   height: calc(84vh - 100px);
-  max-height: 580px;
-  aspect-ratio: 3/4.2;
+  max-height: 600px;
+  aspect-ratio: 2133 / 3764;
   margin: 0 auto;
   cursor: pointer;
   display: flex;
@@ -2110,6 +2110,7 @@ p {
   width: 100%;
   height: 100%;
   max-height: 100%;
+  aspect-ratio: 2133 / 3764;
   transform-style: preserve-3d;
   transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
   border-radius: var(--r-lg);
@@ -2145,14 +2146,48 @@ p {
 
 .card-flip-back {
   transform: rotateY(180deg);
-  background: var(--bg-card);
+  background: #0E1017;
+  cursor: zoom-in;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
 }
 
 .card-flip-back img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   display: block;
+}
+
+.card-zoom-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(14, 16, 24, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(221, 167, 58, 0.55);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #F6D365;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  transition: all 0.2s ease;
+  z-index: 6;
+}
+
+.card-flip-back:hover .card-zoom-badge {
+  background: rgba(14, 16, 24, 0.94);
+  border-color: var(--accent-gold);
+  transform: scale(1.05);
 }
 
 /* Bottom Action Dock under the card */
@@ -2279,7 +2314,8 @@ p {
   .letter-art-col .card-flip-stage {
     height: calc(86vh - 80px);
     max-height: 600px;
-    max-width: 370px;
+    max-width: 340px;
+    aspect-ratio: 2133 / 3764;
   }
 
   /* Companion UI on mobile behaves as a sliding companion drawer from the right */
@@ -2304,6 +2340,94 @@ p {
     opacity: 1;
     pointer-events: auto;
   }
+}
+
+/* Lightbox Phóng To Ảnh To Rõ Nguyên Bản (100% Không Bị Crops) */
+.image-lightbox-layer {
+  position: fixed;
+  inset: 0;
+  background: rgba(7, 9, 15, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: zoom-out;
+}
+
+.image-lightbox-layer.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-close-btn {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1.5px solid var(--accent-gold);
+  background: rgba(23, 26, 36, 0.88);
+  color: #F6D365;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100001;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.lightbox-close-btn:hover {
+  background: var(--accent-gold);
+  color: #0B0D14;
+  transform: scale(1.1) rotate(90deg);
+}
+
+.lightbox-container {
+  position: relative;
+  max-width: 96vw;
+  max-height: 96vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+}
+
+.lightbox-img {
+  max-height: 90vh;
+  max-width: 92vw;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: var(--r-md);
+  border: 1.5px solid rgba(221, 167, 58, 0.55);
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.8), 0 0 50px rgba(221, 167, 58, 0.3);
+  transform: scale(0.92);
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: block;
+}
+
+.image-lightbox-layer.show .lightbox-img {
+  transform: scale(1);
+}
+
+.lightbox-caption {
+  margin-top: 12px;
+  font-size: 0.82rem;
+  color: rgba(255, 255, 255, 0.75);
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
 }
 
 .letter-heading {
