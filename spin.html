@@ -27,6 +27,12 @@
       <span>THÔNG ĐIỆP</span>
     </a>
     <div class="top-actions">
+      <!-- Admin Inbox Button (Only visible to Sunny / Admin) -->
+      <button class="admin-top-btn" id="topAdminInboxBtn" onclick="openAdminInboxModal()" style="display:none;" title="Xem hòm thư tâm sự (Dành riêng cho Sunny)">
+        <span class="svg-icon-sm" data-svg="crown"></span>
+        <span class="admin-top-label">Hòm Thư</span>
+        <span class="admin-unread-pill" id="adminUnreadBadge">0</span>
+      </button>
       <!-- Dark/Light Mode Switcher -->
       <button class="icon-btn" id="themeToggleBtn" aria-label="Đổi giao diện Sáng/Tối" title="Chuyển chế độ Sáng / Tối">
         <span id="themeIcon" class="svg-icon-md" data-svg="sun"></span>
@@ -116,7 +122,8 @@
 
           <div class="btn-group-tight">
             <button class="btn btn-gold btn-sm" onclick="reopenTodayRitual()"><span class="svg-icon-sm" data-svg="fileText"></span> Xem lá thư</button>
-            <button class="btn btn-primary btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
+            <button class="btn btn-primary btn-sm" onclick="openCustomShareModal(currentMessageId)"><span class="svg-icon-sm" data-svg="share2"></span> Chia sẻ ảnh</button>
+            <button class="btn btn-secondary btn-sm" onclick="openSunnyReview()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
             <button class="btn btn-secondary btn-sm" onclick="switchTab('library')"><span class="svg-icon-sm" data-svg="bookOpen"></span> Thư viện</button>
           </div>
         </div>
@@ -212,7 +219,7 @@
     </div>
     <div class="music-bar-controls">
       <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span class="svg-icon-sm" data-svg="skipBack"></span></button>
-      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span class="svg-icon-xs" data-svg="play"></span></button>
+      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span class="svg-icon-sm" data-svg="play"></span></button>
       <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span class="svg-icon-sm" data-svg="skipForward"></span></button>
       <button class="music-min-btn" id="musicMinBtn" onclick="toggleMusicMin()" title="Thu nhỏ trình phát nhạc" aria-label="Thu nhỏ trình phát nhạc"><span class="svg-icon-xs" data-svg="chevronDown"></span></button>
     </div>
@@ -312,6 +319,50 @@
           </div>
         </div>
 
+        <!-- Section: Tâm Sự Cùng Sunny -->
+        <div class="sheet-section">
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="heart" style="color:var(--accent);"></span> Gửi Tâm Sự Đến Sunny</div>
+          <p style="font-size:0.84rem;color:var(--text-body);margin-bottom:12px;line-height:1.55;">
+            Có điều gì đang trĩu nặng hoặc cần một người lắng nghe? Hãy viết cho Sunny, mọi chia sẻ đều được nâng niu và thấu cảm trọn vẹn.
+          </p>
+          <button class="btn btn-gold btn-sm" onclick="openConfessionModal()" style="width:100%;">
+            <span class="svg-icon-sm" data-svg="mail"></span> Viết Tâm Sự Cho Sunny
+          </button>
+        </div>
+
+        <!-- Section: Đánh Giá Fanpage Sunny -->
+        <div class="sheet-section">
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh Giá Fanpage Sunny</div>
+          <div class="review-sunny-box">
+            <div class="review-stars-strip">
+              <span class="svg-icon-sm" data-svg="star"></span>
+              <span class="svg-icon-sm" data-svg="star"></span>
+              <span class="svg-icon-sm" data-svg="star"></span>
+              <span class="svg-icon-sm" data-svg="star"></span>
+              <span class="svg-icon-sm" data-svg="star"></span>
+            </div>
+            <p style="font-size:0.83rem;color:var(--text-body);margin-bottom:12px;line-height:1.5;">
+              Bạn thấy trạm sạc tâm hồn này hữu ích? Hãy dành tặng Sunny một đánh giá và lời tri ân trên Fanpage Facebook nhé!
+            </p>
+            <a class="btn-facebook" href="https://www.facebook.com/chuyengiatamlysunny/reviews" target="_blank" rel="noopener noreferrer">
+              <span class="svg-icon-sm" data-svg="facebook"></span>
+              <span>Đánh Giá Trên Fanpage Sunny</span>
+              <span class="svg-icon-xs" data-svg="externalLink"></span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Section: Quản Trị Viên (Chỉ hiển thị cho Sunny / Admin) -->
+        <div class="sheet-section" id="drawerAdminSection" style="display:none;background:rgba(221,167,58,0.08);border:1.5px solid rgba(221,167,58,0.3);border-radius:var(--r-md);padding:14px;">
+          <div class="sheet-section-title" style="color:var(--accent-gold);"><span class="svg-icon-sm" data-svg="crown"></span> Quản Trị Viên (Sunny)</div>
+          <p style="font-size:0.82rem;color:var(--text-body);margin-bottom:10px;">
+            Bạn đang đăng nhập với tư cách <strong>Chủ Trang (Sunny)</strong>. Nhấn bên dưới để duyệt các lời tâm sự gửi về.
+          </p>
+          <button class="btn btn-gold btn-sm" onclick="openAdminInboxModal()" style="width:100%;">
+            <span class="svg-icon-sm" data-svg="crown"></span> Mở Hòm Thư Tâm Sự (<span id="drawerUnreadCount">0</span> mới)
+          </button>
+        </div>
+
         <!-- Section: Triết Lý & Về Dự Án -->
         <div class="sheet-section">
           <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="bookOpen"></span> Về Dự Án</div>
@@ -402,8 +453,9 @@
       </div>
 
       <div class="btn-group-tight" style="margin-top:var(--sp-md);">
-        <button class="btn btn-gold btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
-        <button class="btn btn-secondary btn-sm" onclick="shareDirectLink()"><span class="svg-icon-sm" data-svg="share2"></span> Chia sẻ</button>
+        <button class="btn btn-gold btn-sm" onclick="openCustomShareModal(currentMessageId)"><span class="svg-icon-sm" data-svg="share2"></span> Chia sẻ ảnh</button>
+        <button class="btn btn-primary btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
+        <button class="btn btn-secondary btn-sm" onclick="openSunnyReview()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
       </div>
     </div>
   </div>
@@ -416,6 +468,159 @@
     <div class="btn-group-tight">
       <a id="storyDownloadBtn" class="btn btn-gold" download="thong-diep-story.png"><span class="svg-icon-sm" data-svg="download"></span> Tải Ảnh Về Máy</a>
       <button class="btn btn-secondary" onclick="closeStoryModal()"><span class="svg-icon-sm" data-svg="close"></span> Đóng</button>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       8. HÒM THƯ TÂM SỰ ĐẾN SUNNY (Confession Modal)
+       ====================================================================== -->
+  <div class="modal-layer" id="confessionModal" onclick="closeConfessionModal(event)">
+    <div class="modal-card confession-card" onclick="event.stopPropagation()">
+      <button class="modal-close-round" onclick="closeConfessionModal()" aria-label="Đóng"><span class="svg-icon-sm" data-svg="close"></span></button>
+      
+      <div class="confession-header">
+        <div class="confession-avatar-wrap">
+          <span class="svg-icon-lg" data-svg="heart"></span>
+        </div>
+        <h3 class="confession-title">Gửi Tâm Sự Đến Sunny</h3>
+        <p class="confession-subtitle">
+          Sunny luôn ở đây để lắng nghe. Mọi chia sẻ của bạn đều được đón nhận với sự thấu cảm và giữ kín tuyệt đối.
+        </p>
+      </div>
+
+      <div class="confession-body">
+        <div class="form-group">
+          <label class="form-label">Tên hoặc biệt danh của bạn</label>
+          <input type="text" id="cfSenderName" class="form-control" placeholder="Ví dụ: Lữ Khách Bình An">
+          <label class="checkbox-label" style="margin-top:6px;display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--text-muted);cursor:pointer;">
+            <input type="checkbox" id="cfIsAnonymous" onchange="toggleAnonymousCheckbox()">
+            <span>Gửi ẩn danh hoàn toàn (Không để lại danh tính)</span>
+          </label>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email hoặc SĐT nhận lời hồi âm (Không bắt buộc)</label>
+          <input type="text" id="cfSenderEmail" class="form-control" placeholder="email@example.com hoặc Zalo/SĐT">
+          <span style="font-size:0.72rem;color:var(--text-muted);display:block;margin-top:4px;">Sunny cam kết giữ kín 100% thông tin liên hệ của bạn.</span>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Chủ đề tâm sự</label>
+          <select id="cfCategory" class="form-control">
+            <option value="Bình an nội tâm">Bình an nội tâm & Cảm xúc</option>
+            <option value="Chuyện tình cảm">Chuyện tình cảm & Các mối quan hệ</option>
+            <option value="Công việc & Định hướng">Công việc & Mục tiêu cuộc sống</option>
+            <option value="Gia đình & Áp lực">Gia đình & Áp lực đời sống</option>
+            <option value="Tri ân & Lời nhắn">Tri ân & Gửi lời nhắn đến Sunny</option>
+            <option value="Khác">Tâm sự khác</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Những điều bạn muốn trút bỏ hoặc sẻ chia...</label>
+          <textarea id="cfContent" class="form-control confession-textarea" placeholder="Hãy viết ra tất cả những điều bạn đang nghĩ... Đừng ngần ngại, trút bỏ bớt những nặng lòng để tâm hồn nhẹ nhàng hơn nhé."></textarea>
+        </div>
+
+        <button class="btn btn-gold" style="width:100%;height:46px;margin-top:8px;" onclick="handleSubmitConfession()" id="cfSubmitBtn">
+          <span class="svg-icon-sm" data-svg="send"></span> Gửi Tâm Sự Đến Sunny
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       9. BẢNG QUẢN TRỊ HÒM THƯ CỦA SUNNY (Admin Inbox Modal)
+       ====================================================================== -->
+  <div class="modal-layer" id="adminInboxModal" onclick="closeAdminInboxModal(event)">
+    <div class="modal-card admin-inbox-card" onclick="event.stopPropagation()">
+      <button class="modal-close-round" onclick="closeAdminInboxModal()" aria-label="Đóng"><span class="svg-icon-sm" data-svg="close"></span></button>
+      
+      <div class="admin-inbox-header">
+        <div style="display:flex;align-items:center;gap:12px;">
+          <div class="admin-crown-badge"><span class="svg-icon-md" data-svg="crown"></span></div>
+          <div>
+            <h3 class="admin-inbox-title">Hòm Thư Tâm Sự Của Sunny</h3>
+            <p class="admin-inbox-subtitle">Dành riêng cho Quản Trị Viên — Lắng nghe & đồng hành cùng bạn đọc</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="admin-filter-bar">
+        <button class="admin-filter-btn active" data-filter="all" onclick="setAdminFilter('all', this)">Tất cả (<span id="adminCountAll">0</span>)</button>
+        <button class="admin-filter-btn" data-filter="unread" onclick="setAdminFilter('unread', this)">Chưa đọc (<span id="adminCountUnread">0</span>)</button>
+        <button class="admin-filter-btn" data-filter="pinned" onclick="setAdminFilter('pinned', this)">Đã ghim (<span id="adminCountPinned">0</span>)</button>
+        <div style="margin-left:auto;">
+          <button class="btn btn-secondary btn-sm" onclick="exportConfessionsJson()" title="Xuất toàn bộ tâm sự về máy"><span class="svg-icon-sm" data-svg="download"></span> Xuất JSON</button>
+        </div>
+      </div>
+
+      <div class="admin-inbox-list" id="adminConfessionsList">
+        <!-- Rendered dynamically in JS -->
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================================
+       10. BẢNG CHIA SẺ THÔNG ĐIỆP TÂM THỨC (Custom Share Modal)
+       ====================================================================== -->
+  <div class="modal-layer" id="customShareModal" onclick="closeCustomShareModal(event)">
+    <div class="modal-card custom-share-card" onclick="event.stopPropagation()">
+      <button class="modal-close-round" onclick="closeCustomShareModal()" aria-label="Đóng"><span class="svg-icon-sm" data-svg="close"></span></button>
+      
+      <div class="share-header">
+        <div class="eyebrow-pill" style="margin-bottom:6px;"><span class="svg-icon-xs" data-svg="sparkles"></span> Lan Tỏa Bình An</div>
+        <h3 class="share-title">Chia Sẻ Thông Điệp</h3>
+        <p class="share-subtitle">Gửi gắm bức tranh thông điệp này đến bạn bè và người thương</p>
+      </div>
+
+      <!-- Preview Artwork Card -->
+      <div class="share-preview-box">
+        <div class="share-card-art holo-tilt" id="shareCardArt">
+          <img id="shareModalImg" src="" alt="Thông điệp">
+          <div class="lib-card-glare"></div>
+        </div>
+        <div class="share-preview-info">
+          <h4 id="shareModalMsgTitle" class="share-card-name">--</h4>
+          <p id="shareModalMsgDesc" class="share-card-desc">--</p>
+        </div>
+      </div>
+
+      <!-- Primary Action: Copy Full Photo to Clipboard -->
+      <button class="btn btn-gold btn-copy-photo" onclick="copyMessagePhotoToClipboard()" id="copyPhotoBtn">
+        <span class="svg-icon-sm" data-svg="copy"></span>
+        <span>Sao Chép Ảnh Vào Bộ Nhớ Tạm</span>
+      </button>
+      <p style="text-align:center;font-size:0.75rem;color:var(--text-muted);margin-top:6px;margin-bottom:14px;padding:0 24px;">
+        ✦ Nhấn sao chép rồi <strong>Dán trực tiếp (Ctrl+V)</strong> ảnh vào Messenger, Zalo, Facebook!
+      </p>
+
+      <!-- Channels Grid -->
+      <div class="share-channels-grid">
+        <button class="share-channel-btn btn-ch-facebook" onclick="shareViaFacebook()" title="Chia sẻ lên Facebook">
+          <span class="channel-icon" data-svg="facebook"></span>
+          <span>Facebook</span>
+        </button>
+
+        <button class="share-channel-btn btn-ch-messenger" onclick="shareViaMessenger()" title="Gửi qua Messenger">
+          <span class="channel-icon" data-svg="messenger"></span>
+          <span>Messenger</span>
+        </button>
+
+        <button class="share-channel-btn btn-ch-instagram" onclick="shareViaInstagramStory()" title="Tạo ảnh Story Instagram">
+          <span class="channel-icon" data-svg="instagram"></span>
+          <span>Instagram</span>
+        </button>
+
+        <button class="share-channel-btn btn-ch-download" onclick="downloadMessagePhoto()" title="Tải ảnh về máy">
+          <span class="channel-icon" data-svg="download"></span>
+          <span>Tải Ảnh</span>
+        </button>
+      </div>
+
+      <div class="share-footer-links">
+        <button class="share-link-pill" onclick="copyShareQuoteText()"><span class="svg-icon-sm" data-svg="fileText"></span> Sao chép lời trích dẫn</button>
+        <button class="share-link-pill" onclick="openSunnyReview()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Fanpage</button>
+      </div>
     </div>
   </div>
 
@@ -644,6 +849,7 @@
       document.body.style.overflow = 'hidden';
       renderDrawerBadges();
       syncDrawerProfile();
+      syncAdminVisibility();
     }
 
     function closeDrawer(e) {
@@ -699,6 +905,7 @@
       }
 
       syncDrawerProfile();
+      await syncAdminVisibility();
 
       if (currentUser.id && currentUser.id !== 'guest') {
         try {
@@ -766,6 +973,7 @@
         spinBtnWrapper.style.display = 'none';
         alreadySpunBox.classList.add('show');
         if (arena) arena.classList.add('already-spun-mode');
+        setTimeout(() => drawWheel(currentRotationAngle), 50);
 
         document.getElementById('todayThumbImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
         document.getElementById('todayMsgTitle').textContent = msg.name;
@@ -776,6 +984,7 @@
         spinBtnWrapper.style.display = 'block';
         alreadySpunBox.classList.remove('show');
         if (arena) arena.classList.remove('already-spun-mode');
+        setTimeout(() => drawWheel(currentRotationAngle), 50);
       }
     }
 
@@ -1294,17 +1503,17 @@
         if (volSlider) volSlider.value = bgMusic.audio.volume;
 
         if (toggleBtn) {
-          toggleBtn.innerHTML = Icons.get(bgMusic.isPlaying ? 'pause' : 'play', 'svg-icon-xs');
+          toggleBtn.innerHTML = Icons.get(bgMusic.isPlaying ? 'pause' : 'play', 'svg-icon-sm');
         }
 
         bgMusic.audio.addEventListener('play', () => {
-          if (toggleBtn) toggleBtn.innerHTML = Icons.get('pause', 'svg-icon-xs');
+          if (toggleBtn) toggleBtn.innerHTML = Icons.get('pause', 'svg-icon-sm');
           if (titleEl) titleEl.textContent = bgMusic.currentTrackName || 'Lofi Thiền Định';
           if (barEl) barEl.classList.add('playing');
         });
 
         bgMusic.audio.addEventListener('pause', () => {
-          if (toggleBtn) toggleBtn.innerHTML = Icons.get('play', 'svg-icon-xs');
+          if (toggleBtn) toggleBtn.innerHTML = Icons.get('play', 'svg-icon-sm');
           if (barEl) barEl.classList.remove('playing');
         });
       }
@@ -1363,15 +1572,439 @@
     }
 
     function shareDirectLink() {
-      if (!currentMessageId) return;
-      const msg = getMessageById(currentMessageId);
-      const shareText = `Hôm nay tôi nhận được thông điệp: "${msg.name}" — ${msg.desc}`;
-      if (navigator.share) {
-        navigator.share({ title: 'Vòng Quay Thông Điệp', text: shareText, url: window.location.href });
-      } else {
-        navigator.clipboard.writeText(shareText);
-        showToast('Đã sao chép lời nhắn vào bộ nhớ tạm!');
+      openCustomShareModal(currentMessageId);
+    }
+
+    // ── 17B. ĐÁNH GIÁ FANPAGE SUNNY ──
+    function openSunnyReview() {
+      window.open('https://www.facebook.com/chuyengiatamlysunny/reviews', '_blank', 'noopener,noreferrer');
+    }
+
+    // ── 17C. QUẢN LÝ QUYỀN ADMIN & HÒM THƯ TÂM SỰ CHO SUNNY ──
+    async function syncAdminVisibility() {
+      const isAdmin = (typeof isAdminUser === 'function') && isAdminUser(currentUser);
+      const topBtn = document.getElementById('topAdminInboxBtn');
+      const drawerSec = document.getElementById('drawerAdminSection');
+
+      if (topBtn) topBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+      if (drawerSec) drawerSec.style.display = isAdmin ? 'block' : 'none';
+
+      if (isAdmin && typeof getConfessionsForAdmin === 'function') {
+        try {
+          const confessions = await getConfessionsForAdmin();
+          const unreadCount = confessions.filter(c => !c.read).length;
+          const badge = document.getElementById('adminUnreadBadge');
+          const drawerBadge = document.getElementById('drawerUnreadCount');
+          if (badge) badge.textContent = unreadCount;
+          if (drawerBadge) drawerBadge.textContent = unreadCount;
+        } catch (_) {}
       }
+    }
+
+    // ── 17D. MODAL GỬI TÂM SỰ ĐẾN SUNNY ──
+    function openConfessionModal() {
+      const modal = document.getElementById('confessionModal');
+      if (!modal) return;
+      
+      const nameInput = document.getElementById('cfSenderName');
+      const emailInput = document.getElementById('cfSenderEmail');
+      const anonCheck = document.getElementById('cfIsAnonymous');
+      const msgInput = document.getElementById('cfContent');
+
+      if (msgInput) msgInput.value = '';
+      if (anonCheck) anonCheck.checked = false;
+      if (nameInput) {
+        nameInput.value = (currentUser && currentUser.id !== 'guest') ? currentUser.name : '';
+        nameInput.disabled = false;
+      }
+      if (emailInput) {
+        emailInput.value = (currentUser && currentUser.id !== 'guest') ? (currentUser.email || '') : '';
+      }
+
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      setTimeout(() => { if (msgInput) msgInput.focus(); }, 150);
+      Icons.renderAll();
+    }
+
+    function closeConfessionModal(e) {
+      if (e && e.target !== document.getElementById('confessionModal') && !e.target.closest('.modal-close-round')) return;
+      const modal = document.getElementById('confessionModal');
+      if (modal) modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    function toggleAnonymousCheckbox() {
+      const anon = document.getElementById('cfIsAnonymous')?.checked;
+      const nameInput = document.getElementById('cfSenderName');
+      if (nameInput) {
+        if (anon) {
+          nameInput.dataset.prevVal = nameInput.value;
+          nameInput.value = 'Một người ẩn danh';
+          nameInput.disabled = true;
+        } else {
+          nameInput.value = nameInput.dataset.prevVal || (currentUser?.name || '');
+          nameInput.disabled = false;
+        }
+      }
+    }
+
+    async function handleSubmitConfession() {
+      const contentEl = document.getElementById('cfContent');
+      const content = contentEl ? contentEl.value.trim() : '';
+      if (!content) {
+        showToast('Vui lòng viết đôi lời tâm sự trước khi gửi nhé!');
+        if (contentEl) contentEl.focus();
+        return;
+      }
+
+      const isAnonymous = document.getElementById('cfIsAnonymous')?.checked || false;
+      const senderName = isAnonymous ? 'Một người ẩn danh' : (document.getElementById('cfSenderName')?.value.trim() || 'Người bạn giấu tên');
+      const senderEmail = document.getElementById('cfSenderEmail')?.value.trim() || '';
+      const category = document.getElementById('cfCategory')?.value || 'Tâm sự cuộc sống';
+
+      const sendBtn = document.getElementById('sendConfessionBtn');
+      if (sendBtn) {
+        sendBtn.disabled = true;
+        sendBtn.innerHTML = `${Icons.get('sparkles', 'svg-icon-sm')} Đang gửi đến Sunny...`;
+      }
+
+      try {
+        if (typeof sendConfessionToSunny === 'function') {
+          await sendConfessionToSunny({ senderName, senderEmail, category, content, isAnonymous });
+        }
+        sounds.playChime();
+        showToast('Lời tâm sự của bạn đã được gửi riêng đến Sunny thành công! Cảm ơn bạn vì đã mở lòng.');
+        closeConfessionModal();
+        await syncAdminVisibility();
+      } catch (err) {
+        console.error('Lỗi gửi tâm sự:', err);
+        showToast('Chưa gửi được, vui lòng thử lại sau giây lát!');
+      } finally {
+        if (sendBtn) {
+          sendBtn.disabled = false;
+          sendBtn.innerHTML = `${Icons.get('send', 'svg-icon-sm')} Gửi Tâm Sự Đến Sunny`;
+        }
+      }
+    }
+
+    // ── 17E. MODAL HÒM THƯ ADMIN DÀNH CHO SUNNY ──
+    let adminInboxData = [];
+    let currentAdminFilter = 'all';
+
+    async function openAdminInboxModal() {
+      if (!isAdminUser(currentUser)) {
+        showToast('Mục này chỉ dành riêng cho Quản trị viên Sunny!');
+        return;
+      }
+      const modal = document.getElementById('adminInboxModal');
+      if (!modal) return;
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+
+      await loadAdminInbox();
+    }
+
+    function closeAdminInboxModal(e) {
+      if (e && e.target !== document.getElementById('adminInboxModal') && !e.target.closest('.modal-close-round')) return;
+      const modal = document.getElementById('adminInboxModal');
+      if (modal) modal.classList.remove('show');
+      document.body.style.overflow = '';
+      syncAdminVisibility();
+    }
+
+    async function loadAdminInbox() {
+      const listEl = document.getElementById('adminConfessionsList');
+      if (listEl) {
+        listEl.innerHTML = `<div style="text-align:center;padding:36px;color:var(--text-muted);"><span class="svg-icon-md" data-svg="sparkles"></span> Đang tải các lời tâm sự...</div>`;
+        Icons.renderAll();
+      }
+
+      if (typeof getConfessionsForAdmin === 'function') {
+        adminInboxData = await getConfessionsForAdmin();
+      } else {
+        adminInboxData = [];
+      }
+
+      renderAdminInboxList();
+    }
+
+    function setAdminFilter(filter, btnEl) {
+      currentAdminFilter = filter;
+      document.querySelectorAll('.admin-filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn === btnEl || btn.dataset.filter === filter);
+      });
+      renderAdminInboxList();
+    }
+
+    function renderAdminInboxList() {
+      const listEl = document.getElementById('adminConfessionsList');
+      if (!listEl) return;
+
+      // Cập nhật số đếm các tab
+      const allC = adminInboxData.length;
+      const unreadC = adminInboxData.filter(c => !c.read).length;
+      const pinnedC = adminInboxData.filter(c => !!c.pinned).length;
+      const allEl = document.getElementById('adminCountAll');
+      const unreadEl = document.getElementById('adminCountUnread');
+      const pinnedEl = document.getElementById('adminCountPinned');
+      if (allEl) allEl.textContent = allC;
+      if (unreadEl) unreadEl.textContent = unreadC;
+      if (pinnedEl) pinnedEl.textContent = pinnedC;
+
+      let filtered = [...adminInboxData];
+      if (currentAdminFilter === 'unread') {
+        filtered = filtered.filter(c => !c.read);
+      } else if (currentAdminFilter === 'pinned') {
+        filtered = filtered.filter(c => !!c.pinned);
+      }
+
+      if (filtered.length === 0) {
+        listEl.innerHTML = `
+          <div style="text-align:center;padding:48px 20px;color:var(--text-muted);">
+            <div style="margin-bottom:12px;opacity:0.6;"><span class="svg-icon-xl" data-svg="heart"></span></div>
+            <p style="font-size:0.92rem;font-weight:700;color:var(--text-primary);margin-bottom:4px;">Chưa có lời tâm sự nào trong mục này</p>
+            <p style="font-size:0.82rem;">Khi bạn đọc gửi chia sẻ, danh sách sẽ hiển thị đầy đủ tại đây.</p>
+          </div>
+        `;
+        Icons.renderAll();
+        return;
+      }
+
+      listEl.innerHTML = filtered.map(item => {
+        const timeAgoStr = formatTimeAgo(item.createdAt);
+        return `
+          <div class="admin-cf-card ${item.read ? 'is-read' : 'is-unread'} ${item.pinned ? 'is-pinned' : ''}" id="cfCard_${item.id}">
+            <div class="admin-cf-meta">
+              <span class="admin-cf-name">${item.isAnonymous ? '✦ Ẩn danh' : escapeHtml(item.senderName)}</span>
+              ${item.senderEmail ? `<span style="font-size:0.75rem;color:var(--text-muted);">(${escapeHtml(item.senderEmail)})</span>` : ''}
+              <span class="admin-category-tag">${escapeHtml(item.category || 'Tâm sự')}</span>
+              <span class="admin-cf-time">${timeAgoStr}</span>
+            </div>
+            <div class="admin-cf-content">${escapeHtml(item.content).replace(/\n/g, '<br>')}</div>
+            <div class="admin-cf-actions">
+              <button class="admin-act-btn ${item.read ? '' : 'act-primary'}" onclick="handleToggleRead('${item.id}', ${!item.read})" title="${item.read ? 'Đánh dấu chưa đọc' : 'Đánh dấu đã đọc'}">
+                <span class="svg-icon-xs" data-svg="${item.read ? 'mail' : 'check'}"></span>
+                <span>${item.read ? 'Chưa đọc' : 'Đã đọc'}</span>
+              </button>
+              <button class="admin-act-btn ${item.pinned ? 'act-pinned' : ''}" onclick="handleTogglePin('${item.id}')" title="Ghim lên đầu">
+                <span class="svg-icon-xs" data-svg="star" style="${item.pinned ? 'color:var(--accent-gold);fill:var(--accent-gold);' : ''}"></span>
+                <span>${item.pinned ? 'Đã ghim' : 'Ghim'}</span>
+              </button>
+              <button class="admin-act-btn act-delete" onclick="handleDeleteConfession('${item.id}')" title="Xóa tâm sự này">
+                <span class="svg-icon-xs" data-svg="trash"></span>
+                <span>Xóa</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      Icons.renderAll();
+    }
+
+    async function handleToggleRead(id, newStatus) {
+      if (typeof markConfessionRead === 'function') {
+        await markConfessionRead(id, newStatus);
+        const item = adminInboxData.find(c => c.id === id);
+        if (item) item.read = newStatus;
+        renderAdminInboxList();
+        syncAdminVisibility();
+      }
+    }
+
+    async function handleTogglePin(id) {
+      if (typeof toggleConfessionPin === 'function') {
+        const isPinned = await toggleConfessionPin(id);
+        const item = adminInboxData.find(c => c.id === id);
+        if (item) item.pinned = isPinned;
+        adminInboxData.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+        renderAdminInboxList();
+      }
+    }
+
+    async function handleDeleteConfession(id) {
+      if (!confirm('Bạn có chắc muốn xóa lời tâm sự này?')) return;
+      if (typeof deleteConfession === 'function') {
+        await deleteConfession(id);
+        adminInboxData = adminInboxData.filter(c => c.id !== id);
+        renderAdminInboxList();
+        syncAdminVisibility();
+        showToast('Đã xóa tâm sự thành công!');
+      }
+    }
+
+    function exportConfessionsJson() {
+      if (!adminInboxData.length) {
+        showToast('Không có dữ liệu tâm sự để xuất!');
+        return;
+      }
+      const blob = new Blob([JSON.stringify(adminInboxData, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `tam-su-sunny-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      showToast('Đã xuất toàn bộ tâm sự về máy!');
+    }
+
+    function formatTimeAgo(isoDate) {
+      if (!isoDate) return '';
+      const diffMs = Date.now() - new Date(isoDate).getTime();
+      const mins = Math.floor(diffMs / 60000);
+      if (mins < 1) return 'Vừa xong';
+      if (mins < 60) return `${mins} phút trước`;
+      const hours = Math.floor(mins / 60);
+      if (hours < 24) return `${hours} giờ trước`;
+      const days = Math.floor(hours / 24);
+      if (days < 30) return `${days} ngày trước`;
+      return new Date(isoDate).toLocaleDateString('vi-VN');
+    }
+
+    function escapeHtml(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    // ── 17F. BẢNG CHIA SẺ RIÊNG (Custom Image Share Modal) ──
+    let shareActiveMsgId = null;
+
+    function openCustomShareModal(msgId) {
+      const id = msgId || currentMessageId || 1;
+      shareActiveMsgId = id;
+      const msg = getMessageById(id);
+      if (!msg) return;
+
+      const modal = document.getElementById('customShareModal');
+      if (!modal) return;
+
+      const imgEl = document.getElementById('shareModalImg');
+      const titleEl = document.getElementById('shareModalMsgTitle');
+      const descEl = document.getElementById('shareModalMsgDesc');
+
+      if (imgEl) imgEl.src = `images/${String(msg.id).padStart(2, '0')}.png`;
+      if (titleEl) titleEl.textContent = msg.name;
+      if (descEl) descEl.textContent = `"${msg.desc}"`;
+
+      modal.classList.add('show');
+      document.body.style.overflow = 'hidden';
+      Icons.renderAll();
+    }
+
+    function closeCustomShareModal(e) {
+      if (e && e.target !== document.getElementById('customShareModal') && !e.target.closest('.modal-close-round')) return;
+      const modal = document.getElementById('customShareModal');
+      if (modal) modal.classList.remove('show');
+      document.body.style.overflow = '';
+    }
+
+    async function copyMessagePhotoToClipboard() {
+      if (!shareActiveMsgId) return;
+      const btn = document.getElementById('copyPhotoBtn');
+      const originalHtml = btn ? btn.innerHTML : '';
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `${Icons.get('sparkles', 'svg-icon-sm')} Đang chép ảnh...`;
+      }
+
+      const imgPath = `images/${String(shareActiveMsgId).padStart(2, '0')}.png`;
+
+      try {
+        const response = await fetch(imgPath);
+        const blob = await response.blob();
+        const pngBlob = blob.type === 'image/png' ? blob : new Blob([blob], { type: 'image/png' });
+        
+        if (navigator.clipboard && window.ClipboardItem) {
+          const item = new ClipboardItem({ 'image/png': pngBlob });
+          await navigator.clipboard.write([item]);
+          
+          if (btn) {
+            btn.innerHTML = `${Icons.get('check', 'svg-icon-sm')} Đã Sao Chép Ảnh!`;
+            btn.style.background = 'linear-gradient(135deg, #10B981, #059669)';
+          }
+          sounds.playChime();
+          showToast('Đã sao chép ảnh! Bạn có thể dán (Ctrl+V) ngay vào Messenger, Zalo hoặc Facebook.');
+          
+          setTimeout(() => {
+            if (btn) {
+              btn.disabled = false;
+              btn.innerHTML = originalHtml;
+              btn.style.background = '';
+            }
+          }, 2400);
+          return;
+        }
+      } catch (err) {
+        console.warn('Lỗi chép ảnh blob vào clipboard:', err);
+      }
+
+      // Fallback
+      const msg = getMessageById(shareActiveMsgId);
+      const textFallback = `[Thông điệp hôm nay] ${msg.name}: "${msg.desc}" — Cùng rút thông điệp tại: ${window.location.origin}${window.location.pathname}`;
+      try {
+        await navigator.clipboard.writeText(textFallback);
+        showToast('Đã sao chép lời trích dẫn! Nhấn "Tải Ảnh" để lưu tranh ảnh gửi bạn bè nhé.');
+      } catch (_) {
+        showToast('Vui lòng nhấn nút "Tải Ảnh" để lưu ảnh về máy!');
+      }
+
+      if (btn) {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+      }
+    }
+
+    function downloadMessagePhoto() {
+      if (!shareActiveMsgId) return;
+      const msg = getMessageById(shareActiveMsgId);
+      const imgPath = `images/${String(shareActiveMsgId).padStart(2, '0')}.png`;
+      const a = document.createElement('a');
+      a.href = imgPath;
+      a.download = `thong-diep-${String(msg.id).padStart(2, '0')}-${msg.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Đang tải ảnh thông điệp về thiết bị!');
+    }
+
+    function shareViaFacebook() {
+      if (!shareActiveMsgId) return;
+      const msg = getMessageById(shareActiveMsgId);
+      const url = encodeURIComponent(window.location.href);
+      const quote = encodeURIComponent(`Thông điệp tâm thức: "${msg.name}" — ${msg.desc}`);
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(`"${msg.name}" — ${msg.desc}\\n\\nTrạm sạc tâm hồn: ${window.location.href}`);
+      }
+      showToast('Đã chép nội dung thông điệp để bạn dán kèm bài viết Facebook!');
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank', 'width=640,height=580,noopener,noreferrer');
+    }
+
+    function shareViaMessenger() {
+      if (!shareActiveMsgId) return;
+      const msg = getMessageById(shareActiveMsgId);
+      const url = encodeURIComponent(window.location.href);
+      copyMessagePhotoToClipboard();
+      const messengerUrl = `https://www.facebook.com/dialog/send?link=${url}&app_id=291494419107518&redirect_uri=${url}`;
+      window.open(messengerUrl, '_blank', 'width=640,height=580,noopener,noreferrer');
+    }
+
+    function shareViaInstagramStory() {
+      closeCustomShareModal();
+      exportTodayStory();
+    }
+
+    function copyShareQuoteText() {
+      if (!shareActiveMsgId) return;
+      const msg = getMessageById(shareActiveMsgId);
+      const quoteText = `✦ THÔNG ĐIỆP TÂM THỨC ✦\\n"${msg.name}"\\n${msg.desc}\\n\\nKhám phá trạm sạc tâm hồn cùng Sunny:\\n${window.location.href}`;
+      navigator.clipboard.writeText(quoteText).then(() => {
+        sounds.playClick();
+        showToast('Đã sao chép toàn bộ lời trích dẫn vào bộ nhớ tạm!');
+      });
     }
 
     // ── 18. XUẤT SAO LƯU DỮ LIỆU & ĐĂNG XUẤT ──

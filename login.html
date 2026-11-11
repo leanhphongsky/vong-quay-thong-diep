@@ -285,6 +285,13 @@
           <span class="svg-icon-sm" data-svg="user"></span>
           <span>Trải Nghiệm Dưới Dạng Khách</span>
         </button>
+
+        <div style="margin-top: 12px; text-align: center;">
+          <button type="button" class="btn-admin-link" onclick="handleAdminLogin()" style="background:none;border:none;color:var(--text-muted);font-size:0.78rem;cursor:pointer;display:inline-flex;align-items:center;gap:5px;font-weight:700;padding:6px 12px;border-radius:var(--r-pill);transition:all 0.2s ease;">
+            <span class="svg-icon-sm" data-svg="crown" style="color:var(--accent-gold);"></span>
+            <span>Đăng nhập quyền Admin (Sunny)</span>
+          </button>
+        </div>
       </div>
 
       <!-- Register Form -->
@@ -397,6 +404,17 @@
     function handleGuestLogin() {
       saveUser({ id: 'guest', name: 'Khách', email: '' });
       location.href = 'spin.html';
+    }
+
+    function handleAdminLogin() {
+      const code = prompt('Nhập mật mã quản trị viên Sunny (Mặc định: sunny2026):', 'sunny2026');
+      if (code === 'sunny2026' || code === 'admin' || code === 'sunny') {
+        if (typeof setAdminSession === 'function') setAdminSession(true);
+        saveUser({ id: 'admin', name: 'Sunny (Chủ Trang)', email: 'chuyengiatamlysunny@gmail.com', role: 'admin' });
+        location.href = 'spin.html';
+      } else if (code !== null) {
+        showError('loginError', 'Mật mã quản trị viên không chính xác!');
+      }
     }
 
     document.addEventListener('keydown', e => {

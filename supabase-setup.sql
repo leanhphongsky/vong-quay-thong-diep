@@ -52,3 +52,28 @@ DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
   AFTER INSERT ON auth.users
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
+
+-- ============================================================
+-- 7. Bảng confessions (Hòm thư tâm sự gửi đến Sunny)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.confessions (
+  id           UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  sender_name  TEXT DEFAULT 'Ẩn danh',
+  sender_email TEXT DEFAULT '',
+  category     TEXT DEFAULT 'Bình an nội tâm',
+  content      TEXT NOT NULL,
+  is_anonymous BOOLEAN DEFAULT false,
+  read         BOOLEAN DEFAULT false,
+  pinned       BOOLEAN DEFAULT false,
+  created_at   TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.confessions ENABLE ROW LEVEL SECURITY;
+
+-- Cho phép tất cả người dùng (kể cả khách / anon) gửi tâm sự
+CREATE POLICY "confessions_insert_all" ON public.confessions FOR INSERT WITH CHECK (true);
+
+-- Cho phép đọc / quản lý tâm sự (Có thể cấp quyền toàn bộ hoặc theo role admin)
+CREATE POLICY "confessions_select_all" ON public.confessions FOR SELECT USING (true);
+CREATE POLICY "confessions_update_all" ON public.confessions FOR UPDATE USING (true);
+CREATE POLICY "confessions_delete_all" ON public.confessions FOR DELETE USING (true);

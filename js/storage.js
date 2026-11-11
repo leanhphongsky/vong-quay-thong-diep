@@ -3,9 +3,10 @@
 // ============================================================
 
 const STORAGE_KEYS = {
-  USER:    'vqtd_user',
-  HISTORY: 'vqtd_history',
-  STREAK:  'vqtd_streak',
+  USER:        'vqtd_user',
+  HISTORY:     'vqtd_history',
+  STREAK:      'vqtd_streak',
+  CONFESSIONS: 'vqtd_confessions'
 };
 
 // ---- Local Cache Helpers ----
@@ -230,4 +231,194 @@ function hasSpunToday() { return getTodaySpin() !== null; }
 function uniqueMessagesCount() {
   const ids = new Set(getLocalHistory().map(h => h.messageId));
   return ids.size;
+}
+
+// ============================================================
+// HÒM THƯ TÂM SỰ ĐẾN SUNNY & QUẢN TRỊ ADMIN
+// ============================================================
+
+function getLocalConfessions() {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEYS.CONFESSIONS)) || [];
+  } catch {
+    return [];
+  }
+}
+
+function saveLocalConfessions(list) {
+  try {
+    localStorage.setItem(STORAGE_KEYS.CONFESSIONS, JSON.stringify(list));
+  } catch (e) {
+    console.error('Không thể lưu tâm sự vào local:', e);
+  }
+}
+
+/**
+ * Gửi tâm sự của người dùng đến Sunny
+ */
+async function sendConfessionToSunny({ senderName, senderEmail, category, content, isAnonymous }) {
+  if (!content || !content.trim()) {
+    throw new Error('Vui lòng nhập nội dung tâm sự.');
+  }
+
+  const confession = {
+    id: 'cf_' + Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+    senderName: isAnonymous ? 'Ẩn danh' : (senderName?.trim() || 'Người bạn bình an'),
+    senderEmail: senderEmail ? senderEmail.trim() : '',
+    category: category || 'Bình an nội tâm',
+    content: content.trim(),
+    isAnonymous: !!isAnonymous,
+    read: false,
+    pinned: false,
+    createdAt: new Date().toISOString()
+  };
+
+  // 1. Lưu local cache ngay lập tức
+  const list = getLocalConfessions();
+  list.unshift(confession);
+  saveLocalConfessions(list);
+
+  // 2. Đồng bộ lên Supabase nếu có client kết nối
+  if (sbClient) {
+    try {
+      await sbClient.from('confessions').insert({
+        sender_name: confession.senderName,
+        sender_email: confession.senderEmail,
+        category: confession.category,
+        content: confession.content,
+        is_anonymous: confession.isAnonymous,
+        read: false,
+        pinned: false
+      });
+    } catch (err) {
+      console.warn('Lưu tâm sự lên Supabase gặp lỗi, đã lưu cục bộ:', err);
+    }
+  }
+
+  return { success: true, confession };
+}
+
+/**
+ * Kiểm tra xem người dùng hiện tại có quyền Admin (Sunny) không
+ */
+function isAdminUser(user) {
+  if (sessionStorage.getItem('vqtd_admin_session') === 'true') {
+    return true;
+  }
+  if (!user) return false;
+  if (user.id === 'admin' || user.role === 'admin') return true;
+  if (user.email) {
+    const email = user.email.toLowerCase().trim();
+    if (email.includes('sunny') || email.includes('admin') || email === 'chuyengiatamlysunny@gmail.com') {
+      return true;
+    }
+  }
+  if (user.name) {
+    const name = user.name.toLowerCase().trim();
+    if (name === 'sunny' || name === 'admin') return true;
+  }
+  return false;
+}
+
+/**
+ * Mở khóa phiên Admin (cho phép đăng nhập nhanh quyền Admin của Sunny)
+ */
+function setAdminSession(active = true) {
+  if (active) {
+    sessionStorage.setItem('vqtd_admin_session', 'true');
+  } else {
+    sessionStorage.removeItem('vqtd_admin_session');
+  }
+}
+
+/**
+ * Lấy danh sách tâm sự dành riêng cho Admin Sunny
+ */
+async function getConfessionsForAdmin() {
+  let localList = getLocalConfessions();
+
+  if (sbClient) {
+    try {
+      const { data, error } = await sbClient
+        .from('confessions')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!error && Array.isArray(data)) {
+        // Hợp nhất dữ liệu cloud và local
+        const mergedMap = new Map();
+        localList.forEach(item => mergedMap.set(item.id, item));
+        data.forEach(item => {
+          const formatted = {
+            id: item.id,
+            senderName: item.sender_name || 'Ẩn danh',
+            senderEmail: item.sender_email || '',
+            category: item.category || 'Bình an',
+            content: item.content || '',
+            isAnonymous: !!item.is_anonymous,
+            read: !!item.read,
+            pinned: !!item.pinned,
+            createdAt: item.created_at || new Date().toISOString()
+          };
+          mergedMap.set(item.id, formatted);
+        });
+        localList = Array.from(mergedMap.values()).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        saveLocalConfessions(localList);
+      }
+    } catch (e) {
+      console.warn('Lấy tâm sự từ Supabase:', e);
+    }
+  }
+
+  return localList;
+}
+
+/**
+ * Đánh dấu đã đọc / chưa đọc
+ */
+async function markConfessionRead(id, isRead = true) {
+  const list = getLocalConfessions();
+  const target = list.find(c => c.id === id);
+  if (target) {
+    target.read = isRead;
+    saveLocalConfessions(list);
+  }
+  if (sbClient) {
+    try {
+      await sbClient.from('confessions').update({ read: isRead }).eq('id', id);
+    } catch (_) {}
+  }
+}
+
+/**
+ * Ghim / Bỏ ghim tâm sự
+ */
+async function toggleConfessionPin(id) {
+  const list = getLocalConfessions();
+  const target = list.find(c => c.id === id);
+  if (target) {
+    target.pinned = !target.pinned;
+    saveLocalConfessions(list);
+    if (sbClient) {
+      try {
+        await sbClient.from('confessions').update({ pinned: target.pinned }).eq('id', id);
+      } catch (_) {}
+    }
+    return target.pinned;
+  }
+  return false;
+}
+
+/**
+ * Xóa tâm sự
+ */
+async function deleteConfession(id) {
+  let list = getLocalConfessions();
+  list = list.filter(c => c.id !== id);
+  saveLocalConfessions(list);
+  if (sbClient) {
+    try {
+      await sbClient.from('confessions').delete().eq('id', id);
+    } catch (_) {}
+  }
 }
