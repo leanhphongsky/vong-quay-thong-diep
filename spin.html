@@ -269,6 +269,7 @@
             <div class="profile-details">
               <div class="profile-name-text" id="drawerUserName">Người Dùng</div>
               <div class="profile-sub-text" id="drawerUserEmail">Thành viên tĩnh tại</div>
+              <div id="drawerCloudBadge" class="cloud-status-badge is-guest"><span class="cloud-dot amber"></span> <span>Chế độ Khách (Lưu trên máy)</span></div>
             </div>
             <button class="btn btn-secondary btn-sm" onclick="editUserName()">Sửa tên</button>
           </div>
@@ -378,6 +379,13 @@
         <!-- Section: Dữ Liệu & Thoát -->
         <div class="sheet-section">
           <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="lock"></span> Dữ Liệu & Tài Khoản</div>
+          <div class="setting-item-row" id="drawerCloudSyncRow">
+            <div>
+              <div class="setting-label-bold">Đồng bộ Cloud</div>
+              <div class="setting-desc-sub" id="drawerCloudSyncSub">Đang kiểm tra kết nối...</div>
+            </div>
+            <button class="btn btn-secondary btn-sm" onclick="triggerManualCloudSync()"><span class="svg-icon-sm" data-svg="cloudRain"></span> Đồng bộ</button>
+          </div>
           <div class="setting-item-row">
             <div>
               <div class="setting-label-bold">Sao lưu lịch sử</div>
@@ -915,6 +923,39 @@
       if (avatarBubble) avatarBubble.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-xl');
       const topAvatar = document.getElementById('topAvatarIcon');
       if (topAvatar) topAvatar.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-md');
+
+      const cloudBadge = document.getElementById('drawerCloudBadge');
+      const cloudSyncSub = document.getElementById('drawerCloudSyncSub');
+      const isCloudUser = currentUser && currentUser.id && currentUser.id !== 'guest';
+
+      if (cloudBadge) {
+        if (isCloudUser) {
+          cloudBadge.className = 'cloud-status-badge is-connected';
+          cloudBadge.innerHTML = '<span class="cloud-dot"></span> <span>Đã kết nối Supabase Cloud</span>';
+        } else {
+          cloudBadge.className = 'cloud-status-badge is-guest';
+          cloudBadge.innerHTML = '<span class="cloud-dot amber"></span> <span>Chế độ Khách (Lưu trên máy) · <a href="login.html">Đăng nhập lưu Cloud</a></span>';
+        }
+      }
+
+      if (cloudSyncSub) {
+        cloudSyncSub.textContent = isCloudUser 
+          ? `Tài khoản: ${currentUser.email || currentUser.name}` 
+          : 'Dữ liệu đang lưu trên trình duyệt';
+      }
+    }
+
+    async function triggerManualCloudSync() {
+      if (!currentUser || !currentUser.id || currentUser.id === 'guest') {
+        showToast('Bạn đang dùng chế độ Khách! Hãy đăng ký hoặc đăng nhập để đồng bộ lên Cloud nhé.');
+        return;
+      }
+      showToast('Đang kết nối và đồng bộ với Supabase Cloud...');
+      await syncDataFromSupabase(currentUser.id);
+      refreshStatsStrip();
+      checkTodaySpinStatus();
+      renderLibrary();
+      showToast('Đã hoàn tất đồng bộ dữ liệu đám mây!');
     }
 
     async function editUserName() {

@@ -9,6 +9,23 @@ const STORAGE_KEYS = {
   CONFESSIONS: 'vqtd_confessions'
 };
 
+// ---- Dynamic User-Scoped Cache Keys ----
+function getUserHistoryKey(u) {
+  const user = u || getLocalUser();
+  if (user && user.id && user.id !== 'guest') {
+    return `${STORAGE_KEYS.HISTORY}_${user.id}`;
+  }
+  return `${STORAGE_KEYS.HISTORY}_guest`;
+}
+
+function getUserStreakKey(u) {
+  const user = u || getLocalUser();
+  if (user && user.id && user.id !== 'guest') {
+    return `${STORAGE_KEYS.STREAK}_${user.id}`;
+  }
+  return `${STORAGE_KEYS.STREAK}_guest`;
+}
+
 // ---- Local Cache Helpers ----
 function getLocalUser() {
   try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.USER)); }
@@ -21,26 +38,43 @@ function saveLocalUser(user) {
 
 function clearLocalUser() {
   localStorage.removeItem(STORAGE_KEYS.USER);
-  localStorage.removeItem(STORAGE_KEYS.HISTORY);
-  localStorage.removeItem(STORAGE_KEYS.STREAK);
 }
 
-function getLocalHistory() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.HISTORY)) || []; }
-  catch { return []; }
+function getLocalHistory(userId) {
+  try {
+    const key = userId ? `${STORAGE_KEYS.HISTORY}_${userId}` : getUserHistoryKey();
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw) || [];
+    // Fallback cho dữ liệu cũ chưa gắn prefix nếu là khách
+    const legacy = localStorage.getItem(STORAGE_KEYS.HISTORY);
+    if (legacy && (!userId || userId === 'guest')) return JSON.parse(legacy) || [];
+    return [];
+  } catch {
+    return [];
+  }
 }
 
-function saveLocalHistory(hist) {
-  localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(hist));
+function saveLocalHistory(hist, userId) {
+  const key = userId ? `${STORAGE_KEYS.HISTORY}_${userId}` : getUserHistoryKey();
+  localStorage.setItem(key, JSON.stringify(hist));
 }
 
-function getLocalStreak() {
-  try { return JSON.parse(localStorage.getItem(STORAGE_KEYS.STREAK)) || { count: 0, lastDate: null }; }
-  catch { return { count: 0, lastDate: null }; }
+function getLocalStreak(userId) {
+  try {
+    const key = userId ? `${STORAGE_KEYS.STREAK}_${userId}` : getUserStreakKey();
+    const raw = localStorage.getItem(key);
+    if (raw) return JSON.parse(raw);
+    const legacy = localStorage.getItem(STORAGE_KEYS.STREAK);
+    if (legacy && (!userId || userId === 'guest')) return JSON.parse(legacy);
+    return { count: 0, lastDate: null };
+  } catch {
+    return { count: 0, lastDate: null };
+  }
 }
 
-function saveLocalStreak(streak) {
-  localStorage.setItem(STORAGE_KEYS.STREAK, JSON.stringify(streak));
+function saveLocalStreak(streak, userId) {
+  const key = userId ? `${STORAGE_KEYS.STREAK}_${userId}` : getUserStreakKey();
+  localStorage.setItem(key, JSON.stringify(streak));
 }
 
 function getTodayStr() {
@@ -63,16 +97,18 @@ function secondsUntilMidnight() {
 // ---- Supabase Auth Wrappers ----
 async function getCurrentUser() {
   if (sbClient) {
-    const { data: { session } } = await sbClient.auth.getSession();
-    if (session && session.user) {
-      const u = {
-        id: session.user.id,
-        email: session.user.email,
-        name: session.user.user_metadata?.name || session.user.email.split('@')[0]
-      };
-      saveLocalUser(u);
-      return u;
-    }
+    try {
+      const { data: { session } } = await sbClient.auth.getSession();
+      if (session && session.user) {
+        const u = {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.user_metadata?.name || session.user.email.split('@')[0]
+        };
+        saveLocalUser(u);
+        return u;
+      }
+    } catch (_) {}
   }
   return getLocalUser();
 }
@@ -119,6 +155,9 @@ async function logoutUser() {
     try { await sbClient.auth.signOut(); } catch (e) { console.error(e); }
   }
   clearLocalUser();
+  if (typeof sessionStorage !== 'undefined') {
+    sessionStorage.removeItem('vqtd_admin_session');
+  }
 }
 
 // ---- Sync Data With Supabase ----
@@ -128,22 +167,24 @@ async function syncDataFromSupabase(userId) {
   try {
     const { data: historyData, error: hErr } = await sbClient
       .from('spin_history')
-      .select('message_id, spin_date')
+      .select('message_id, spin_date, note, action_done')
       .eq('user_id', userId)
-      .order('created_at', { ascending: false });
+      .order('spin_date', { ascending: false });
 
     if (!hErr && historyData) {
-      const localHist = getLocalHistory();
+      const localHist = getLocalHistory(userId);
       const formatted = historyData.map(item => {
         const existing = localHist.find(l => l.date === item.spin_date);
         return {
           date: item.spin_date,
           messageId: item.message_id,
-          note: existing?.note || '',
-          actionDone: existing?.actionDone || false
+          note: item.note || existing?.note || '',
+          actionDone: item.action_done !== undefined ? !!item.action_done : (existing?.actionDone || false)
         };
       });
-      saveLocalHistory(formatted);
+      saveLocalHistory(formatted, userId);
+    } else if (hErr) {
+      console.warn("Lỗi sync spin_history từ Supabase:", hErr.message);
     }
 
     const { data: profile, error: pErr } = await sbClient
@@ -156,7 +197,9 @@ async function syncDataFromSupabase(userId) {
       saveLocalStreak({
         count: profile.streak_count || 0,
         lastDate: profile.last_spin_date || null
-      });
+      }, userId);
+    } else if (pErr) {
+      console.warn("Lỗi sync profile từ Supabase:", pErr.message);
     }
   } catch (err) {
     console.warn("Lỗi sync từ Supabase:", err);
@@ -166,15 +209,16 @@ async function syncDataFromSupabase(userId) {
 async function recordSpinToCloud(messageId) {
   const user = getLocalUser();
   const today = getTodayStr();
+  const userId = user?.id;
 
-  let history = getLocalHistory();
+  let history = getLocalHistory(userId);
   if (!history.find(h => h.date === today)) {
     history.unshift({ date: today, messageId, note: '', actionDone: false });
-    saveLocalHistory(history);
+    saveLocalHistory(history, userId);
   }
 
   const yesterday = getYesterdayStr();
-  let streak = getLocalStreak();
+  let streak = getLocalStreak(userId);
   if (streak.lastDate !== today) {
     if (streak.lastDate === yesterday) {
       streak.count++;
@@ -182,22 +226,25 @@ async function recordSpinToCloud(messageId) {
       streak.count = 1;
     }
     streak.lastDate = today;
-    saveLocalStreak(streak);
+    saveLocalStreak(streak, userId);
   }
 
   if (sbClient && user && user.id && user.id !== 'guest') {
     try {
-      await sbClient.from('spin_history').insert({
+      const { error: insErr } = await sbClient.from('spin_history').insert({
         user_id: user.id,
         message_id: messageId,
         spin_date: today
       });
+      if (insErr) console.warn("Lỗi lưu spin_history lên Cloud:", insErr.message);
 
-      await sbClient.from('profiles').update({
+      const { error: profErr } = await sbClient.from('profiles').upsert({
+        id: user.id,
         streak_count: streak.count,
         last_spin_date: today,
         total_spins: history.length
-      }).eq('id', user.id);
+      });
+      if (profErr) console.warn("Lỗi lưu profile lên Cloud:", profErr.message);
     } catch (err) {
       console.error("Ghi nhận lên Supabase gặp lỗi:", err);
     }
@@ -207,14 +254,43 @@ async function recordSpinToCloud(messageId) {
 }
 
 // Lưu nhật ký / cảm nhận cá nhân
-function saveMessageNote(dateStr, noteText, actionDone = null) {
-  const history = getLocalHistory();
+async function saveMessageNote(dateStr, noteText, actionDone = null) {
+  const user = getLocalUser();
+  const userId = user?.id;
+  const history = getLocalHistory(userId);
   const item = history.find(h => h.date === dateStr);
   if (item) {
     item.note = noteText;
     if (actionDone !== null) item.actionDone = actionDone;
-    saveLocalHistory(history);
+    saveLocalHistory(history, userId);
   }
+
+  // Đồng bộ note lên Cloud nếu có tài khoản
+  if (sbClient && user && user.id && user.id !== 'guest') {
+    try {
+      const updatePayload = { note: noteText };
+      if (actionDone !== null) updatePayload.action_done = !!actionDone;
+      await sbClient
+        .from('spin_history')
+        .update(updatePayload)
+        .eq('user_id', user.id)
+        .eq('spin_date', dateStr);
+    } catch (e) {
+      console.warn("Lưu note lên Supabase gặp lỗi:", e);
+    }
+  }
+}
+
+// Trả về thông tin trạng thái kết nối Cloud
+function getCloudConnectionInfo() {
+  const user = getLocalUser();
+  const isGuest = !user || !user.id || user.id === 'guest';
+  return {
+    isConfigured: !!sbClient,
+    isGuest,
+    user: isGuest ? null : user,
+    projectUrl: typeof SUPABASE_URL !== 'undefined' ? SUPABASE_URL : ''
+  };
 }
 
 // ---- Compatibility Functions ----
