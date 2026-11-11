@@ -1478,7 +1478,51 @@ p {
   opacity: 1;
 }
 
-/* Subtle corner badge for lock / unlock status — art remains 100% visible */
+/* Kiểu ẩn huyền bí cho thẻ Chưa Mở Khóa */
+.lib-card-lock-mask {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 16, 24, 0.72);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: #FBBF24;
+  z-index: 5;
+  transition: backdrop-filter 0.3s ease, background 0.3s ease;
+}
+
+.lib-lock-bubble {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(221, 167, 58, 0.2);
+  border: 1.5px solid rgba(221, 167, 58, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #F59E0B;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+}
+
+.lib-lock-bubble svg {
+  width: 22px;
+  height: 22px;
+  stroke: #F59E0B;
+}
+
+.lib-lock-label {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+/* Huy hiệu góc cho thẻ Đã Mở */
 .lib-status-pill {
   position: absolute;
   top: 8px;
@@ -1499,12 +1543,6 @@ p {
   background: rgba(16, 185, 129, 0.9);
   color: #FFFFFF;
   border: 1px solid rgba(255, 255, 255, 0.5);
-}
-
-.lib-status-pill.is-locked {
-  background: rgba(15, 17, 26, 0.75);
-  color: #E5A638;
-  border: 1px solid rgba(229, 166, 56, 0.45);
 }
 
 .lib-status-pill svg {
