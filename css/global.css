@@ -2014,24 +2014,26 @@ p {
   100% { transform: scale(0) rotate(-35deg); opacity: 0; }
 }
 
-/* Phase 2: Card Flip Reveal & Holographic 3D Tilt */
+/* Phase 2: Card Flip Reveal & Holographic 3D Tilt (Full Image & Companion UI Beside) */
 .letter-sheet-card {
   display: none;
-  max-width: 480px;
-  width: 100%;
-  max-height: 88vh;
-  overflow-y: auto;
+  max-width: 980px;
+  width: 95vw;
+  max-height: 92vh;
   background: var(--bg-card);
   border: 1.5px solid var(--accent-gold);
   border-radius: var(--r-lg);
-  padding: var(--sp-xl);
-  box-shadow: var(--shadow-lg), 0 0 35px rgba(221, 167, 58, 0.3);
+  padding: 22px;
+  box-shadow: var(--shadow-lg), 0 0 40px rgba(221, 167, 58, 0.32);
   position: relative;
   animation: viewSlideFade 0.4s ease forwards;
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
 .letter-sheet-card.show {
-  display: block;
+  display: flex;
+  flex-direction: column;
 }
 
 .modal-close-round {
@@ -2048,7 +2050,7 @@ p {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  z-index: 10;
+  z-index: 30;
   transition: all 0.2s ease;
   padding: 0;
 }
@@ -2064,22 +2066,53 @@ p {
   transform: scale(1.08);
 }
 
-/* Card Flip 3D with Holographic Sheen */
-.card-flip-stage {
-  perspective: 1200px;
+/* Modal Inner Layout: Full Card Art (Left) + Companion UI Beside (Right) */
+.letter-modal-layout {
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  gap: 22px;
   width: 100%;
-  max-width: 290px;
-  margin: var(--sp-sm) auto var(--sp-md);
+  height: 100%;
+  max-height: calc(92vh - 44px);
+  position: relative;
+}
+
+/* Col 1: Card Artwork Stage (Near full image, centerpiece) */
+.letter-art-col {
+  flex: 1 1 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: 440px;
+  width: 100%;
+  min-width: 0;
+  transition: all 0.35s ease;
+}
+
+.letter-art-col .card-flip-stage {
+  perspective: 1400px;
+  width: 100%;
+  max-width: 420px;
+  height: calc(84vh - 100px);
+  max-height: 580px;
+  aspect-ratio: 3/4.2;
+  margin: 0 auto;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .card-flip-body {
   position: relative;
   width: 100%;
-  aspect-ratio: 3/4.2;
+  height: 100%;
+  max-height: 100%;
   transform-style: preserve-3d;
   transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
 }
 
 .card-flip-stage.flipped .card-flip-body {
@@ -2091,11 +2124,11 @@ p {
   inset: 0;
   width: 100%;
   height: 100%;
-  border-radius: var(--r-md);
+  border-radius: var(--r-lg);
   overflow: hidden;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 16px 45px rgba(0, 0, 0, 0.35);
   border: 2px solid var(--accent-gold);
 }
 
@@ -2119,6 +2152,158 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
+}
+
+/* Bottom Action Dock under the card */
+.letter-art-dock {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 14px;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+.letter-dock-btn {
+  border-radius: 999px !important;
+  font-weight: 700;
+  padding: 8px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* Col 2: Companion UI beside it (UI Hiện Kế Bên) */
+.letter-companion-col {
+  flex: 1 1 50%;
+  max-width: 480px;
+  width: 100%;
+  min-width: 0;
+  max-height: calc(92vh - 44px);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg-subtle);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 20px;
+  box-sizing: border-box;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.companion-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+}
+
+.companion-tag {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--accent-gold);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.companion-close-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-body);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  padding: 0;
+}
+
+.companion-close-btn:hover {
+  background: var(--bg-subtle);
+  transform: scale(1.08);
+}
+
+.companion-scroll-body {
+  overflow-y: auto;
+  padding-right: 6px;
+  flex: 1;
+}
+
+.companion-scroll-body::-webkit-scrollbar {
+  width: 5px;
+}
+.companion-scroll-body::-webkit-scrollbar-thumb {
+  background: rgba(221, 167, 58, 0.3);
+  border-radius: 10px;
+}
+.companion-scroll-body::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-gold);
+}
+
+/* When companion is collapsed on desktop (so card is 100% full stage) */
+.letter-sheet-card.companion-collapsed .letter-companion-col {
+  display: none;
+}
+.letter-sheet-card.companion-collapsed {
+  max-width: 520px;
+}
+
+/* Responsive for Mobile & Small Tablets (< 860px) */
+@media (max-width: 859px) {
+  .letter-sheet-card {
+    max-width: 480px;
+    width: 95vw;
+    max-height: 94vh;
+    padding: 16px 14px;
+    overflow: hidden;
+  }
+
+  .letter-modal-layout {
+    max-height: calc(94vh - 32px);
+    position: relative;
+  }
+
+  .letter-art-col {
+    max-width: 100%;
+    flex: 1;
+  }
+
+  .letter-art-col .card-flip-stage {
+    height: calc(86vh - 80px);
+    max-height: 600px;
+    max-width: 370px;
+  }
+
+  /* Companion UI on mobile behaves as a sliding companion drawer from the right */
+  .letter-companion-col {
+    position: absolute;
+    inset: 0;
+    max-width: 100%;
+    max-height: 100%;
+    z-index: 25;
+    background: var(--bg-card);
+    border: 1.5px solid var(--accent-gold);
+    border-radius: var(--r-lg);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    transform: translateX(105%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.25s ease;
+  }
+
+  .letter-companion-col.open {
+    transform: translateX(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .letter-heading {

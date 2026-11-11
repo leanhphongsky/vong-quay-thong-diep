@@ -420,60 +420,85 @@
       </button>
     </div>
 
-    <!-- Phase 2: Card Flip Reveal & Journal -->
+    <!-- Phase 2: Card Flip Reveal & Journal (Full Image + Companion UI Beside) -->
     <div class="letter-sheet-card" id="letterRevealCard">
       <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư"><span class="svg-icon-sm" data-svg="close"></span></button>
 
-      <!-- 3D Card Flip with Holographic Tilt -->
-      <div class="card-flip-stage holo-tilt" id="flipStage" onclick="toggleCardFlip()">
-        <div class="card-flip-body">
-          <div class="card-flip-face card-flip-front">
-            <div style="margin-bottom:10px;"><span data-svg="astrolabe" class="svg-icon-xl" style="color:var(--accent-gold);"></span></div>
-            <div style="font-family:'Plus Jakarta Sans','Be Vietnam Pro',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
-            <p style="font-size:0.8rem;opacity:0.8;">Chạm để lật mặt tranh thông điệp</p>
+      <div class="letter-modal-layout">
+        <!-- Cột 1: Tranh Thẻ Bài Gần Như Full Hình -->
+        <div class="letter-art-col">
+          <div class="card-flip-stage holo-tilt" id="flipStage" onclick="toggleCardFlip()" title="Chạm để lật mặt thẻ">
+            <div class="card-flip-body">
+              <div class="card-flip-face card-flip-front">
+                <div style="margin-bottom:10px;"><span data-svg="astrolabe" class="svg-icon-xl" style="color:var(--accent-gold);"></span></div>
+                <div style="font-family:'Plus Jakarta Sans','Be Vietnam Pro',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
+                <p style="font-size:0.8rem;opacity:0.8;">Chạm để lật mặt tranh thông điệp</p>
+              </div>
+              <div class="card-flip-face card-flip-back">
+                <img id="letterCardImg" src="" alt="Thông điệp">
+                <div class="lib-card-glare"></div>
+              </div>
+            </div>
           </div>
-          <div class="card-flip-face card-flip-back">
-            <img id="letterCardImg" src="" alt="Thông điệp">
-            <div class="lib-card-glare"></div>
+
+          <!-- Thanh điều khiển tiện ích ngay dưới tranh thẻ bài -->
+          <div class="letter-art-dock">
+            <button class="btn btn-secondary btn-sm letter-dock-btn" onclick="toggleCardFlip()" title="Lật mặt trước/sau của thẻ">
+              <span class="svg-icon-sm" data-svg="refresh"></span> <span class="btn-text-responsive">Lật thẻ</span>
+            </button>
+            <button class="btn btn-gold btn-sm letter-dock-btn letter-toggle-companion-btn" id="btnToggleCompanion" onclick="toggleCompanionPane()" title="Mở bài học và ghi chú cảm nhận">
+              <span class="svg-icon-sm" data-svg="feather"></span> <span id="companionToggleText">Bài học & Ghi chú</span>
+            </button>
+            <button class="btn btn-secondary btn-sm letter-dock-btn" onclick="openCustomShareModal(currentMessageId)" title="Chia sẻ bức tranh này">
+              <span class="svg-icon-sm" data-svg="share2"></span> <span class="btn-text-responsive">Chia sẻ</span>
+            </button>
           </div>
         </div>
-      </div>
-      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;"><span class="svg-icon-sm" data-svg="compass"></span> Chạm vào thẻ bài để lật đổi mặt tranh</p>
 
-      <h3 class="letter-heading" id="letterTitle">--</h3>
-      <p class="letter-quote-text" id="letterQuote">--</p>
+        <!-- Cột 2: UI Hiện Kế Bên (Companion UI Panel chứa Bài học, Hành động, Nhật ký, Đánh giá) -->
+        <div class="letter-companion-col" id="letterCompanionCol">
+          <div class="companion-header-bar">
+            <div class="companion-tag"><span class="svg-icon-xs" data-svg="sparkles"></span> THÔNG ĐIỆP HÔM NAY</div>
+            <button class="companion-close-btn" onclick="toggleCompanionPane()" aria-label="Đóng bảng ghi chú"><span class="svg-icon-sm" data-svg="close"></span></button>
+          </div>
 
-      <!-- Hành động tỉnh thức -->
-      <div class="action-card-callout">
-        <div class="action-card-header"><span class="svg-icon-sm" data-svg="sparkles"></span> Hành Động Gợi Ý Hôm Nay</div>
-        <p id="letterActionText" style="font-size:0.9rem;color:var(--text-primary);font-weight:700;">--</p>
-        <label class="action-checkbox-line">
-          <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
-          <span>Tôi cam kết / đã hoàn thành điều này</span>
-        </label>
-      </div>
+          <div class="companion-scroll-body">
+            <h3 class="letter-heading" id="letterTitle">--</h3>
+            <p class="letter-quote-text" id="letterQuote">--</p>
 
-      <!-- Ô nhật ký -->
-      <div class="journal-entry-box">
-        <div style="font-size:0.84rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><span class="svg-icon-sm" data-svg="feather"></span> Cảm nghĩ & Lời tri ân:</div>
-        <textarea id="journalInput" class="journal-textarea" placeholder="Viết vài dòng cảm nhận để neo lại khoảnh khắc bình yên này..."></textarea>
-        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()"><span class="svg-icon-sm" data-svg="save"></span> Lưu nhật ký này</button>
-      </div>
+            <!-- Hành động tỉnh thức -->
+            <div class="action-card-callout">
+              <div class="action-card-header"><span class="svg-icon-sm" data-svg="sparkles"></span> Hành Động Gợi Ý Hôm Nay</div>
+              <p id="letterActionText" style="font-size:0.9rem;color:var(--text-primary);font-weight:700;">--</p>
+              <label class="action-checkbox-line">
+                <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
+                <span>Tôi cam kết / đã hoàn thành điều này</span>
+              </label>
+            </div>
 
-      <!-- Banner Đánh Giá Fanpage Sunny trực tiếp trong UI Thông Điệp -->
-      <div class="review-inline-banner" onclick="openSunnyReviewPromptModal()">
-        <div class="review-inline-stars">⭐⭐⭐⭐⭐</div>
-        <div class="review-inline-text">
-          <div class="review-inline-title">Bạn yêu thích thông điệp hôm nay?</div>
-          <div class="review-inline-sub">Gửi tặng Sunny một lượt Đánh giá 5 sao trên Fanpage Facebook nhé!</div>
+            <!-- Ô nhật ký -->
+            <div class="journal-entry-box">
+              <div style="font-size:0.84rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><span class="svg-icon-sm" data-svg="feather"></span> Cảm nghĩ & Lời tri ân:</div>
+              <textarea id="journalInput" class="journal-textarea" placeholder="Viết vài dòng cảm nhận để neo lại khoảnh khắc bình yên này..."></textarea>
+              <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()"><span class="svg-icon-sm" data-svg="save"></span> Lưu nhật ký này</button>
+            </div>
+
+            <!-- Banner Đánh Giá Fanpage Sunny trực tiếp trong UI Thông Điệp -->
+            <div class="review-inline-banner" onclick="openSunnyReviewPromptModal()">
+              <div class="review-inline-stars">⭐⭐⭐⭐⭐</div>
+              <div class="review-inline-text">
+                <div class="review-inline-title">Bạn yêu thích thông điệp hôm nay?</div>
+                <div class="review-inline-sub">Gửi tặng Sunny một lượt Đánh giá 5 sao trên Fanpage Facebook nhé!</div>
+              </div>
+              <button class="btn btn-gold btn-xs"><span class="svg-icon-xs" data-svg="star"></span> Review</button>
+            </div>
+
+            <div class="btn-group-tight" style="margin-top:var(--sp-md);">
+              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
+              <button class="btn btn-secondary btn-sm" onclick="openSunnyReviewPromptModal()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
+            </div>
+          </div>
         </div>
-        <button class="btn btn-gold btn-xs"><span class="svg-icon-xs" data-svg="star"></span> Review</button>
-      </div>
-
-      <div class="btn-group-tight" style="margin-top:var(--sp-md);">
-        <button class="btn btn-gold btn-sm" onclick="openCustomShareModal(currentMessageId)"><span class="svg-icon-sm" data-svg="share2"></span> Chia sẻ ảnh</button>
-        <button class="btn btn-primary btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
-        <button class="btn btn-secondary btn-sm" onclick="openSunnyReviewPromptModal()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
       </div>
     </div>
   </div>
@@ -1453,6 +1478,13 @@
 
       document.getElementById('flipStage').classList.remove('flipped');
 
+      const modalCard = document.getElementById('letterRevealCard');
+      const companionCol = document.getElementById('letterCompanionCol');
+      const toggleBtnText = document.getElementById('companionToggleText');
+      if (modalCard) modalCard.classList.remove('companion-collapsed');
+      if (companionCol) companionCol.classList.remove('open');
+      if (toggleBtnText) toggleBtnText.textContent = 'Bài học & Ghi chú';
+
       document.getElementById('letterCardImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
       document.getElementById('letterTitle').textContent = msg.name;
       document.getElementById('letterQuote').textContent = `"${msg.desc}"`;
@@ -1463,6 +1495,30 @@
       document.getElementById('actionCheckbox').checked = todayRec?.actionDone || false;
     }
 
+    function toggleCompanionPane() {
+      const modalCard = document.getElementById('letterRevealCard');
+      const companionCol = document.getElementById('letterCompanionCol');
+      const toggleBtnText = document.getElementById('companionToggleText');
+      if (!companionCol) return;
+
+      const isMobile = window.innerWidth < 860;
+      if (isMobile) {
+        const willOpen = !companionCol.classList.contains('open');
+        companionCol.classList.toggle('open', willOpen);
+        if (toggleBtnText) {
+          toggleBtnText.textContent = willOpen ? 'Đóng bài học' : 'Bài học & Ghi chú';
+        }
+      } else {
+        if (modalCard) {
+          const willCollapse = !modalCard.classList.contains('companion-collapsed');
+          modalCard.classList.toggle('companion-collapsed', willCollapse);
+          if (toggleBtnText) {
+            toggleBtnText.textContent = willCollapse ? 'Hiện bài học' : 'Bài học & Ghi chú';
+          }
+        }
+      }
+    }
+
     function onCrackWaxSeal() {
       sounds.playWaxCrack();
       if (navigator.vibrate) navigator.vibrate([25, 40, 25]);
@@ -1471,7 +1527,12 @@
         AppAnimations.crackWaxSeal(
           document.getElementById('waxSealCard'),
           document.getElementById('letterRevealCard'),
-          () => launchConfettiEffect()
+          () => {
+            launchConfettiEffect();
+            setTimeout(() => {
+              document.getElementById('flipStage')?.classList.add('flipped');
+            }, 300);
+          }
         );
       } else {
         const btn = document.getElementById('waxSealBtn');
@@ -1480,6 +1541,9 @@
           document.getElementById('waxSealCard').style.display = 'none';
           document.getElementById('letterRevealCard').classList.add('show');
           launchConfettiEffect();
+          setTimeout(() => {
+            document.getElementById('flipStage')?.classList.add('flipped');
+          }, 300);
         }, 550);
       }
     }
@@ -1520,6 +1584,7 @@
       openRitualModal(msg);
       document.getElementById('waxSealCard').style.display = 'none';
       document.getElementById('letterRevealCard').classList.add('show');
+      document.getElementById('flipStage')?.classList.add('flipped');
     }
 
     function onActionCheckboxToggle() {
