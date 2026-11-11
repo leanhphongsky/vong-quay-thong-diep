@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>Vòng Quay Thông Điệp — Trạm Sạc Tâm Hồn</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
   <link rel="stylesheet" href="css/global.css">
 </head>
 <body>
@@ -139,24 +140,24 @@
       </div>
 
       <!-- 4 Compact Energy Pills with 3D Tilt -->
-      <div style="margin-top:var(--sp-2xl);text-align:center;">
+      <div style="margin-top:var(--sp-2xl);text-align:center;" data-aos="fade-up" data-aos-duration="600">
         <h3 style="font-size:1.1rem;font-weight:800;margin-bottom:var(--sp-xs);">4 Nguồn Năng Lượng Tâm Thức</h3>
         <p style="font-size:0.82rem;color:var(--text-muted);">Chạm vào nguồn năng lượng để khám phá các thông điệp tương ứng</p>
 
         <div class="energy-pills-row">
-          <div class="energy-pill holo-tilt" onclick="filterByEnergy('wisdom')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('wisdom')" data-aos="fade-up" data-aos-delay="60">
             <span class="energy-pill-icon" data-svg="wisdomLotus"></span>
             <div class="energy-pill-title">Trí Tuệ & Tĩnh Lặng</div>
           </div>
-          <div class="energy-pill holo-tilt" onclick="filterByEnergy('love')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('love')" data-aos="fade-up" data-aos-delay="120">
             <span class="energy-pill-icon" data-svg="loveRadiant"></span>
             <div class="energy-pill-title">Yêu Thương & Chữa Lành</div>
           </div>
-          <div class="energy-pill holo-tilt" onclick="filterByEnergy('discipline')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('discipline')" data-aos="fade-up" data-aos-delay="180">
             <span class="energy-pill-icon" data-svg="disciplineFlame"></span>
             <div class="energy-pill-title">Kỷ Luật & Hành Động</div>
           </div>
-          <div class="energy-pill holo-tilt" onclick="filterByEnergy('flow')">
+          <div class="energy-pill holo-tilt" onclick="filterByEnergy('flow')" data-aos="fade-up" data-aos-delay="240">
             <span class="energy-pill-icon" data-svg="flowWave"></span>
             <div class="energy-pill-title">Thuận Dòng & Tái Sinh</div>
           </div>
@@ -166,13 +167,13 @@
 
     <!-- ── VIEW 2: THƯ VIỆN 70 BÀI HỌC ── -->
     <section id="viewLibrary" class="view-panel">
-      <div class="hero-header" style="padding-bottom:var(--sp-sm);">
+      <div class="hero-header" style="padding-bottom:var(--sp-sm);" data-aos="fade-down" data-aos-duration="600">
         <div class="eyebrow-pill"><span class="svg-icon-sm" data-svg="bookOpen"></span> Bộ Sưu Tập</div>
         <h1 class="hero-title" style="font-size:1.7rem;">70 Hạt Mầm Khai Sáng</h1>
       </div>
 
       <!-- Unlock Progress -->
-      <div class="lib-progress-wrap">
+      <div class="lib-progress-wrap" data-aos="fade-up" data-aos-delay="40">
         <div class="lib-progress-meta">
           <span>Tiến trình mở khóa</span>
           <span><strong id="libProgressText" style="color:var(--accent);">0</strong>/70</span>
@@ -183,7 +184,7 @@
       </div>
 
       <!-- Search & Filters -->
-      <div class="lib-header-box">
+      <div class="lib-header-box" data-aos="fade-up" data-aos-delay="80">
         <div class="search-input-box">
           <span class="search-prefix-icon"><span class="svg-icon-sm" data-svg="search"></span></span>
           <input type="text" id="libSearchInput" class="search-field" placeholder="Tìm kiếm thông điệp hoặc bài học..." oninput="onSearchLib()">
@@ -634,6 +635,8 @@
        SCRIPTS
        ====================================================================== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
   <script src="js/icons.js"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/sound.js"></script>
@@ -641,6 +644,7 @@
   <script src="js/storage.js"></script>
   <script src="js/story-generator.js"></script>
   <script src="js/bg-music.js"></script>
+  <script src="js/animations.js"></script>
   <script src="js/background-paths.js"></script>
   <script src="js/rainglass-background.js"></script>
 
@@ -770,28 +774,32 @@
       }
     }
 
-    // ── 4. ZEN BREATHE GUIDE (Hít thở sâu) ──
+    // ── 4. ZEN BREATHE GUIDE (Hít thở sâu & Lắng đọng) ──
     let isBreathing = false;
     function triggerZenBreathe() {
       if (isBreathing) return;
       isBreathing = true;
       const textEl = document.getElementById('breatheText');
+      const orbEl = document.querySelector('.zen-breathe-orb');
       sounds.playSingingBowl();
 
-      textEl.textContent = 'Hít vào thật sâu... (4s)';
-      setTimeout(() => {
-        textEl.textContent = 'Giữ lại sự bình an... (4s)';
-      }, 4000);
-      setTimeout(() => {
-        textEl.textContent = 'Thở ra nhẹ nhàng, thả lỏng mọi âu lo... (4s)';
-      }, 8000);
-      setTimeout(() => {
-        textEl.textContent = 'Tâm bạn đã sẵn sàng đón nhận chỉ dẫn.';
-        isBreathing = false;
+      if (window.AppAnimations && typeof AppAnimations.triggerBreatheCycle === 'function') {
+        AppAnimations.triggerBreatheCycle(orbEl, textEl, () => {
+          isBreathing = false;
+          setTimeout(() => {
+            if (textEl) textEl.textContent = 'Hít sâu và lắng đọng tâm trí (4s)';
+          }, 3500);
+        });
+      } else {
+        textEl.textContent = 'Hít vào thật sâu... (4s)';
+        setTimeout(() => { textEl.textContent = 'Giữ lại sự bình an... (4s)'; }, 4000);
+        setTimeout(() => { textEl.textContent = 'Thở ra nhẹ nhàng, thả lỏng mọi âu lo... (4s)'; }, 8000);
         setTimeout(() => {
-          textEl.textContent = 'Hít sâu và lắng đọng tâm trí (4s)';
-        }, 3500);
-      }, 12000);
+          textEl.textContent = 'Tâm bạn đã sẵn sàng đón nhận chỉ dẫn.';
+          isBreathing = false;
+          setTimeout(() => { textEl.textContent = 'Hít sâu và lắng đọng tâm trí (4s)'; }, 3500);
+        }, 12000);
+      }
     }
 
     // ── 5. SPA TAB SWITCHING VỚI KOKONUT MORPHIC NAVBAR ──
@@ -811,24 +819,41 @@
       const left = btnRect.left - navRect.left;
       const width = btnRect.width;
 
-      indicator.style.left = `${left}px`;
-      indicator.style.width = `${width}px`;
-      indicator.style.opacity = '1';
+      if (window.gsap) {
+        gsap.to(indicator, {
+          left: left,
+          width: width,
+          opacity: 1,
+          duration: 0.42,
+          ease: 'elastic.out(1, 0.75)'
+        });
+      } else {
+        indicator.style.left = `${left}px`;
+        indicator.style.width = `${width}px`;
+        indicator.style.opacity = '1';
+      }
     }
 
     function switchTab(tabId) {
+      if (tabId === activeTab && document.getElementById(tabId === 'spin' ? 'viewSpin' : 'viewLibrary')?.classList.contains('active')) return;
+      const prevTab = activeTab;
       activeTab = tabId;
-      document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
 
-      if (tabId === 'spin') {
-        document.getElementById('viewSpin').classList.add('active');
-        window.location.hash = 'spin';
-        updateMorphicNav('spin');
-      } else if (tabId === 'library') {
-        document.getElementById('viewLibrary').classList.add('active');
-        window.location.hash = 'library';
-        updateMorphicNav('library');
-        renderLibrary();
+      const currentPanel = prevTab === 'spin' ? document.getElementById('viewSpin') : document.getElementById('viewLibrary');
+      const targetPanel = tabId === 'spin' ? document.getElementById('viewSpin') : document.getElementById('viewLibrary');
+
+      if (window.AppAnimations && typeof AppAnimations.animateViewTransition === 'function') {
+        AppAnimations.animateViewTransition(currentPanel, targetPanel, () => {
+          window.location.hash = tabId;
+          updateMorphicNav(tabId);
+          if (tabId === 'library') renderLibrary();
+        });
+      } else {
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        if (targetPanel) targetPanel.classList.add('active');
+        window.location.hash = tabId;
+        updateMorphicNav(tabId);
+        if (tabId === 'library') renderLibrary();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -845,8 +870,13 @@
     let currentAvatarGlyph = localStorage.getItem('vqtd_avatar_glyph') || 'astrolabe';
 
     function openDrawer() {
-      document.getElementById('drawerBackdrop').classList.add('show');
-      document.body.style.overflow = 'hidden';
+      const backdrop = document.getElementById('drawerBackdrop');
+      if (window.AppAnimations && typeof AppAnimations.openDrawer === 'function') {
+        AppAnimations.openDrawer(backdrop, '.drawer-sheet');
+      } else {
+        backdrop.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
       renderDrawerBadges();
       syncDrawerProfile();
       syncAdminVisibility();
@@ -856,9 +886,14 @@
       if (e && e.target !== document.getElementById('drawerBackdrop') && !e.target.closest('.icon-btn')) {
         return;
       }
-      document.getElementById('drawerBackdrop').classList.remove('show');
-      document.body.style.overflow = '';
-      updateMorphicNav(activeTab);
+      const backdrop = document.getElementById('drawerBackdrop');
+      if (window.AppAnimations && typeof AppAnimations.closeDrawer === 'function') {
+        AppAnimations.closeDrawer(backdrop, '.drawer-sheet', () => updateMorphicNav(activeTab));
+      } else {
+        backdrop.classList.remove('show');
+        document.body.style.overflow = '';
+        updateMorphicNav(activeTab);
+      }
     }
 
     function cycleAvatarGlyph() {
@@ -897,6 +932,10 @@
     async function initApp() {
       Icons.renderAll();
       initTheme();
+
+      if (window.AppAnimations && typeof AppAnimations.init === 'function') {
+        AppAnimations.init();
+      }
 
       currentUser = await getCurrentUser();
       if (!currentUser) {
@@ -1222,6 +1261,31 @@
       const fullRotations = 7 + Math.random() * 3;
       const targetAngle = currentRotationAngle + (Math.PI * 2 * fullRotations) + (Math.random() * Math.PI * 2);
 
+      // GSAP High-Precision Horological Physics Engine
+      if (window.AppAnimations && typeof AppAnimations.spinWheelWithGSAP === 'function' && window.gsap) {
+        AppAnimations.spinWheelWithGSAP({
+          startAngle: currentRotationAngle,
+          targetAngle: targetAngle,
+          duration: 5.8,
+          onUpdate: (angle) => {
+            currentRotationAngle = angle;
+            drawWheel(currentRotationAngle);
+          },
+          onTick: (progress) => {
+            sounds.playTick(1.0 + (1 - progress) * 0.6);
+            if (navigator.vibrate) navigator.vibrate(8);
+          },
+          onComplete: (finalAngle) => {
+            currentRotationAngle = finalAngle;
+            isWheelSpinning = false;
+            discWrap.classList.remove('spinning-active');
+            loader.style.display = 'none';
+            onSpinDone(chosenMessage);
+          }
+        });
+        return;
+      }
+
       const duration = 4800;
       const startTime = performance.now();
       const startAngle = currentRotationAngle;
@@ -1282,9 +1346,16 @@
       const letterCard = document.getElementById('letterRevealCard');
 
       waxCard.style.display = 'block';
+      waxCard.style.opacity = '1';
+      waxCard.style.transform = 'none';
       letterCard.classList.remove('show');
-      modal.classList.add('show');
-      document.body.style.overflow = 'hidden';
+
+      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
+        AppAnimations.openModal(modal, '#waxSealCard');
+      } else {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
 
       document.getElementById('flipStage').classList.remove('flipped');
 
@@ -1299,16 +1370,24 @@
     }
 
     function onCrackWaxSeal() {
-      const btn = document.getElementById('waxSealBtn');
-      btn.style.animation = 'sealBreakAnim 0.6s ease forwards';
       sounds.playWaxCrack();
       if (navigator.vibrate) navigator.vibrate([25, 40, 25]);
 
-      setTimeout(() => {
-        document.getElementById('waxSealCard').style.display = 'none';
-        document.getElementById('letterRevealCard').classList.add('show');
-        launchConfettiEffect();
-      }, 550);
+      if (window.AppAnimations && typeof AppAnimations.crackWaxSeal === 'function') {
+        AppAnimations.crackWaxSeal(
+          document.getElementById('waxSealCard'),
+          document.getElementById('letterRevealCard'),
+          () => launchConfettiEffect()
+        );
+      } else {
+        const btn = document.getElementById('waxSealBtn');
+        btn.style.animation = 'sealBreakAnim 0.6s ease forwards';
+        setTimeout(() => {
+          document.getElementById('waxSealCard').style.display = 'none';
+          document.getElementById('letterRevealCard').classList.add('show');
+          launchConfettiEffect();
+        }, 550);
+      }
     }
 
     function toggleCardFlip() {
@@ -1317,9 +1396,14 @@
     }
 
     function closeRitualModal() {
-      document.getElementById('ritualModal').classList.remove('show');
-      document.body.style.overflow = '';
-      checkTodaySpinStatus();
+      const modal = document.getElementById('ritualModal');
+      if (window.AppAnimations && typeof AppAnimations.closeModal === 'function') {
+        AppAnimations.closeModal(modal, '.modal-card', () => checkTodaySpinStatus());
+      } else {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        checkTodaySpinStatus();
+      }
     }
 
     function reopenTodayRitual() {
@@ -1386,13 +1470,16 @@
       });
 
       grid.innerHTML = '';
-      filtered.forEach(msg => {
+      filtered.forEach((msg, idx) => {
         const isUnlocked = history.some(h => h.messageId === msg.id);
         const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
         const iconSvg = Icons.get(cat.iconName || 'sparkles', 'svg-icon-xs');
 
         const card = document.createElement('div');
         card.className = 'lib-card holo-tilt';
+        card.setAttribute('data-aos', 'fade-up');
+        card.setAttribute('data-aos-delay', String((idx % 8) * 45));
+        card.setAttribute('data-aos-duration', '500');
         card.innerHTML = `
           <div class="lib-card-art">
             <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
@@ -1421,6 +1508,16 @@
       });
 
       initHoloTilt();
+      if (window.AppAnimations) AppAnimations.refreshAOS();
+      if (window.gsap) {
+        gsap.from(grid.children, {
+          y: 18,
+          opacity: 0,
+          stagger: 0.025,
+          duration: 0.35,
+          ease: 'power2.out'
+        });
+      }
     }
 
     // ── 14. HOLOGRAPHIC 3D CARD TILT ENGINE ──
@@ -1621,8 +1718,12 @@
         emailInput.value = (currentUser && currentUser.id !== 'guest') ? (currentUser.email || '') : '';
       }
 
-      modal.classList.add('show');
-      document.body.style.overflow = 'hidden';
+      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
+        AppAnimations.openModal(modal, '.confession-card');
+      } else {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
       setTimeout(() => { if (msgInput) msgInput.focus(); }, 150);
       Icons.renderAll();
     }
@@ -1630,8 +1731,13 @@
     function closeConfessionModal(e) {
       if (e && e.target !== document.getElementById('confessionModal') && !e.target.closest('.modal-close-round')) return;
       const modal = document.getElementById('confessionModal');
-      if (modal) modal.classList.remove('show');
-      document.body.style.overflow = '';
+      if (!modal) return;
+      if (window.AppAnimations && typeof AppAnimations.closeModal === 'function') {
+        AppAnimations.closeModal(modal, '.confession-card');
+      } else {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
     }
 
     function toggleAnonymousCheckbox() {
@@ -1699,8 +1805,12 @@
       }
       const modal = document.getElementById('adminInboxModal');
       if (!modal) return;
-      modal.classList.add('show');
-      document.body.style.overflow = 'hidden';
+      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
+        AppAnimations.openModal(modal, '.admin-inbox-card');
+      } else {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
 
       await loadAdminInbox();
     }
@@ -1708,9 +1818,14 @@
     function closeAdminInboxModal(e) {
       if (e && e.target !== document.getElementById('adminInboxModal') && !e.target.closest('.modal-close-round')) return;
       const modal = document.getElementById('adminInboxModal');
-      if (modal) modal.classList.remove('show');
-      document.body.style.overflow = '';
-      syncAdminVisibility();
+      if (!modal) return;
+      if (window.AppAnimations && typeof AppAnimations.closeModal === 'function') {
+        AppAnimations.closeModal(modal, '.admin-inbox-card', () => syncAdminVisibility());
+      } else {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+        syncAdminVisibility();
+      }
     }
 
     async function loadAdminInbox() {
@@ -1890,16 +2005,25 @@
       if (titleEl) titleEl.textContent = msg.name;
       if (descEl) descEl.textContent = `"${msg.desc}"`;
 
-      modal.classList.add('show');
-      document.body.style.overflow = 'hidden';
+      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
+        AppAnimations.openModal(modal, '.custom-share-card');
+      } else {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
       Icons.renderAll();
     }
 
     function closeCustomShareModal(e) {
       if (e && e.target !== document.getElementById('customShareModal') && !e.target.closest('.modal-close-round')) return;
       const modal = document.getElementById('customShareModal');
-      if (modal) modal.classList.remove('show');
-      document.body.style.overflow = '';
+      if (!modal) return;
+      if (window.AppAnimations && typeof AppAnimations.closeModal === 'function') {
+        AppAnimations.closeModal(modal, '.custom-share-card');
+      } else {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+      }
     }
 
     async function copyMessagePhotoToClipboard() {
