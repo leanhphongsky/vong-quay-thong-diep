@@ -3,7 +3,7 @@
    Siêu Mượt Mà · Vũ Trụ Lung Linh · Holographic 3D Foil · Tactile Delights
    ========================================================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400;1,600&family=Nunito:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;0,900;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=Nunito:wght@400;500;600;700;800;900&display=swap');
 
 :root {
   /* ── Light Mode Palette (Warm Dawn Sanctuary) ── */
@@ -99,13 +99,13 @@ html {
 }
 
 body {
-  font-family: 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Plus Jakarta Sans', 'Nunito', -apple-system, BlinkMacSystemFont, sans-serif;
   background-color: var(--bg-primary);
   color: var(--text-primary);
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   padding-top: calc(var(--nav-height) + 14px);
-  padding-bottom: calc(var(--bottom-bar-height) + var(--music-bar-height) + 26px);
+  padding-bottom: calc(var(--bottom-bar-height) + var(--music-bar-height) + 48px);
   min-height: 100vh;
   transition: background-color 0.4s ease, color 0.4s ease;
   overflow-x: hidden;
@@ -240,12 +240,12 @@ svg.svg-icon-2xl,
 }
 
 /* ── Typography Scale ── */
-.font-display { font-family: 'Cinzel', serif; }
-.font-heading { font-family: 'Playfair Display', serif; }
-.font-body    { font-family: 'Nunito', sans-serif; }
+.font-display { font-family: 'Playfair Display', 'Be Vietnam Pro', serif; }
+.font-heading { font-family: 'Playfair Display', 'Be Vietnam Pro', serif; }
+.font-body    { font-family: 'Plus Jakarta Sans', 'Nunito', sans-serif; }
 
 h1, h2, h3 {
-  font-family: 'Playfair Display', serif;
+  font-family: 'Playfair Display', 'Be Vietnam Pro', serif;
   color: var(--text-primary);
   line-height: 1.25;
 }
@@ -257,7 +257,7 @@ p {
 /* ── Container Layout ── */
 .container {
   width: 100%;
-  max-width: 680px;
+  max-width: 860px;
   margin: 0 auto;
   padding: 0 var(--sp-lg);
   position: relative;
@@ -293,10 +293,10 @@ p {
   align-items: center;
   gap: var(--sp-sm);
   text-decoration: none;
-  font-family: 'Cinzel', serif;
+  font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
   font-weight: 800;
   font-size: 1.05rem;
-  letter-spacing: 1px;
+  letter-spacing: 1.5px;
   color: var(--text-primary);
   cursor: pointer;
   user-select: none;
@@ -506,10 +506,10 @@ p {
 /* ── 3. Modern Glass Music Player Bar (48px) ── */
 .music-bar {
   position: fixed;
-  bottom: calc(14px + 46px + 10px);
+  bottom: calc(14px + 46px + 12px);
   left: 50%;
   transform: translateX(-50%);
-  width: min(520px, calc(100vw - 28px));
+  width: min(440px, calc(100vw - 32px));
   height: var(--music-bar-height);
   background: rgba(255, 255, 255, 0.88);
   backdrop-filter: blur(18px);
@@ -521,16 +521,60 @@ p {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 16px 0 12px;
+  padding: 0 10px 0 14px;
   font-size: 0.82rem;
   color: var(--text-body);
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 .dark .music-bar {
-  background: rgba(19, 23, 34, 0.9);
+  background: rgba(19, 23, 34, 0.92);
   border-color: var(--border);
   box-shadow: var(--shadow-md), 0 0 25px rgba(0, 0, 0, 0.5);
+}
+
+.music-bar.minimized {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-radius: 50%;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.28);
+}
+
+.music-bar.minimized .music-bar-left,
+.music-bar.minimized .music-ctrl-btn,
+.music-bar.minimized .music-play-btn {
+  display: none !important;
+}
+
+.music-bar.minimized .music-min-btn {
+  width: 100%;
+  height: 100%;
+  color: var(--accent);
+}
+
+.music-min-btn {
+  width: 26px;
+  height: 26px;
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 0;
+  transition: color 0.15s ease, transform 0.2s ease;
+  margin-left: 2px;
+}
+
+.music-min-btn:hover {
+  color: var(--accent);
+  transform: scale(1.15);
 }
 
 .music-bar-left {
@@ -633,11 +677,6 @@ p {
   height: 14px;
   fill: currentColor;
 }
-  box-shadow: 0 4px 12px rgba(224, 109, 68, 0.45);
-  margin: 0 4px;
-  cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
-}
 
 .music-play-btn:hover {
   transform: scale(1.12);
@@ -690,12 +729,13 @@ p {
 }
 
 .hero-title {
-  font-family: 'Cinzel', serif;
-  font-size: clamp(1.7rem, 5.5vw, 2.4rem);
+  font-family: 'Playfair Display', 'Be Vietnam Pro', serif;
+  font-size: clamp(1.7rem, 5.5vw, 2.35rem);
   font-weight: 800;
   color: var(--text-primary);
   margin-bottom: 6px;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  line-height: 1.25;
 }
 
 .hero-subtitle {
@@ -746,22 +786,24 @@ p {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--sp-xl);
+  gap: var(--sp-lg);
   margin-bottom: var(--sp-2xl);
   position: relative;
+  width: 100%;
 }
 
 /* Hào quang nền của vòng quay */
 .wheel-disc-container {
   position: relative;
-  width: min(350px, 88vw);
-  height: min(350px, 88vw);
+  width: min(360px, 86vw);
+  height: min(360px, 86vw);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 0 auto;
   background: radial-gradient(circle, rgba(221, 167, 58, 0.22) 0%, rgba(224, 109, 68, 0.1) 60%, transparent 75%);
-  transition: transform 0.4s ease;
+  transition: transform 0.4s ease, width 0.3s ease, height 0.3s ease;
 }
 
 .wheel-disc-container.spinning-active {
@@ -790,13 +832,13 @@ p {
 
 .wheel-pointer-pin {
   position: absolute;
-  top: -20px;
+  top: -16px;
   left: 50%;
   transform: translateX(-50%);
-  width: 32px;
-  height: 48px;
-  z-index: 15;
-  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
+  width: 30px;
+  height: 44px;
+  z-index: 25;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.4));
   pointer-events: none;
   transition: transform 0.1s ease;
 }
@@ -812,8 +854,8 @@ p {
 }
 
 .wheel-canvas {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
   border-radius: 50%;
   box-shadow: var(--shadow-md), 0 0 30px rgba(221, 167, 58, 0.25);
   cursor: pointer;
@@ -849,15 +891,15 @@ p {
 /* Super Magnetic CTA Spin Button */
 .btn-cta-spin {
   width: min(310px, 86vw);
-  height: 58px;
+  height: 56px;
   background: linear-gradient(135deg, var(--accent) 0%, #EA8152 45%, var(--accent-gold) 100%);
   color: #FFFFFF;
   border: 2px solid rgba(255, 255, 255, 0.4);
   border-radius: var(--r-pill);
-  font-family: 'Cinzel', serif;
-  font-size: 1.2rem;
+  font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
+  font-size: 1.15rem;
   font-weight: 800;
-  letter-spacing: 2.5px;
+  letter-spacing: 2px;
   cursor: pointer;
   box-shadow: 0 8px 26px rgba(224, 109, 68, 0.45), 0 0 20px rgba(221, 167, 58, 0.25);
   transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
@@ -1015,6 +1057,62 @@ p {
 
 .already-spun-card.show {
   display: block;
+}
+
+/* ── Already Spun Dual-Column Desktop Hero ── */
+@media (min-width: 820px) {
+  .wheel-arena.already-spun-mode {
+    display: grid;
+    grid-template-columns: 340px 1fr;
+    grid-template-areas: 
+      "disc card"
+      "stats stats";
+    align-items: center;
+    gap: 36px;
+    max-width: 840px;
+    margin: 0 auto var(--sp-xl);
+  }
+
+  .wheel-arena.already-spun-mode #wheelDiscWrap {
+    grid-area: disc;
+    width: 330px;
+    height: 330px;
+  }
+
+  .wheel-arena.already-spun-mode #alreadySpunBox {
+    grid-area: card;
+    margin: 0;
+    max-width: 100%;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .wheel-arena.already-spun-mode #alreadySpunBox .today-thumb {
+    margin: 0 0 var(--sp-sm);
+    width: 110px;
+  }
+
+  .wheel-arena.already-spun-mode #alreadySpunBox .today-title,
+  .wheel-arena.already-spun-mode #alreadySpunBox .today-excerpt {
+    text-align: left;
+  }
+
+  .wheel-arena.already-spun-mode .stats-inline-strip {
+    grid-area: stats;
+    margin-top: 8px;
+  }
+}
+
+@media (max-width: 819px) {
+  .wheel-arena.already-spun-mode #wheelDiscWrap {
+    width: min(270px, 72vw);
+    height: min(270px, 72vw);
+  }
+  .wheel-arena.already-spun-mode {
+    gap: var(--sp-md);
+  }
 }
 
 .today-thumb {
@@ -1467,7 +1565,7 @@ p {
 }
 
 .drawer-title {
-  font-family: 'Cinzel', serif;
+  font-family: 'Playfair Display', 'Be Vietnam Pro', serif;
   font-size: 1.15rem;
   font-weight: 800;
   color: var(--text-primary);

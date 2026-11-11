@@ -214,6 +214,7 @@
       <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span class="svg-icon-sm" data-svg="skipBack"></span></button>
       <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span class="svg-icon-xs" data-svg="play"></span></button>
       <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span class="svg-icon-sm" data-svg="skipForward"></span></button>
+      <button class="music-min-btn" id="musicMinBtn" onclick="toggleMusicMin()" title="Thu nhỏ trình phát nhạc" aria-label="Thu nhỏ trình phát nhạc"><span class="svg-icon-xs" data-svg="chevronDown"></span></button>
     </div>
   </aside>
 
@@ -369,7 +370,7 @@
         <div class="card-flip-body">
           <div class="card-flip-face card-flip-front">
             <div style="margin-bottom:10px;"><span data-svg="astrolabe" class="svg-icon-xl" style="color:var(--accent-gold);"></span></div>
-            <div style="font-family:'Cinzel',serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
+            <div style="font-family:'Plus Jakarta Sans','Be Vietnam Pro',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
             <p style="font-size:0.8rem;opacity:0.8;">Chạm để lật mặt tranh thông điệp</p>
           </div>
           <div class="card-flip-face card-flip-back">
@@ -629,6 +630,9 @@
 
     window.addEventListener('resize', () => {
       updateMorphicNav(activeTab);
+      if (typeof drawWheel === 'function') {
+        drawWheel(currentRotationAngle);
+      }
     });
 
     // ── 6. DRAWER BOTTOM SHEET (Thêm) ──
@@ -753,6 +757,7 @@
       const todayRecord = getTodaySpin();
       const spinBtnWrapper = document.getElementById('spinBtnWrapper');
       const alreadySpunBox = document.getElementById('alreadySpunBox');
+      const arena = document.querySelector('.wheel-arena');
 
       if (todayRecord) {
         currentMessageId = todayRecord.messageId;
@@ -760,6 +765,7 @@
 
         spinBtnWrapper.style.display = 'none';
         alreadySpunBox.classList.add('show');
+        if (arena) arena.classList.add('already-spun-mode');
 
         document.getElementById('todayThumbImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
         document.getElementById('todayMsgTitle').textContent = msg.name;
@@ -769,6 +775,7 @@
       } else {
         spinBtnWrapper.style.display = 'block';
         alreadySpunBox.classList.remove('show');
+        if (arena) arena.classList.remove('already-spun-mode');
       }
     }
 
@@ -791,45 +798,46 @@
     const ctx = canvas.getContext('2d');
     const SEGMENTS = 12;
 
-    const SEGMENT_RUNES = ['✦','✧','☽','☼','♃','♄','☿','♀','♂','♈','♎','☯'];
-    const SEGMENT_LABELS = ['BÌNH AN','TRÍ TUỆ','HY VỌNG','CHỮA LÀNH','DỒI DÀO','TÌNH YÊU',
-                            'KỶ LUẬT','BỀN BỈ','KHAI SÁNG','CHÁNH NIỆM','THONG DONG','PHÚC LẠC'];
+    const SEGMENT_RUNES = ['✦', '✧', '☽', '☼', '♃', '♄', '☿', '♀', '♂', '★', '❂', '◈'];
+    const SEGMENT_LABELS = ['BÌNH AN', 'TRÍ TUỆ', 'HY VỌNG', 'CHỮA LÀNH', 'DỒI DÀO', 'TÌNH YÊU',
+                            'KỶ LUẬT', 'BỀN BỈ', 'KHAI SÁNG', 'CHÁNH NIỆM', 'THONG DONG', 'PHÚC LẠC'];
 
     let currentRotationAngle = 0;
     let isWheelSpinning = false;
     let lastSegmentIndex = -1;
 
     function drawWheel(angle) {
+      const container = document.getElementById('wheelDiscWrap');
+      const clientW = container ? container.clientWidth : 360;
       const dpr = Math.max(window.devicePixelRatio || 1, 2);
-      const CSS_SIZE = 480;
-      if (canvas.width !== CSS_SIZE * dpr) {
-        canvas.width = CSS_SIZE * dpr;
-        canvas.height = CSS_SIZE * dpr;
-        canvas.style.width = CSS_SIZE + 'px';
-        canvas.style.height = CSS_SIZE + 'px';
+      const size = clientW > 100 ? clientW : 360;
+
+      if (canvas.width !== size * dpr || canvas.height !== size * dpr) {
+        canvas.width = size * dpr;
+        canvas.height = size * dpr;
       }
 
       ctx.save();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      const CX = (CSS_SIZE * dpr) / 2;
-      const CY = (CSS_SIZE * dpr) / 2;
-      const R = 224 * dpr;
-      const s = dpr;
+      const CX = (size * dpr) / 2;
+      const CY = (size * dpr) / 2;
+      const R = (size * 0.46) * dpr;
+      const s = (size / 360) * dpr;
       const isDark = document.documentElement.classList.contains('dark');
       const segAngle = (Math.PI * 2) / SEGMENTS;
 
       // ── Outer Celestial Border Ring ──
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 10 * s, 0, Math.PI * 2);
+      ctx.arc(CX, CY, R + 9 * s, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#080A10' : '#EDE4D4';
       ctx.shadowColor = isDark ? 'rgba(221, 167, 58, 0.45)' : 'rgba(184, 134, 11, 0.3)';
-      ctx.shadowBlur = 24 * s;
+      ctx.shadowBlur = 18 * s;
       ctx.fill();
 
       // Outer Gold Bevel
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 9 * s, 0, Math.PI * 2);
+      ctx.arc(CX, CY, R + 8 * s, 0, Math.PI * 2);
       ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
       ctx.lineWidth = 2 * s;
       ctx.stroke();
@@ -840,8 +848,8 @@
         const rad = angle + (deg * Math.PI) / 180;
         const isMajor = deg % 30 === 0;
         const isMedium = deg % 5 === 0;
-        const tickLen = (isMajor ? 11 : isMedium ? 6.5 : 3.5) * s;
-        const rOuter = R + 5 * s;
+        const tickLen = (isMajor ? 10 : isMedium ? 6 : 3) * s;
+        const rOuter = R + 4.5 * s;
         const rInner = rOuter - tickLen;
 
         const x1 = CX + Math.cos(rad) * rInner;
@@ -857,7 +865,7 @@
           : isMedium
             ? (isDark ? 'rgba(221, 167, 58, 0.65)' : 'rgba(184, 134, 11, 0.6)')
             : (isDark ? 'rgba(221, 167, 58, 0.28)' : 'rgba(184, 134, 11, 0.25)');
-        ctx.lineWidth = (isMajor ? 2.2 : isMedium ? 1.2 : 0.75) * s;
+        ctx.lineWidth = (isMajor ? 2 : isMedium ? 1.2 : 0.75) * s;
         ctx.stroke();
       }
       ctx.restore();
@@ -887,29 +895,37 @@
         ctx.moveTo(CX, CY);
         ctx.lineTo(CX + Math.cos(start) * R, CY + Math.sin(start) * R);
         ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.65)' : 'rgba(184, 134, 11, 0.55)';
-        ctx.lineWidth = 1.75 * s;
+        ctx.lineWidth = 1.5 * s;
         ctx.stroke();
 
-        // Celestial Rune Sigil (Outer Orbit)
-        const rx = CX + Math.cos(mid) * (R * 0.78);
-        const ry = CY + Math.sin(mid) * (R * 0.78);
+        // Celestial Rune Sigil (Outer Orbit) - No Emojis!
+        const rx = CX + Math.cos(mid) * (R * 0.77);
+        const ry = CY + Math.sin(mid) * (R * 0.77);
         ctx.save();
         ctx.translate(rx, ry);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = `bold ${Math.round(20 * s)}px serif`;
+        ctx.font = `bold ${Math.round(18 * s)}px 'Plus Jakarta Sans', sans-serif`;
         ctx.fillStyle = isDark ? '#FDE68A' : '#7D4815';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(SEGMENT_RUNES[i], 0, 0);
         ctx.restore();
 
-        // Sector Label (Cinzel Typography)
+        // Sector Label (Upright Text Orientation with Native Vietnamese Font)
         const lx = CX + Math.cos(mid) * (R * 0.46);
         const ly = CY + Math.sin(mid) * (R * 0.46);
         ctx.save();
         ctx.translate(lx, ly);
-        ctx.rotate(mid + Math.PI / 2);
-        ctx.font = `700 ${Math.round(10.5 * s)}px 'Cinzel', serif`;
+
+        // Normalize mid angle to 0..2PI to determine if upside down
+        let rot = mid + Math.PI / 2;
+        const normAngle = ((mid % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
+        if (normAngle > 0 && normAngle < Math.PI) {
+          rot += Math.PI; // flip upright
+        }
+        ctx.rotate(rot);
+
+        ctx.font = `800 ${Math.round(9.5 * s)}px 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif`;
         ctx.fillStyle = isDark ? '#F1E9DB' : '#2D1810';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
@@ -921,11 +937,11 @@
       ctx.beginPath();
       ctx.arc(CX, CY, R, 0, Math.PI * 2);
       ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
-      ctx.lineWidth = 2.5 * s;
+      ctx.lineWidth = 2.2 * s;
       ctx.stroke();
 
       ctx.beginPath();
-      ctx.arc(CX, CY, R * 0.64, 0, Math.PI * 2);
+      ctx.arc(CX, CY, R * 0.63, 0, Math.PI * 2);
       ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.35)' : 'rgba(184, 134, 11, 0.3)';
       ctx.lineWidth = 1 * s;
       ctx.stroke();
@@ -933,32 +949,32 @@
       // ── Sacred Geometry: Inscribed 12-Pointed Metatron Star ──
       ctx.save();
       ctx.beginPath();
-      const innerR = 64 * s;
+      const innerR = 56 * s;
       for (let i = 0; i < 12; i++) {
         const theta1 = angle + (i * Math.PI * 2) / 12;
         const theta2 = angle + ((i + 4) * Math.PI * 2) / 12;
         ctx.moveTo(CX + Math.cos(theta1) * innerR, CY + Math.sin(theta1) * innerR);
         ctx.lineTo(CX + Math.cos(theta2) * innerR, CY + Math.sin(theta2) * innerR);
       }
-      ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.4)' : 'rgba(184, 134, 11, 0.35)';
+      ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.38)' : 'rgba(184, 134, 11, 0.32)';
       ctx.lineWidth = 1 * s;
       ctx.stroke();
       ctx.restore();
 
       // ── Central Pivot Rings & Hub ──
       ctx.beginPath();
-      ctx.arc(CX, CY, 52 * s, 0, Math.PI * 2);
+      ctx.arc(CX, CY, 46 * s, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#0E131F' : '#FAF5EB';
       ctx.fill();
       ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
-      ctx.lineWidth = 3 * s;
+      ctx.lineWidth = 2.5 * s;
       ctx.stroke();
 
       // Center Concentric Gold Accent Ring
       ctx.beginPath();
-      ctx.arc(CX, CY, 28 * s, 0, Math.PI * 2);
+      ctx.arc(CX, CY, 24 * s, 0, Math.PI * 2);
       ctx.strokeStyle = isDark ? 'rgba(253, 230, 138, 0.7)' : 'rgba(184, 134, 11, 0.6)';
-      ctx.lineWidth = 1.5 * s;
+      ctx.lineWidth = 1.2 * s;
       ctx.stroke();
 
       // ── Specular Curved Crystal Glare ──
@@ -1296,6 +1312,19 @@
 
     function setMusicVol(val) {
       if (bgMusic) bgMusic.setVolume(parseFloat(val));
+    }
+
+    function toggleMusicMin() {
+      const bar = document.getElementById('musicPlayerBar');
+      const minBtn = document.getElementById('musicMinBtn');
+      if (!bar) return;
+      bar.classList.toggle('minimized');
+      const isMin = bar.classList.contains('minimized');
+      if (minBtn) {
+        minBtn.innerHTML = Icons.get(isMin ? 'music' : 'chevronDown', 'svg-icon-xs');
+        minBtn.title = isMin ? 'Mở rộng trình phát nhạc' : 'Thu nhỏ trình phát nhạc';
+        minBtn.setAttribute('aria-label', isMin ? 'Mở rộng trình phát nhạc' : 'Thu nhỏ trình phát nhạc');
+      }
     }
 
     function toggleSfxEngine() {
