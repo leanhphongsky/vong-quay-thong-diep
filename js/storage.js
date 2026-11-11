@@ -295,7 +295,16 @@ function getCloudConnectionInfo() {
 
 // ---- Compatibility Functions ----
 function getUser() { return getLocalUser(); }
-function saveUser(u) { saveLocalUser(u); }
+function saveUser(u) {
+  saveLocalUser(u);
+  if (sbClient && u && u.id && u.id !== 'guest') {
+    sbClient.from('profiles').upsert({
+      id: u.id,
+      display_name: u.name,
+      updated_at: new Date().toISOString()
+    }).then(() => {}).catch(e => console.warn('Lỗi tự động lưu tên profile lên Cloud:', e));
+  }
+}
 function clearUser() { clearLocalUser(); }
 function getHistory() { return getLocalHistory(); }
 function getStreak() { return getLocalStreak(); }

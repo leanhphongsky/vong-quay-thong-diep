@@ -1435,6 +1435,7 @@ p {
   display: flex;
   flex-direction: column;
   transform-style: preserve-3d;
+  opacity: 1 !important;
 }
 
 .lib-card:hover {
@@ -1455,6 +1456,7 @@ p {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
   transition: transform 0.4s ease;
 }
 
@@ -1476,25 +1478,38 @@ p {
   opacity: 1;
 }
 
-.lib-card-lock-mask {
+/* Subtle corner badge for lock / unlock status — art remains 100% visible */
+.lib-status-pill {
   position: absolute;
-  inset: 0;
-  background: rgba(12, 14, 22, 0.58);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  top: 8px;
+  right: 8px;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
   z-index: 5;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
-.lib-card-lock-mask svg {
-  width: 32px;
-  height: 32px;
-  stroke: #FFFFFF;
-  stroke-width: 1.75;
-  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.6));
+.lib-status-pill.is-unlocked {
+  background: rgba(16, 185, 129, 0.9);
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.lib-status-pill.is-locked {
+  background: rgba(15, 17, 26, 0.75);
+  color: #E5A638;
+  border: 1px solid rgba(229, 166, 56, 0.45);
+}
+
+.lib-status-pill svg {
+  width: 13px;
+  height: 13px;
 }
 
 .lib-card-body {
@@ -2266,6 +2281,28 @@ p {
 .modal-layer.show {
   opacity: 1;
   pointer-events: auto;
+}
+
+/* GSAP Pure Physics Mode: disable CSS transition conflict when GSAP drives animations */
+.gsap-ready .modal-card,
+.gsap-ready .drawer-sheet,
+.gsap-ready .modal-layer,
+.gsap-ready .drawer-backdrop {
+  transition: none !important;
+}
+
+.cloud-auto-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(16, 185, 129, 0.12);
+  color: #10B981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .modal-card {

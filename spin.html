@@ -381,10 +381,10 @@
           <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="lock"></span> Dữ Liệu & Tài Khoản</div>
           <div class="setting-item-row" id="drawerCloudSyncRow">
             <div>
-              <div class="setting-label-bold">Đồng bộ Cloud</div>
+              <div class="setting-label-bold">Tự động đồng bộ</div>
               <div class="setting-desc-sub" id="drawerCloudSyncSub">Đang kiểm tra kết nối...</div>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="triggerManualCloudSync()"><span class="svg-icon-sm" data-svg="cloudRain"></span> Đồng bộ</button>
+            <span class="cloud-auto-pill" id="drawerCloudAutoPill"><span class="svg-icon-xs" data-svg="check"></span> Tự động</span>
           </div>
           <div class="setting-item-row">
             <div>
@@ -926,12 +926,13 @@
 
       const cloudBadge = document.getElementById('drawerCloudBadge');
       const cloudSyncSub = document.getElementById('drawerCloudSyncSub');
+      const cloudPill = document.getElementById('drawerCloudAutoPill');
       const isCloudUser = currentUser && currentUser.id && currentUser.id !== 'guest';
 
       if (cloudBadge) {
         if (isCloudUser) {
           cloudBadge.className = 'cloud-status-badge is-connected';
-          cloudBadge.innerHTML = '<span class="cloud-dot"></span> <span>Đã kết nối Supabase Cloud</span>';
+          cloudBadge.innerHTML = '<span class="cloud-dot"></span> <span>Đã kết nối</span>';
         } else {
           cloudBadge.className = 'cloud-status-badge is-guest';
           cloudBadge.innerHTML = '<span class="cloud-dot amber"></span> <span>Chế độ Khách (Lưu trên máy) · <a href="login.html">Đăng nhập lưu Cloud</a></span>';
@@ -940,22 +941,22 @@
 
       if (cloudSyncSub) {
         cloudSyncSub.textContent = isCloudUser 
-          ? `Tài khoản: ${currentUser.email || currentUser.name}` 
-          : 'Dữ liệu đang lưu trên trình duyệt';
+          ? `Tự động lưu trữ trên Cloud cho ${currentUser.email || currentUser.name}` 
+          : 'Dữ liệu lưu trên máy. Đăng nhập để tự động lưu trên Cloud';
+      }
+
+      if (cloudPill) {
+        cloudPill.style.display = isCloudUser ? 'inline-flex' : 'none';
       }
     }
 
-    async function triggerManualCloudSync() {
-      if (!currentUser || !currentUser.id || currentUser.id === 'guest') {
-        showToast('Bạn đang dùng chế độ Khách! Hãy đăng ký hoặc đăng nhập để đồng bộ lên Cloud nhé.');
-        return;
-      }
-      showToast('Đang kết nối và đồng bộ với Supabase Cloud...');
-      await syncDataFromSupabase(currentUser.id);
-      refreshStatsStrip();
-      checkTodaySpinStatus();
-      renderLibrary();
-      showToast('Đã hoàn tất đồng bộ dữ liệu đám mây!');
+    async function autoSyncCloudData() {
+      if (!currentUser || !currentUser.id || currentUser.id === 'guest') return;
+      try {
+        await syncDataFromSupabase(currentUser.id);
+        refreshStatsStrip();
+        checkTodaySpinStatus();
+      } catch (_) {}
     }
 
     async function editUserName() {
@@ -1021,6 +1022,11 @@
         document.fonts.ready.then(() => updateMorphicNav(activeTab));
       }
       initHoloTilt();
+
+      // Tự động đồng bộ dữ liệu ngầm khi người dùng quay lại tab
+      window.addEventListener('focus', () => {
+        autoSyncCloudData();
+      });
     }
 
     // ── 8. STATS STRIP ──
@@ -1511,27 +1517,32 @@
       });
 
       grid.innerHTML = '';
-      filtered.forEach((msg, idx) => {
+      filtered.forEach((msg) => {
         const isUnlocked = history.some(h => h.messageId === msg.id);
         const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
         const iconSvg = Icons.get(cat.iconName || 'sparkles', 'svg-icon-xs');
 
         const card = document.createElement('div');
         card.className = 'lib-card holo-tilt';
-        card.setAttribute('data-aos', 'fade-up');
-        card.setAttribute('data-aos-delay', String((idx % 8) * 45));
-        card.setAttribute('data-aos-duration', '500');
         card.innerHTML = `
           <div class="lib-card-art">
-            <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
+            <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}">
             <div class="lib-card-glare"></div>
-            ${isUnlocked ? '' : `<div class="lib-card-lock-mask">${Icons.get('lock', 'svg-icon-lg')}</div>`}
+            ${isUnlocked ? `
+              <div class="lib-status-pill is-unlocked" title="Đã khai mở từ vòng quay">
+                ${Icons.get('check', 'svg-icon-xs')}
+              </div>
+            ` : `
+              <div class="lib-status-pill is-locked" title="Chưa khai mở từ vòng quay">
+                ${Icons.get('lock', 'svg-icon-xs')}
+              </div>
+            `}
           </div>
           <div class="lib-card-body">
             <div class="lib-card-name">${msg.name}</div>
             <div class="lib-card-meta">
               <span style="color:${cat.color};font-weight:800;display:inline-flex;align-items:center;gap:4px;">${iconSvg} ${cat.name.split(' ')[0]}</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;">${isUnlocked ? Icons.get('check', 'svg-icon-xs') + ' Đã mở' : 'Chưa mở'}</span>
+              <span style="display:inline-flex;align-items:center;gap:3px;font-weight:600;">${isUnlocked ? '<span style="color:var(--accent);">Đã mở</span>' : '<span style="opacity:0.65;">Chưa mở</span>'}</span>
             </div>
           </div>
         `;
@@ -1549,14 +1560,14 @@
       });
 
       initHoloTilt();
-      if (window.AppAnimations) AppAnimations.refreshAOS();
       if (window.gsap) {
         gsap.from(grid.children, {
           y: 18,
           opacity: 0,
-          stagger: 0.025,
+          stagger: 0.015,
           duration: 0.35,
-          ease: 'power2.out'
+          ease: 'power2.out',
+          clearProps: 'opacity,transform'
         });
       }
     }

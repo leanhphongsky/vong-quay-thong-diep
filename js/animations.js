@@ -12,8 +12,14 @@
      * Khởi tạo toàn bộ animation engine: AOS và GSAP defaults
      */
     init: function () {
+      if (typeof global.gsap !== 'undefined') {
+        document.documentElement.classList.add('gsap-ready');
+        console.log('🌟 Celestial GSAP Engine Ready at 120Hz');
+      }
+
       this.initAOS();
       this.setupMagneticButtons();
+      this.setupButtonBounces();
       this.playPageEntrance();
     },
 
@@ -45,56 +51,64 @@
     playPageEntrance: function () {
       if (typeof global.gsap === 'undefined') return;
 
-      const tl = global.gsap.timeline({ defaults: { ease: 'power3.out' } });
+      const tl = global.gsap.timeline({
+        defaults: { ease: 'power3.out' },
+        onComplete: () => {
+          // Clear props so layout is completely unconstrained
+          global.gsap.set(['.top-bar', '.hero-header', '#wheelDiscWrap', '#spinBtnWrapper', '#alreadySpunBox', '.morphic-navbar-dock', '.music-bar'], {
+            clearProps: 'opacity,transform'
+          });
+        }
+      });
 
       // 1. Top bar nhẹ nhàng trượt xuống
       tl.from('.top-bar', {
         y: -30,
         opacity: 0,
-        duration: 0.7
+        duration: 0.65
       });
 
       // 2. Hero header & Eyebrow pill
       tl.from(['.hero-header .eyebrow-pill', '.hero-header .hero-title', '.hero-header .hero-subtitle', '.zen-breathe-guide'], {
-        y: 20,
+        y: 18,
         opacity: 0,
-        stagger: 0.08,
-        duration: 0.6
-      }, '-=0.4');
+        stagger: 0.07,
+        duration: 0.55
+      }, '-=0.35');
 
       // 3. Vòng quay thiên văn bung nở với lực đàn hồi
       tl.from('#wheelDiscWrap', {
-        scale: 0.75,
+        scale: 0.8,
         opacity: 0,
-        rotation: -25,
-        duration: 1.1,
+        rotation: -20,
+        duration: 1.0,
         ease: 'elastic.out(1, 0.75)'
-      }, '-=0.3');
+      }, '-=0.25');
 
       // 4. Nút bấm CTA Quay hoặc Thẻ hôm nay
       tl.from(['#spinBtnWrapper', '#alreadySpunBox'], {
-        scale: 0.85,
-        y: 25,
+        scale: 0.88,
+        y: 20,
         opacity: 0,
-        duration: 0.7,
-        ease: 'back.out(1.8)'
-      }, '-=0.6');
+        duration: 0.6,
+        ease: 'back.out(1.6)'
+      }, '-=0.5');
 
       // 5. Thanh dock điều hướng & trình phát nhạc đáy trang
       tl.from(['.morphic-navbar-dock', '.music-bar'], {
-        y: 40,
+        y: 35,
         opacity: 0,
-        stagger: 0.1,
-        duration: 0.75,
-        ease: 'power4.out'
-      }, '-=0.5');
+        stagger: 0.08,
+        duration: 0.65,
+        ease: 'power3.out'
+      }, '-=0.45');
 
       // 6. Thanh thống kê inline
       tl.from('.stats-inline-strip', {
         opacity: 0,
         y: 10,
-        duration: 0.5
-      }, '-=0.4');
+        duration: 0.45
+      }, '-=0.35');
     },
 
     /**
@@ -104,14 +118,13 @@
       const {
         startAngle = 0,
         targetAngle,
-        duration = 6.2,
+        duration = 5.8,
         onUpdate,
         onTick,
         onComplete
       } = options;
 
       if (typeof global.gsap === 'undefined') {
-        // Fallback an toàn nếu GSAP không tải được
         if (onComplete) onComplete(targetAngle);
         return;
       }
@@ -140,7 +153,7 @@
             // Nhịp kim chỉ hồi chuyển bằng GSAP micro-kick
             if (pointerPin) {
               global.gsap.fromTo(pointerPin,
-                { rotation: -13, y: -2, xPercent: -50 },
+                { rotation: -14, y: -2, xPercent: -50 },
                 { rotation: 0, y: 0, xPercent: -50, duration: 0.12, ease: 'back.out(2)' }
               );
             }
@@ -150,7 +163,7 @@
           // Khi dừng: kim chỉ nảy nhẹ đàn hồi tinh tế
           if (pointerPin) {
             global.gsap.fromTo(pointerPin,
-              { rotation: 8, xPercent: -50 },
+              { rotation: 7, xPercent: -50 },
               { rotation: 0, xPercent: -50, duration: 0.6, ease: 'elastic.out(1.2, 0.5)' }
             );
           }
@@ -165,45 +178,60 @@
      * ── 4. CHUYỂN TAB MƯỢT MÀ BẰNG GSAP CINEMATIC CROSSFADE ──
      */
     animateViewTransition: function (outgoingView, incomingView, onHalfway) {
-      if (typeof global.gsap === 'undefined') {
+      if (typeof global.gsap === 'undefined' || !global.gsap) {
         if (outgoingView) outgoingView.classList.remove('active');
         if (incomingView) incomingView.classList.add('active');
         if (onHalfway) onHalfway();
         return;
       }
 
-      const tl = global.gsap.timeline();
+      if (outgoingView === incomingView) return;
 
       if (outgoingView) {
-        tl.to(outgoingView, {
+        global.gsap.to(outgoingView, {
           opacity: 0,
-          y: -15,
-          duration: 0.22,
+          y: -10,
+          duration: 0.18,
           ease: 'power2.in',
-          onComplete: function () {
+          onComplete: () => {
             outgoingView.classList.remove('active');
+            global.gsap.set(outgoingView, { clearProps: 'opacity,transform' });
+
             if (incomingView) {
               incomingView.classList.add('active');
-              global.gsap.set(incomingView, { opacity: 0, y: 20 });
+              global.gsap.fromTo(incomingView,
+                { opacity: 0, y: 14 },
+                {
+                  opacity: 1,
+                  y: 0,
+                  duration: 0.32,
+                  ease: 'power3.out',
+                  clearProps: 'opacity,transform',
+                  onComplete: () => {
+                    AppAnimations.refreshAOS();
+                  }
+                }
+              );
             }
             if (onHalfway) onHalfway();
           }
         });
-      } else {
-        if (incomingView) incomingView.classList.add('active');
-        if (onHalfway) onHalfway();
-      }
-
-      if (incomingView) {
-        tl.to(incomingView, {
-          opacity: 1,
-          y: 0,
-          duration: 0.45,
-          ease: 'power3.out',
-          onComplete: () => {
-            AppAnimations.refreshAOS();
+      } else if (incomingView) {
+        incomingView.classList.add('active');
+        global.gsap.fromTo(incomingView,
+          { opacity: 0, y: 14 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.32,
+            ease: 'power3.out',
+            clearProps: 'opacity,transform',
+            onComplete: () => {
+              AppAnimations.refreshAOS();
+            }
           }
-        });
+        );
+        if (onHalfway) onHalfway();
       }
     },
 
@@ -220,11 +248,11 @@
       const card = modalEl.querySelector(cardSelector);
       if (card) {
         global.gsap.fromTo(card,
-          { scale: 0.86, y: 35, opacity: 0, rotationX: 6, transformPerspective: 900 },
-          { scale: 1, y: 0, opacity: 1, rotationX: 0, duration: 0.48, ease: 'back.out(1.5)', clearProps: 'transformPerspective' }
+          { scale: 0.88, y: 30, opacity: 0, rotationX: 5, transformPerspective: 900 },
+          { scale: 1, y: 0, opacity: 1, rotationX: 0, duration: 0.42, ease: 'back.out(1.5)', clearProps: 'transformPerspective' }
         );
       }
-      global.gsap.fromTo(modalEl, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+      global.gsap.fromTo(modalEl, { opacity: 0 }, { opacity: 1, duration: 0.28, ease: 'power2.out' });
     },
 
     closeModal: function (modalEl, cardSelector = '.modal-card', onClosed) {
@@ -242,14 +270,15 @@
         onComplete: function () {
           modalEl.classList.remove('show');
           document.body.style.overflow = '';
+          global.gsap.set([modalEl, card], { clearProps: 'opacity,transform' });
           if (onClosed) onClosed();
         }
       });
 
       if (card) {
-        tl.to(card, { scale: 0.92, y: 20, opacity: 0, duration: 0.22, ease: 'power2.in' });
+        tl.to(card, { scale: 0.93, y: 16, opacity: 0, duration: 0.2, ease: 'power2.in' });
       }
-      tl.to(modalEl, { opacity: 0, duration: 0.2 }, '-=0.15');
+      tl.to(modalEl, { opacity: 0, duration: 0.18 }, '-=0.12');
     },
 
     /**
@@ -266,18 +295,18 @@
       if (sheet) {
         global.gsap.fromTo(sheet,
           { y: '100%' },
-          { y: '0%', duration: 0.45, ease: 'power3.out' }
+          { y: '0%', duration: 0.42, ease: 'power3.out' }
         );
 
         const sections = sheet.querySelectorAll('.sheet-section');
         if (sections.length > 0) {
           global.gsap.fromTo(sections,
-            { opacity: 0, y: 15 },
-            { opacity: 1, y: 0, stagger: 0.04, duration: 0.4, delay: 0.15, ease: 'power2.out' }
+            { opacity: 0, y: 12 },
+            { opacity: 1, y: 0, stagger: 0.04, duration: 0.35, delay: 0.12, ease: 'power2.out', clearProps: 'opacity,transform' }
           );
         }
       }
-      global.gsap.fromTo(backdropEl, { opacity: 0 }, { opacity: 1, duration: 0.3 });
+      global.gsap.fromTo(backdropEl, { opacity: 0 }, { opacity: 1, duration: 0.25 });
     },
 
     closeDrawer: function (backdropEl, sheetSelector = '.drawer-sheet', onClosed) {
@@ -295,14 +324,15 @@
         onComplete: function () {
           backdropEl.classList.remove('show');
           document.body.style.overflow = '';
+          global.gsap.set([backdropEl, sheet], { clearProps: 'opacity,transform' });
           if (onClosed) onClosed();
         }
       });
 
       if (sheet) {
-        tl.to(sheet, { y: '100%', duration: 0.32, ease: 'power3.in' });
+        tl.to(sheet, { y: '100%', duration: 0.28, ease: 'power3.in' });
       }
-      tl.to(backdropEl, { opacity: 0, duration: 0.25 }, '-=0.1');
+      tl.to(backdropEl, { opacity: 0, duration: 0.22 }, '-=0.08');
     },
 
     /**
@@ -325,7 +355,7 @@
         x: targetX,
         width: targetW,
         opacity: 1,
-        duration: 0.45,
+        duration: 0.42,
         ease: 'elastic.out(1, 0.8)'
       });
     },
@@ -346,24 +376,24 @@
 
       if (sealBtn) {
         tl.to(sealBtn, {
-          scale: 1.35,
+          scale: 1.3,
           rotation: 12,
-          filter: 'brightness(1.5)',
-          duration: 0.22,
+          filter: 'brightness(1.4)',
+          duration: 0.2,
           ease: 'power2.out'
         });
         tl.to(waxCardEl, {
           opacity: 0,
-          scale: 0.9,
-          duration: 0.3,
+          scale: 0.92,
+          duration: 0.26,
           ease: 'power2.in',
           onComplete: () => {
             if (waxCardEl) waxCardEl.style.display = 'none';
             if (letterCardEl) {
               letterCardEl.classList.add('show');
               global.gsap.fromTo(letterCardEl,
-                { opacity: 0, scale: 0.85, y: 30, rotationX: -12, transformPerspective: 800 },
-                { opacity: 1, scale: 1, y: 0, rotationX: 0, duration: 0.7, ease: 'back.out(1.6)', clearProps: 'transformPerspective' }
+                { opacity: 0, scale: 0.88, y: 25, rotationX: -10, transformPerspective: 800 },
+                { opacity: 1, scale: 1, y: 0, rotationX: 0, duration: 0.65, ease: 'back.out(1.6)', clearProps: 'transformPerspective' }
               );
             }
             if (onComplete) onComplete();
@@ -374,29 +404,44 @@
 
     /**
      * ── 9. MAGNETIC BUTTON MICRO-INTERACTION ──
-     * Khi rê chuột gần các nút bấm quan trọng, nút bị hút nhẹ về phía con trỏ
      */
     setupMagneticButtons: function () {
       if (typeof window === 'undefined' || !window.matchMedia('(hover: hover)').matches) return;
       if (typeof global.gsap === 'undefined') return;
 
-      const magneticElements = document.querySelectorAll('.btn-cta-spin, .btn-gold, .auth-logo');
+      const magneticElements = document.querySelectorAll('.btn-cta-spin, .btn-gold, .brand-link');
       magneticElements.forEach(el => {
         el.addEventListener('mousemove', function (e) {
           const rect = el.getBoundingClientRect();
-          const x = (e.clientX - rect.left - rect.width / 2) * 0.24;
-          const y = (e.clientY - rect.top - rect.height / 2) * 0.24;
-          global.gsap.to(el, { x, y, duration: 0.3, ease: 'power2.out' });
+          const x = (e.clientX - rect.left - rect.width / 2) * 0.2;
+          const y = (e.clientY - rect.top - rect.height / 2) * 0.2;
+          global.gsap.to(el, { x, y, duration: 0.25, ease: 'power2.out' });
         });
 
         el.addEventListener('mouseleave', function () {
-          global.gsap.to(el, { x: 0, y: 0, duration: 0.55, ease: 'elastic.out(1.1, 0.45)' });
+          global.gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1.1, 0.45)' });
         });
       });
     },
 
     /**
-     * ── 10. ZEN BREATHE INTERACTIVE TIMELINE ──
+     * ── 10. BUTTON CLICK BOUNCE ──
+     */
+    setupButtonBounces: function () {
+      if (typeof global.gsap === 'undefined') return;
+      document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn, .energy-pill, .cat-filter-btn');
+        if (btn) {
+          global.gsap.fromTo(btn,
+            { scale: 0.94 },
+            { scale: 1, duration: 0.25, ease: 'back.out(2)' }
+          );
+        }
+      });
+    },
+
+    /**
+     * ── 11. ZEN BREATHE INTERACTIVE TIMELINE ──
      */
     triggerBreatheCycle: function (orbEl, textEl, onFinish) {
       if (typeof global.gsap === 'undefined') return;
