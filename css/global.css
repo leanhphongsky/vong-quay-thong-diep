@@ -1442,8 +1442,8 @@ p {
 }
 
 .lib-card:hover {
-  transform: translateY(-5px) scale(1.02);
-  box-shadow: var(--shadow-md), 0 8px 24px rgba(221, 167, 58, 0.2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-sm), 0 4px 14px rgba(221, 167, 58, 0.15);
   border-color: var(--accent-gold);
 }
 
@@ -1460,68 +1460,68 @@ p {
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform 0.4s ease;
+  transition: transform 0.3s ease;
 }
 
 .lib-card:hover .lib-card-art img {
-  transform: scale(1.05);
+  transform: scale(1.02);
 }
 
-/* Holographic Glare Sheen */
+/* Holographic Glare Sheen (Nhẹ nhàng, tinh tế) */
 .lib-card-glare {
   position: absolute;
   inset: 0;
-  background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.25) 45%, rgba(255,255,255,0.4) 50%, transparent 55%);
+  background: linear-gradient(125deg, transparent 0%, rgba(255,255,255,0.15) 45%, rgba(255,255,255,0.25) 50%, transparent 55%);
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.3s ease;
 }
 
 .lib-card:hover .lib-card-glare {
-  opacity: 1;
+  opacity: 0.5;
 }
 
-/* Kiểu ẩn huyền bí cho thẻ Chưa Mở Khóa */
+/* Kiểu ẩn sương mờ thanh lịch cho thẻ Chưa Mở Khóa */
 .lib-card-lock-mask {
   position: absolute;
   inset: 0;
-  background: rgba(14, 16, 24, 0.72);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  background: rgba(14, 16, 24, 0.45);
+  backdrop-filter: blur(4.5px);
+  -webkit-backdrop-filter: blur(4.5px);
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   color: #FBBF24;
   z-index: 5;
-  transition: backdrop-filter 0.3s ease, background 0.3s ease;
+  transition: backdrop-filter 0.25s ease, background 0.25s ease;
 }
 
 .lib-lock-bubble {
-  width: 44px;
-  height: 44px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(221, 167, 58, 0.2);
-  border: 1.5px solid rgba(221, 167, 58, 0.5);
+  background: rgba(221, 167, 58, 0.18);
+  border: 1px solid rgba(221, 167, 58, 0.4);
   display: flex;
   align-items: center;
   justify-content: center;
   color: #F59E0B;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.45);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
 
 .lib-lock-bubble svg {
-  width: 22px;
-  height: 22px;
+  width: 17px;
+  height: 17px;
   stroke: #F59E0B;
 }
 
 .lib-lock-label {
-  font-size: 0.76rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: rgba(255, 255, 255, 0.85);
   text-transform: uppercase;
 }
 

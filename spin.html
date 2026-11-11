@@ -1646,16 +1646,17 @@
           const y = e.clientY - rect.top;
           const centerX = rect.width / 2;
           const centerY = rect.height / 2;
-          const rotateX = ((y - centerY) / centerY) * -10;
-          const rotateY = ((x - centerX) / centerX) * 10;
+          // Độ nghiêng 3D nhẹ nhàng, thanh thoát (giảm bớt góc nghiêng tránh che khuất các phần tử lân cận)
+          const rotateX = (((y - centerY) / centerY) * -3.2).toFixed(2);
+          const rotateY = (((x - centerX) / centerX) * 3.2).toFixed(2);
 
-          card.style.transform = `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.02)`;
+          card.style.transform = `perspective(1400px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px) scale(1.008)`;
           
           const glare = card.querySelector('.lib-card-glare');
           if (glare) {
             const angle = Math.atan2(y - centerY, x - centerX) * (180 / Math.PI) + 90;
-            glare.style.opacity = '0.9';
-            glare.style.background = `linear-gradient(${angle}deg, transparent 20%, rgba(255,255,255,0.4) 50%, transparent 80%)`;
+            glare.style.opacity = '0.35';
+            glare.style.background = `linear-gradient(${angle}deg, transparent 30%, rgba(255,255,255,0.22) 50%, transparent 70%)`;
           }
         });
 

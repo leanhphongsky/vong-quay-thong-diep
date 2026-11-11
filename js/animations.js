@@ -413,13 +413,13 @@
       magneticElements.forEach(el => {
         el.addEventListener('mousemove', function (e) {
           const rect = el.getBoundingClientRect();
-          const x = (e.clientX - rect.left - rect.width / 2) * 0.2;
-          const y = (e.clientY - rect.top - rect.height / 2) * 0.2;
+          const x = (e.clientX - rect.left - rect.width / 2) * 0.1;
+          const y = (e.clientY - rect.top - rect.height / 2) * 0.1;
           global.gsap.to(el, { x, y, duration: 0.25, ease: 'power2.out' });
         });
 
         el.addEventListener('mouseleave', function () {
-          global.gsap.to(el, { x: 0, y: 0, duration: 0.5, ease: 'elastic.out(1.1, 0.45)' });
+          global.gsap.to(el, { x: 0, y: 0, duration: 0.45, ease: 'elastic.out(1.1, 0.5)' });
         });
       });
     },
@@ -433,8 +433,8 @@
         const btn = e.target.closest('.btn, .energy-pill, .cat-filter-btn');
         if (btn) {
           global.gsap.fromTo(btn,
-            { scale: 0.94 },
-            { scale: 1, duration: 0.25, ease: 'back.out(2)' }
+            { scale: 0.975 },
+            { scale: 1, duration: 0.22, ease: 'power2.out' }
           );
         }
       });
