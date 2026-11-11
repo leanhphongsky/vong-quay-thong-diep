@@ -162,6 +162,28 @@ button, input, textarea {
   color: inherit;
 }
 
+/* ── SVG Iconography System (Lucide-Standard) ── */
+.svg-icon {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  stroke-width: 1.75;
+}
+.svg-icon-lg {
+  width: 24px;
+  height: 24px;
+}
+.svg-icon-sm {
+  width: 16px;
+  height: 16px;
+}
+.svg-icon-xl {
+  width: 28px;
+  height: 28px;
+}
+
 /* ── Typography Scale ── */
 .font-display { font-family: 'Cinzel', serif; }
 .font-heading { font-family: 'Playfair Display', serif; }
@@ -272,93 +294,132 @@ p {
   transform: scale(0.92);
 }
 
-/* ── 2. Bottom Nav (3 Tabs Tinh Tế với Active Glow) ── */
-.bottom-nav {
+/* ── 2. Kokonut UI Morphic Navbar (Floating Split Nav) ── */
+.morphic-navbar-dock {
   position: fixed;
-  bottom: 0;
+  bottom: 14px;
   left: 0;
   right: 0;
-  height: var(--bottom-bar-height);
-  background: rgba(255, 253, 249, 0.92);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-top: 1px solid var(--border);
-  z-index: 210;
   display: flex;
+  justify-content: center;
   align-items: center;
-  justify-content: space-around;
-  padding: 0 var(--sp-sm);
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  z-index: 220;
+  pointer-events: none;
+  padding: 0 16px;
 }
 
-.dark .bottom-nav {
-  background: rgba(10, 13, 20, 0.92);
-  border-top-color: var(--border);
+.morphic-navbar {
+  pointer-events: auto;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px;
+  border-radius: 9999px;
+  background: rgba(18, 22, 34, 0.90);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45), 0 2px 8px rgba(0, 0, 0, 0.25);
+  user-select: none;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.nav-tab-btn {
-  flex: 1;
-  max-width: 130px;
-  height: 100%;
-  background: none;
-  border: none;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
+:root:not(.dark) .morphic-navbar {
+  background: rgba(255, 253, 249, 0.94);
+  border-color: rgba(221, 167, 58, 0.28);
+  box-shadow: 0 14px 36px rgba(45, 24, 16, 0.14), 0 2px 8px rgba(45, 24, 16, 0.08);
+}
+
+.morphic-nav-item {
+  position: relative;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  color: var(--text-muted);
-  font-size: 0.76rem;
+  gap: 7px;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  font-family: inherit;
+  font-size: 0.82rem;
   font-weight: 700;
-  transition: color 0.25s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  letter-spacing: 0.3px;
+  color: var(--text-muted);
+  background: transparent;
+  border: none;
+  cursor: pointer;
   outline: none;
-  user-select: none;
-  position: relative;
+  z-index: 2;
+  transition: color 0.22s ease, transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  white-space: nowrap;
 }
 
-.nav-tab-btn .tab-icon {
-  font-size: 1.35rem;
-  line-height: 1;
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.3s ease;
+.morphic-nav-item .svg-icon,
+.morphic-nav-item svg {
+  width: 17px;
+  height: 17px;
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), stroke 0.22s ease;
 }
 
-.nav-tab-btn.active {
-  color: var(--accent);
-}
-
-.nav-tab-btn.active .tab-icon {
-  transform: translateY(-3px) scale(1.15);
-  filter: drop-shadow(0 3px 8px rgba(224, 109, 68, 0.45));
-}
-
-.nav-tab-btn::after {
-  content: '';
-  position: absolute;
-  bottom: 8px;
-  width: 5px;
-  height: 5px;
-  border-radius: 50%;
-  background: var(--accent);
-  opacity: 0;
-  transform: scale(0);
-  transition: all 0.25s ease;
-}
-
-.nav-tab-btn.active::after {
-  opacity: 1;
-  transform: scale(1);
-}
-
-.nav-tab-btn:hover:not(.active) {
+.morphic-nav-item:hover {
   color: var(--text-primary);
   transform: translateY(-1px);
+}
+
+.morphic-nav-item.active {
+  color: #FFFFFF;
+}
+
+:root:not(.dark) .morphic-nav-item.active {
+  color: #1E1208;
+}
+
+.morphic-nav-item.active .svg-icon,
+.morphic-nav-item.active svg {
+  transform: scale(1.1);
+  stroke: var(--accent);
+}
+
+/* Sliding Morphic Capsule Indicator */
+.morphic-nav-indicator {
+  position: absolute;
+  top: 5px;
+  bottom: 5px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: left 0.32s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.2s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+:root:not(.dark) .morphic-nav-indicator {
+  background: rgba(224, 109, 68, 0.12);
+  box-shadow: 0 2px 8px rgba(224, 109, 68, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+/* Kokonut UI Underline Accent (amber/orange bar underneath active item) */
+.morphic-nav-indicator::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 2.5px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* Legacy Bottom Nav Fallback */
+.bottom-nav {
+  display: none;
 }
 
 /* ── 3. Modern Glass Music Player Bar (48px) ── */
 .music-bar {
   position: fixed;
-  bottom: calc(var(--bottom-bar-height) + 8px);
+  bottom: calc(14px + 46px + 10px);
   left: 50%;
   transform: translateX(-50%);
   width: min(520px, calc(100vw - 28px));
@@ -623,13 +684,13 @@ p {
 
 .wheel-pointer-pin {
   position: absolute;
-  top: -16px;
+  top: -20px;
   left: 50%;
   transform: translateX(-50%);
   width: 32px;
-  height: 42px;
+  height: 48px;
   z-index: 15;
-  filter: drop-shadow(0 4px 10px rgba(224, 109, 68, 0.5));
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.45));
   pointer-events: none;
   transition: transform 0.1s ease;
 }
@@ -791,14 +852,24 @@ p {
 }
 
 .energy-pill-icon {
-  font-size: 1.7rem;
-  margin-bottom: 6px;
-  display: block;
-  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  width: 34px;
+  height: 34px;
+  margin: 0 auto 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), color 0.25s ease;
+}
+
+.energy-pill-icon svg {
+  width: 26px;
+  height: 26px;
 }
 
 .energy-pill:hover .energy-pill-icon {
-  transform: scale(1.2);
+  transform: scale(1.18) translateY(-2px);
+  color: var(--accent-gold);
 }
 
 .energy-pill-title {
@@ -1290,32 +1361,45 @@ p {
 
 .badge-tile {
   background: var(--bg-card);
-  border: 1px solid var(--border);
+  border: 1.5px solid var(--border);
   border-radius: var(--r-sm);
-  padding: var(--sp-sm) 4px;
+  padding: 10px 4px 8px;
   text-align: center;
-  transition: transform 0.2s ease, border-color 0.2s ease;
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .badge-tile.earned {
   border-color: var(--accent-gold);
   background: var(--accent-gold-soft);
-  box-shadow: 0 2px 8px rgba(221, 167, 58, 0.2);
+  box-shadow: 0 4px 12px rgba(221, 167, 58, 0.25);
 }
 
 .badge-tile.earned:hover {
-  transform: scale(1.08);
+  transform: translateY(-2px) scale(1.06);
 }
 
 .badge-tile:not(.earned) {
-  opacity: 0.35;
+  opacity: 0.28;
   filter: grayscale(1);
 }
 
-.badge-emoji {
-  font-size: 1.5rem;
-  display: block;
-  margin-bottom: 2px;
+.badge-icon-wrap {
+  width: 26px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-gold);
+  margin-bottom: 4px;
+}
+
+.badge-icon-wrap svg {
+  width: 22px;
+  height: 22px;
 }
 
 .badge-label {
@@ -1323,6 +1407,51 @@ p {
   font-weight: 700;
   color: var(--text-primary);
   line-height: 1.2;
+}
+
+/* Background choice chips in drawer */
+.bg-choice-chip {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-sm);
+  padding: 10px 12px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.bg-choice-chip:hover {
+  border-color: var(--accent);
+  background: var(--bg-subtle);
+  transform: translateY(-1px);
+}
+
+.bg-choice-chip.active {
+  border-color: var(--accent);
+  border-width: 2px;
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.chip-icon {
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.chip-icon svg {
+  width: 18px;
+  height: 18px;
 }
 
 /* Setting Row */

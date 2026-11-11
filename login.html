@@ -242,7 +242,7 @@
   <div class="auth-box">
     <!-- Header -->
     <div class="auth-header">
-      <div class="auth-logo">🌀</div>
+      <div class="auth-logo" style="display:flex;align-items:center;justify-content:center;color:#FDE68A;"><span class="svg-icon-xl" data-svg="astrolabe"></span></div>
       <h1>VÒNG QUAY THÔNG ĐIỆP</h1>
       <p>Trạm sạc tâm hồn & đón nhận chỉ dẫn mỗi ngày</p>
     </div>
@@ -266,12 +266,12 @@
           <label>Mật khẩu</label>
           <input type="password" id="loginPassword" class="form-control" placeholder="••••••••" autocomplete="current-password">
         </div>
-        <button class="btn-submit" onclick="handleLogin()" id="loginBtn">🎡 Đăng Nhập</button>
+        <button class="btn-submit" onclick="handleLogin()" id="loginBtn"><span class="svg-icon-sm" data-svg="compass"></span> Đăng Nhập</button>
         
         <div class="divider-text">hoặc</div>
         
         <button class="btn-guest" onclick="handleGuestLogin()">
-          <span>👤</span>
+          <span class="svg-icon-sm" data-svg="user"></span>
           <span>Trải Nghiệm Dưới Dạng Khách</span>
         </button>
       </div>
@@ -291,7 +291,7 @@
           <label>Mật khẩu</label>
           <input type="password" id="registerPassword" class="form-control" placeholder="Ít nhất 6 ký tự" autocomplete="new-password">
         </div>
-        <button class="btn-submit" onclick="handleRegister()" id="registerBtn">✨ Tạo Tài Khoản</button>
+        <button class="btn-submit" onclick="handleRegister()" id="registerBtn"><span class="svg-icon-sm" data-svg="sparkles"></span> Tạo Tài Khoản</button>
         <p class="terms-text">Đăng ký tài khoản để đồng bộ chuỗi ngày quay và ghi chú của bạn lên Cloud.</p>
       </div>
 
@@ -303,10 +303,12 @@
 
   <!-- CDN Supabase JS -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/icons.js"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/background-paths.js"></script>
   <script>
+    Icons.renderAll();
     window.initBackgroundPaths('bgPathsCanvas', {
       count: 36,
       spread: 0.9,
@@ -352,7 +354,7 @@
         showError('loginError', err.message || 'Đăng nhập không thành công.');
       } finally {
         btn.disabled = false;
-        btn.textContent = '🎡 Đăng Nhập';
+        btn.innerHTML = `${Icons.get('compass', 'svg-icon-sm')} Đăng Nhập`;
       }
     }
 
@@ -377,7 +379,7 @@
         showError('registerError', err.message || 'Tạo tài khoản thất bại.');
       } finally {
         btn.disabled = false;
-        btn.textContent = '✨ Tạo Tài Khoản';
+        btn.innerHTML = `${Icons.get('sparkles', 'svg-icon-sm')} Tạo Tài Khoản`;
       }
     }
 

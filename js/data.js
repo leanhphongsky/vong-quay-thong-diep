@@ -3,10 +3,10 @@
 // ============================================================
 
 const CATEGORIES = {
-  WISDOM:     { id: 'wisdom',     name: 'Trí Tuệ & Tĩnh Lặng',  icon: '🧘', color: '#9B89B3' },
-  LOVE:       { id: 'love',       name: 'Yêu Thương & Chữa Lành', icon: '💖', color: '#E07A5F' },
-  DISCIPLINE: { id: 'discipline', name: 'Kỷ Luật & Hành Động',  icon: '⚡', color: '#E9C46A' },
-  FLOW:       { id: 'flow',       name: 'Thuận Dòng & Tái Sinh', icon: '🌊', color: '#81B29A' }
+  WISDOM:     { id: 'wisdom',     name: 'Trí Tuệ & Tĩnh Lặng',  iconName: 'wisdomLotus', color: '#9B89B3' },
+  LOVE:       { id: 'love',       name: 'Yêu Thương & Chữa Lành', iconName: 'loveRadiant', color: '#E07A5F' },
+  DISCIPLINE: { id: 'discipline', name: 'Kỷ Luật & Hành Động',  iconName: 'disciplineFlame', color: '#E9C46A' },
+  FLOW:       { id: 'flow',       name: 'Thuận Dòng & Tái Sinh', iconName: 'flowWave', color: '#81B29A' }
 };
 
 const MESSAGES = [

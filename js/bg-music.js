@@ -117,7 +117,7 @@ class BackgroundMusicPlayer {
     sessionStorage.removeItem('vqtd_music_time');
     this.play();
     if (typeof showToast === 'function') {
-      showToast('Đang phát: ' + this.currentSong.title + ' 🎵');
+      showToast('Đang phát: ' + this.currentSong.title);
     }
   }
 
@@ -128,7 +128,7 @@ class BackgroundMusicPlayer {
     sessionStorage.removeItem('vqtd_music_time');
     this.play();
     if (typeof showToast === 'function') {
-      showToast('Đang phát: ' + this.currentSong.title + ' 🎵');
+      showToast('Đang phát: ' + this.currentSong.title);
     }
   }
 
@@ -186,7 +186,7 @@ class BackgroundMusicPlayer {
       if (typeof showToast === 'function') showToast('Đã tạm dừng nhạc nền ⏸️');
     } else {
       this.play();
-      if (typeof showToast === 'function') showToast('Đang phát: ' + (this.currentSong?.title || 'Lofi') + ' 🎵');
+      if (typeof showToast === 'function') showToast('Đang phát: ' + (this.currentSong?.title || 'Lofi'));
     }
   }
 

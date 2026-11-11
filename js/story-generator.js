@@ -80,9 +80,9 @@ async function generateStoryCard({ message, userName = 'Bạn', dateStr, note = 
   ctx.save();
   ctx.textAlign = 'center';
   ctx.fillStyle = '#F4A47A';
-  ctx.font = '600 26px "Nunito", sans-serif';
+  ctx.font = '600 24px "Nunito", sans-serif';
   const displayDate = dateStr || new Date().toLocaleDateString('vi-VN', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
-  ctx.fillText(`📅 ${displayDate}`, 540, 310);
+  ctx.fillText(`✦ ${displayDate} ✦`, 540, 310);
   ctx.restore();
 
   // 6. Vẽ Ảnh Thông Điệp vào trung tâm
@@ -169,7 +169,7 @@ async function generateStoryCard({ message, userName = 'Bạn', dateStr, note = 
   if (message.action) {
     ctx.fillStyle = '#E9C46A';
     ctx.font = 'bold 24px "Nunito", sans-serif';
-    ctx.fillText('✨ HÀNH ĐỘNG HÔM NAY', 540, endDescY + 65);
+    ctx.fillText('✦ HÀNH ĐỘNG HÔM NAY ✦', 540, endDescY + 65);
 
     ctx.fillStyle = 'rgba(244, 164, 122, 0.95)';
     ctx.font = 'italic 26px "Nunito", sans-serif';

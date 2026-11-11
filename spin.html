@@ -23,17 +23,17 @@
        ====================================================================== -->
   <header class="top-bar">
     <a class="brand-link" onclick="switchTab('spin')">
-      <span class="brand-logo-icon">🌀</span>
+      <span class="brand-logo-icon" data-svg="astrolabe"></span>
       <span>THÔNG ĐIỆP</span>
     </a>
     <div class="top-actions">
       <!-- Dark/Light Mode Switcher -->
       <button class="icon-btn" id="themeToggleBtn" aria-label="Đổi giao diện Sáng/Tối" title="Chuyển chế độ Sáng / Tối">
-        <span id="themeIcon">☀️</span>
+        <span id="themeIcon" data-svg="sun"></span>
       </button>
       <!-- Quick Profile / Sheet trigger -->
       <button class="icon-btn" onclick="openDrawer()" aria-label="Mở cài đặt và hồ sơ" title="Cài đặt & Hồ sơ">
-        <span id="topAvatarIcon">🌟</span>
+        <span id="topAvatarIcon" data-svg="user"></span>
       </button>
     </div>
   </header>
@@ -63,21 +63,26 @@
           <!-- Vành đai chòm sao thiên văn quay chậm -->
           <div class="wheel-astral-ring"></div>
 
-          <!-- Kim chỉ la bàn với drop shadow & bump anim -->
+          <!-- Kim chỉ la bàn Breguet Chrono Horology Pointer -->
           <div class="wheel-pointer-pin" id="wheelPointerPin">
-            <svg viewBox="0 0 32 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M16 44L0 8C0 3.58 7.16 0 16 0C24.84 0 32 3.58 32 8L16 44Z" fill="url(#pinGoldGradPro)"/>
+            <svg viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
-                <linearGradient id="pinGoldGradPro" x1="0" y1="0" x2="32" y2="44" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#FDE68A"/>
-                  <stop offset="0.5" stop-color="#F59E0B"/>
-                  <stop offset="1" stop-color="#E06D44"/>
+                <linearGradient id="breguetGoldPin" x1="0" y1="0" x2="32" y2="48" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#FFE8A3"/>
+                  <stop offset="0.45" stop-color="#E5A638"/>
+                  <stop offset="0.8" stop-color="#C27A1A"/>
+                  <stop offset="1" stop-color="#8C4E0B"/>
                 </linearGradient>
               </defs>
+              <path d="M16 48 L11 16 C11 11 13 8 16 8 C19 8 21 11 21 16 Z" fill="url(#breguetGoldPin)"/>
+              <circle cx="16" cy="18" r="7" stroke="url(#breguetGoldPin)" stroke-width="2.5" fill="#121622"/>
+              <circle cx="16" cy="18" r="3" fill="url(#breguetGoldPin)"/>
+              <polygon points="16,0 12,12 20,12" fill="url(#breguetGoldPin)"/>
+              <circle cx="16" cy="8" r="2.5" fill="#FFFFFF"/>
             </svg>
           </div>
 
-          <!-- Main Wheel Canvas -->
+          <!-- Main Wheel Canvas (Astrolabe Celestial Dial) -->
           <canvas id="spinCanvas" class="wheel-canvas" width="480" height="480"></canvas>
           
           <!-- Center Crystal Gem with Radiant Sheen -->
@@ -103,15 +108,16 @@
           
           <div>
             <div class="countdown-badge">
-              <span>⏳ Lượt quay tiếp theo:</span>
+              <span class="svg-icon-sm" data-svg="clock"></span>
+              <span>Lượt quay tiếp theo:</span>
               <strong id="countdownTimer">--:--:--</strong>
             </div>
           </div>
 
           <div class="btn-group-tight">
-            <button class="btn btn-gold btn-sm" onclick="reopenTodayRitual()">📜 Xem lá thư</button>
-            <button class="btn btn-primary btn-sm" onclick="exportTodayStory()">📸 Tạo ảnh Story</button>
-            <button class="btn btn-secondary btn-sm" onclick="switchTab('library')">📚 Thư viện</button>
+            <button class="btn btn-gold btn-sm" onclick="reopenTodayRitual()"><span class="svg-icon-sm" data-svg="fileText"></span> Xem lá thư</button>
+            <button class="btn btn-primary btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
+            <button class="btn btn-secondary btn-sm" onclick="switchTab('library')"><span class="svg-icon-sm" data-svg="bookOpen"></span> Thư viện</button>
           </div>
         </div>
 
@@ -121,7 +127,7 @@
           <span class="stats-dot-sep">·</span>
           <span><strong id="statUnlockedCount">0</strong>/70 thông điệp</span>
           <span class="stats-dot-sep">·</span>
-          <span>🔥 <strong id="statStreakDays">0</strong> ngày liên tiếp</span>
+          <span><span class="svg-icon-sm" data-svg="flame" style="color:var(--accent);"></span> <strong id="statStreakDays">0</strong> ngày liên tiếp</span>
         </div>
       </div>
 
@@ -132,19 +138,19 @@
 
         <div class="energy-pills-row">
           <div class="energy-pill holo-tilt" onclick="filterByEnergy('wisdom')">
-            <span class="energy-pill-icon">🧘</span>
+            <span class="energy-pill-icon" data-svg="wisdomLotus"></span>
             <div class="energy-pill-title">Trí Tuệ & Tĩnh Lặng</div>
           </div>
           <div class="energy-pill holo-tilt" onclick="filterByEnergy('love')">
-            <span class="energy-pill-icon">💖</span>
+            <span class="energy-pill-icon" data-svg="loveRadiant"></span>
             <div class="energy-pill-title">Yêu Thương & Chữa Lành</div>
           </div>
           <div class="energy-pill holo-tilt" onclick="filterByEnergy('discipline')">
-            <span class="energy-pill-icon">⚡</span>
+            <span class="energy-pill-icon" data-svg="disciplineFlame"></span>
             <div class="energy-pill-title">Kỷ Luật & Hành Động</div>
           </div>
           <div class="energy-pill holo-tilt" onclick="filterByEnergy('flow')">
-            <span class="energy-pill-icon">🌊</span>
+            <span class="energy-pill-icon" data-svg="flowWave"></span>
             <div class="energy-pill-title">Thuận Dòng & Tái Sinh</div>
           </div>
         </div>
@@ -154,7 +160,7 @@
     <!-- ── VIEW 2: THƯ VIỆN 70 BÀI HỌC ── -->
     <section id="viewLibrary" class="view-panel">
       <div class="hero-header" style="padding-bottom:var(--sp-sm);">
-        <div class="eyebrow-pill">📚 Bộ Sưu Tập</div>
+        <div class="eyebrow-pill"><span class="svg-icon-sm" data-svg="bookOpen"></span> Bộ Sưu Tập</div>
         <h1 class="hero-title" style="font-size:1.7rem;">70 Hạt Mầm Khai Sáng</h1>
       </div>
 
@@ -172,14 +178,14 @@
       <!-- Search & Filters -->
       <div class="lib-header-box">
         <div class="search-input-box">
-          <input type="text" id="libSearchInput" class="search-field" placeholder="🔍 Tìm kiếm thông điệp hoặc bài học..." oninput="onSearchLib()">
+          <input type="text" id="libSearchInput" class="search-field" placeholder="Tìm kiếm thông điệp hoặc bài học..." oninput="onSearchLib()">
         </div>
         <div class="category-filter-bar">
           <button class="cat-filter-btn active" data-cat="all" onclick="setLibCategory('all', this)">Tất cả (70)</button>
-          <button class="cat-filter-btn" data-cat="wisdom" onclick="setLibCategory('wisdom', this)">🧘 Trí Tuệ</button>
-          <button class="cat-filter-btn" data-cat="love" onclick="setLibCategory('love', this)">💖 Yêu Thương</button>
-          <button class="cat-filter-btn" data-cat="discipline" onclick="setLibCategory('discipline', this)">⚡ Kỷ Luật</button>
-          <button class="cat-filter-btn" data-cat="flow" onclick="setLibCategory('flow', this)">🌊 Thuận Dòng</button>
+          <button class="cat-filter-btn" data-cat="wisdom" onclick="setLibCategory('wisdom', this)"><span class="svg-icon-sm" data-svg="wisdomLotus"></span> Trí Tuệ</button>
+          <button class="cat-filter-btn" data-cat="love" onclick="setLibCategory('love', this)"><span class="svg-icon-sm" data-svg="loveRadiant"></span> Yêu Thương</button>
+          <button class="cat-filter-btn" data-cat="discipline" onclick="setLibCategory('discipline', this)"><span class="svg-icon-sm" data-svg="disciplineFlame"></span> Kỷ Luật</button>
+          <button class="cat-filter-btn" data-cat="flow" onclick="setLibCategory('flow', this)"><span class="svg-icon-sm" data-svg="flowWave"></span> Thuận Dòng</button>
         </div>
       </div>
 
@@ -204,28 +210,31 @@
       <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Khởi Đầu Tĩnh Lặng</span>
     </div>
     <div class="music-bar-controls">
-      <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước">⏮</button>
-      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc">▶</button>
-      <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau">⏭</button>
+      <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span data-svg="skipBack"></span></button>
+      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span data-svg="play"></span></button>
+      <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span data-svg="skipForward"></span></button>
     </div>
   </aside>
 
   <!-- ======================================================================
-       4. BOTTOM NAVIGATION (Chỉ 3 tab: Quay, Thư Viện, Thêm)
+       4. KOKONUT UI MORPHIC NAVBAR (Floating Split Nav)
        ====================================================================== -->
-  <nav class="bottom-nav">
-    <button class="nav-tab-btn active" id="tabBtnSpin" onclick="switchTab('spin')">
-      <span class="tab-icon">🎡</span>
-      <span>Vòng Quay</span>
-    </button>
-    <button class="nav-tab-btn" id="tabBtnLibrary" onclick="switchTab('library')">
-      <span class="tab-icon">📚</span>
-      <span>Thư Viện</span>
-    </button>
-    <button class="nav-tab-btn" id="tabBtnMore" onclick="openDrawer()">
-      <span class="tab-icon">⚙️</span>
-      <span>Thêm</span>
-    </button>
+  <nav class="morphic-navbar-dock" id="morphicNavbarDock" aria-label="Điều hướng chính">
+    <div class="morphic-navbar" id="morphicNavbar">
+      <div class="morphic-nav-indicator" id="morphicNavIndicator"></div>
+      <button class="morphic-nav-item active" id="tabBtnSpin" onclick="switchTab('spin')" data-tab="spin">
+        <span class="svg-icon-sm" data-svg="compass"></span>
+        <span>Vòng Quay</span>
+      </button>
+      <button class="morphic-nav-item" id="tabBtnLibrary" onclick="switchTab('library')" data-tab="library">
+        <span class="svg-icon-sm" data-svg="bookOpen"></span>
+        <span>Thư Viện</span>
+      </button>
+      <button class="morphic-nav-item" id="tabBtnMore" onclick="openDrawer()" data-tab="more">
+        <span class="svg-icon-sm" data-svg="sliders"></span>
+        <span>Tùy Chọn</span>
+      </button>
+    </div>
   </nav>
 
   <!-- ======================================================================
@@ -236,16 +245,16 @@
       <div class="drawer-drag-handle"></div>
       <div class="drawer-header">
         <h3 class="drawer-title">Tùy Chọn & Hồ Sơ</h3>
-        <button class="icon-btn" onclick="closeDrawer()" aria-label="Đóng bảng">✕</button>
+        <button class="icon-btn" onclick="closeDrawer()" aria-label="Đóng bảng"><span data-svg="close"></span></button>
       </div>
 
       <div class="drawer-body">
-        <!-- Section: Hồ sơ & Avatar Emoji -->
+        <!-- Section: Hồ sơ & Biểu tượng -->
         <div class="sheet-section">
-          <div class="sheet-section-title">👤 Hồ Sơ Của Bạn</div>
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="user"></span> Hồ Sơ Của Bạn</div>
           <div class="profile-row">
-            <div class="profile-avatar-bubble" id="profileAvatarDisplay" onclick="cycleAvatarEmoji()" title="Chạm để đổi diện mạo">
-              🌟
+            <div class="profile-avatar-bubble" id="profileAvatarDisplay" onclick="cycleAvatarGlyph()" title="Chạm để đổi biểu tượng ấn chứng">
+              <span data-svg="astrolabe"></span>
             </div>
             <div class="profile-details">
               <div class="profile-name-text" id="drawerUserName">Người Dùng</div>
@@ -257,19 +266,21 @@
 
         <!-- Section: 8 Huy Hiệu Danh Dự -->
         <div class="sheet-section">
-          <div class="sheet-section-title">🏅 8 Huy Hiệu Danh Dự</div>
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="award"></span> 8 Huy Hiệu Danh Dự</div>
           <div class="badges-strip-grid" id="drawerBadgesGrid"></div>
         </div>
 
         <!-- Section: Tùy Chỉnh Hình Nền (Backgrounds) -->
         <div class="sheet-section">
-          <div class="sheet-section-title">🎨 Tùy Chọn Hình Nền</div>
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="sparkles"></span> Tùy Chọn Hình Nền</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <button class="btn btn-secondary btn-sm" id="bgChoicePaths" onclick="switchActiveBg('paths')" style="border-width:2px;border-color:var(--accent);">
-              〰️ Dải Lụa Vũ Trụ
+            <button class="bg-choice-chip active" id="bgChoicePaths" onclick="switchActiveBg('paths')">
+              <span class="chip-icon" data-svg="waves"></span>
+              <span>Dải Lụa Vũ Trụ</span>
             </button>
-            <button class="btn btn-secondary btn-sm" id="bgChoiceRain" onclick="switchActiveBg('rainglass')" style="border-width:1.5px;">
-              🌧️ Mưa Kính Mờ (Wipe)
+            <button class="bg-choice-chip" id="bgChoiceRain" onclick="switchActiveBg('rainglass')">
+              <span class="chip-icon" data-svg="cloudRain"></span>
+              <span>Mưa Kính Mờ (Wipe)</span>
             </button>
           </div>
           <p style="font-size:0.75rem;color:var(--text-muted);margin-top:8px;">
@@ -279,7 +290,7 @@
 
         <!-- Section: Âm Thanh & SFX -->
         <div class="sheet-section">
-          <div class="sheet-section-title">🎵 Cài Đặt Âm Thanh</div>
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="music"></span> Cài Đặt Âm Thanh</div>
           <div class="setting-item-row">
             <div>
               <div class="setting-label-bold">Âm lượng Lofi</div>
@@ -292,37 +303,40 @@
               <div class="setting-label-bold">Hiệu ứng chuông & kim</div>
               <div class="setting-desc-sub">Chuông xoay Tây Tạng 432Hz</div>
             </div>
-            <button class="btn btn-secondary btn-sm" id="sfxStateBtn" onclick="toggleSfxEngine()">🔊 Đang bật</button>
+            <button class="btn btn-secondary btn-sm" id="sfxStateBtn" onclick="toggleSfxEngine()">
+              <span class="svg-icon-sm" data-svg="volume2"></span>
+              <span>Đang bật</span>
+            </button>
           </div>
         </div>
 
         <!-- Section: Triết Lý & Về Dự Án -->
         <div class="sheet-section">
-          <div class="sheet-section-title">📖 Về Dự Án</div>
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="bookOpen"></span> Về Dự Án</div>
           <p style="font-size:0.86rem;color:var(--text-body);margin-bottom:8px;line-height:1.65;">
             <strong>Vòng Quay Thông Điệp</strong> là trạm sạc bình an mỗi sáng giúp bạn dành ra 2 phút lắng đọng, tiếp nhận bài học chữa lành và nuôi dưỡng năng lượng tích cực cho ngày dài.
           </p>
           <p style="font-size:0.8rem;color:var(--text-muted);">
-            Phiên bản v2.5 Celestial Zen Sanctuary Pro Edition.
+            Phiên bản v3.0 Celestial Horology Pro Edition.
           </p>
         </div>
 
         <!-- Section: Dữ Liệu & Thoát -->
         <div class="sheet-section">
-          <div class="sheet-section-title">🔒 Dữ Liệu & Tài Khoản</div>
+          <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="lock"></span> Dữ Liệu & Tài Khoản</div>
           <div class="setting-item-row">
             <div>
               <div class="setting-label-bold">Sao lưu lịch sử</div>
               <div class="setting-desc-sub">Tải tệp JSON về máy</div>
             </div>
-            <button class="btn btn-secondary btn-sm" onclick="exportDataJson()">📤 Tải JSON</button>
+            <button class="btn btn-secondary btn-sm" onclick="exportDataJson()"><span class="svg-icon-sm" data-svg="download"></span> Tải JSON</button>
           </div>
           <div class="setting-item-row">
             <div>
-              <div class="setting-label-bold" style="color:#D9534F;">Đăng xuất</div>
+              <div class="setting-label-bold" style="color:#EF4444;">Đăng xuất</div>
               <div class="setting-desc-sub">Thoát phiên đăng nhập</div>
             </div>
-            <button class="btn btn-sm" style="background:#FDE8E8;color:#D9534F;border:1px solid #F8B4B4;" onclick="doUserLogout()">🚪 Đăng xuất</button>
+            <button class="btn btn-sm" style="background:rgba(239,68,68,0.12);color:#EF4444;border:1px solid rgba(239,68,68,0.3);" onclick="doUserLogout()"><span class="svg-icon-sm" data-svg="logOut"></span> Đăng xuất</button>
           </div>
         </div>
       </div>
@@ -341,19 +355,19 @@
       <p style="font-size:0.88rem;color:var(--text-muted);">Chạm vào con dấu sáp để khai mở thông điệp của bạn</p>
       
       <button class="wax-seal-btn" id="waxSealBtn" onclick="onCrackWaxSeal()" title="Chạm để bẻ khóa con dấu sáp">
-        <span>🌀</span>
+        <span data-svg="astrolabe" class="svg-icon-lg"></span>
       </button>
     </div>
 
     <!-- Phase 2: Card Flip Reveal & Journal -->
     <div class="letter-sheet-card" id="letterRevealCard">
-      <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư">✕</button>
+      <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư"><span data-svg="close"></span></button>
 
       <!-- 3D Card Flip with Holographic Tilt -->
       <div class="card-flip-stage holo-tilt" id="flipStage" onclick="toggleCardFlip()">
         <div class="card-flip-body">
           <div class="card-flip-face card-flip-front">
-            <div style="font-size:2.4rem;margin-bottom:10px;">✦ 🌀 ✦</div>
+            <div style="margin-bottom:10px;"><span data-svg="astrolabe" class="svg-icon-xl" style="color:var(--accent-gold);"></span></div>
             <div style="font-family:'Cinzel',serif;font-weight:800;font-size:1.15rem;letter-spacing:2px;margin-bottom:8px;">VŨ TRỤ DẪN LỐI</div>
             <p style="font-size:0.8rem;opacity:0.8;">Chạm để lật mặt tranh thông điệp</p>
           </div>
@@ -363,14 +377,14 @@
           </div>
         </div>
       </div>
-      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;">🔄 Chạm vào thẻ bài để lật đổi mặt tranh</p>
+      <p style="text-align:center;font-size:0.78rem;color:var(--text-muted);margin-bottom:14px;"><span class="svg-icon-sm" data-svg="compass"></span> Chạm vào thẻ bài để lật đổi mặt tranh</p>
 
       <h3 class="letter-heading" id="letterTitle">--</h3>
       <p class="letter-quote-text" id="letterQuote">--</p>
 
       <!-- Hành động tỉnh thức -->
       <div class="action-card-callout">
-        <div class="action-card-header">✨ Hành Động Gợi Ý Hôm Nay</div>
+        <div class="action-card-header"><span class="svg-icon-sm" data-svg="sparkles"></span> Hành Động Gợi Ý Hôm Nay</div>
         <p id="letterActionText" style="font-size:0.9rem;color:var(--text-primary);font-weight:700;">--</p>
         <label class="action-checkbox-line">
           <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
@@ -380,14 +394,14 @@
 
       <!-- Ô nhật ký -->
       <div class="journal-entry-box">
-        <div style="font-size:0.84rem;font-weight:800;color:var(--text-primary);">✍️ Cảm nghĩ & Lời tri ân:</div>
+        <div style="font-size:0.84rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><span class="svg-icon-sm" data-svg="feather"></span> Cảm nghĩ & Lời tri ân:</div>
         <textarea id="journalInput" class="journal-textarea" placeholder="Viết vài dòng cảm nhận để neo lại khoảnh khắc bình yên này..."></textarea>
-        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()">💾 Lưu nhật ký này</button>
+        <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()"><span class="svg-icon-sm" data-svg="save"></span> Lưu nhật ký này</button>
       </div>
 
       <div class="btn-group-tight" style="margin-top:var(--sp-md);">
-        <button class="btn btn-gold btn-sm" onclick="exportTodayStory()">📸 Tạo ảnh Story</button>
-        <button class="btn btn-secondary btn-sm" onclick="shareDirectLink()">💌 Chia sẻ</button>
+        <button class="btn btn-gold btn-sm" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
+        <button class="btn btn-secondary btn-sm" onclick="shareDirectLink()"><span class="svg-icon-sm" data-svg="share2"></span> Chia sẻ</button>
       </div>
     </div>
   </div>
@@ -398,8 +412,8 @@
   <div class="story-preview-modal" id="storyModal">
     <img id="storyRenderPreview" class="story-render-img" src="" alt="Story Preview">
     <div class="btn-group-tight">
-      <a id="storyDownloadBtn" class="btn btn-gold" download="thong-diep-story.png">⬇️ Tải Ảnh Về Máy</a>
-      <button class="btn btn-secondary" onclick="closeStoryModal()">✕ Đóng</button>
+      <a id="storyDownloadBtn" class="btn btn-gold" download="thong-diep-story.png"><span class="svg-icon-sm" data-svg="download"></span> Tải Ảnh Về Máy</a>
+      <button class="btn btn-secondary" onclick="closeStoryModal()"><span class="svg-icon-sm" data-svg="close"></span> Đóng</button>
     </div>
   </div>
 
@@ -413,6 +427,7 @@
        SCRIPTS
        ====================================================================== -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="js/icons.js"></script>
   <script src="js/supabase-client.js"></script>
   <script src="js/sound.js"></script>
   <script src="js/data.js"></script>
@@ -430,9 +445,6 @@
     let selectedLibCategory = 'all';
     let libSearchText = '';
     let toastTimeout = null;
-
-    const AVATAR_EMOJIS = ['🌟', '🕊️', '🧘', '🌸', '🌊', '☀️', '🌙', '🍃', '🦋', '🔮', '✨', '💎'];
-    let currentAvatarEmoji = localStorage.getItem('vqtd_avatar_emoji') || '🌟';
 
     // ── TÙY BIẾN HÌNH NỀN (BACKGROUND CHANGER) ──
     let pathsInstance = null;
@@ -461,7 +473,7 @@
       currentBgChoice = choice;
       localStorage.setItem('vqtd_bg_choice', choice);
       applyBgChoice(choice);
-      showToast(choice === 'rainglass' ? 'Đã đổi nền Mưa Kính Mờ 🌧️' : 'Đã đổi nền Dải Lụa Vũ Trụ 〰️');
+      showToast(choice === 'rainglass' ? 'Đã đổi nền Mưa Kính Mờ' : 'Đã đổi nền Dải Lụa Vũ Trụ');
     }
 
     function applyBgChoice(choice) {
@@ -532,19 +544,23 @@
         const isDark = document.documentElement.classList.contains('dark');
         const next = isDark ? 'light' : 'dark';
         applyTheme(next);
-        showToast(next === 'dark' ? 'Đã bật chế độ Đêm tĩnh mịch 🌙' : 'Đã bật chế độ Ngày an lành ☀️');
+        showToast(next === 'dark' ? 'Đã bật chế độ Đêm tĩnh mịch' : 'Đã bật chế độ Ngày an lành');
       });
     }
 
     function applyTheme(theme) {
+      const themeIcon = document.getElementById('themeIcon');
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
-        document.getElementById('themeIcon').textContent = '🌙';
+        if (themeIcon) themeIcon.innerHTML = Icons.get('moon');
       } else {
         document.documentElement.classList.remove('dark');
-        document.getElementById('themeIcon').textContent = '☀️';
+        if (themeIcon) themeIcon.innerHTML = Icons.get('sun');
       }
       localStorage.setItem('vqtd_theme', theme);
+      if (typeof drawWheel === 'function') {
+        drawWheel(currentRotationAngle);
+      }
     }
 
     // ── 4. ZEN BREATHE GUIDE (Hít thở sâu) ──
@@ -555,15 +571,15 @@
       const textEl = document.getElementById('breatheText');
       sounds.playSingingBowl();
 
-      textEl.textContent = '🌬️ Hít vào thật sâu... (4s)';
+      textEl.textContent = 'Hít vào thật sâu... (4s)';
       setTimeout(() => {
-        textEl.textContent = '🕊️ Giữ lại sự bình an... (4s)';
+        textEl.textContent = 'Giữ lại sự bình an... (4s)';
       }, 4000);
       setTimeout(() => {
-        textEl.textContent = '🍃 Thở ra nhẹ nhàng, thả lỏng mọi âu lo... (4s)';
+        textEl.textContent = 'Thở ra nhẹ nhàng, thả lỏng mọi âu lo... (4s)';
       }, 8000);
       setTimeout(() => {
-        textEl.textContent = '✨ Tâm bạn đã sẵn sàng đón nhận chỉ dẫn.';
+        textEl.textContent = 'Tâm bạn đã sẵn sàng đón nhận chỉ dẫn.';
         isBreathing = false;
         setTimeout(() => {
           textEl.textContent = 'Hít sâu và lắng đọng tâm trí (4s)';
@@ -571,26 +587,53 @@
       }, 12000);
     }
 
-    // ── 5. SPA TAB SWITCHING (Quay & Thư Viện) ──
+    // ── 5. SPA TAB SWITCHING VỚI KOKONUT MORPHIC NAVBAR ──
+    function updateMorphicNav(tabId) {
+      const nav = document.getElementById('morphicNavbar');
+      const indicator = document.getElementById('morphicNavIndicator');
+      if (!nav || !indicator) return;
+
+      const activeBtn = nav.querySelector(`.morphic-nav-item[data-tab="${tabId}"]`);
+      if (!activeBtn) return;
+
+      nav.querySelectorAll('.morphic-nav-item').forEach(b => b.classList.remove('active'));
+      activeBtn.classList.add('active');
+
+      const navRect = nav.getBoundingClientRect();
+      const btnRect = activeBtn.getBoundingClientRect();
+      const left = btnRect.left - navRect.left;
+      const width = btnRect.width;
+
+      indicator.style.left = `${left}px`;
+      indicator.style.width = `${width}px`;
+      indicator.style.opacity = '1';
+    }
+
     function switchTab(tabId) {
       activeTab = tabId;
       document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-      document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
 
       if (tabId === 'spin') {
         document.getElementById('viewSpin').classList.add('active');
-        document.getElementById('tabBtnSpin').classList.add('active');
         window.location.hash = 'spin';
+        updateMorphicNav('spin');
       } else if (tabId === 'library') {
         document.getElementById('viewLibrary').classList.add('active');
-        document.getElementById('tabBtnLibrary').classList.add('active');
         window.location.hash = 'library';
+        updateMorphicNav('library');
         renderLibrary();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
+    window.addEventListener('resize', () => {
+      updateMorphicNav(activeTab);
+    });
+
     // ── 6. DRAWER BOTTOM SHEET (Thêm) ──
+    const AVATAR_GLYPHS = ['astrolabe', 'compass', 'wisdomLotus', 'loveRadiant', 'disciplineFlame', 'flowWave', 'sparkles', 'badgeSun', 'badgeMoon', 'badgeStar'];
+    let currentAvatarGlyph = localStorage.getItem('vqtd_avatar_glyph') || 'astrolabe';
+
     function openDrawer() {
       document.getElementById('drawerBackdrop').classList.add('show');
       document.body.style.overflow = 'hidden';
@@ -599,29 +642,33 @@
     }
 
     function closeDrawer(e) {
-      if (e && e.target !== document.getElementById('drawerBackdrop') && !e.target.classList.contains('icon-btn')) {
-        // Cho phép click nút đóng
+      if (e && e.target !== document.getElementById('drawerBackdrop') && !e.target.closest('.icon-btn')) {
+        return;
       }
       document.getElementById('drawerBackdrop').classList.remove('show');
       document.body.style.overflow = '';
+      updateMorphicNav(activeTab);
     }
 
-    function cycleAvatarEmoji() {
-      const idx = AVATAR_EMOJIS.indexOf(currentAvatarEmoji);
-      const nextIdx = (idx + 1) % AVATAR_EMOJIS.length;
-      currentAvatarEmoji = AVATAR_EMOJIS[nextIdx];
-      localStorage.setItem('vqtd_avatar_emoji', currentAvatarEmoji);
+    function cycleAvatarGlyph() {
+      const idx = AVATAR_GLYPHS.indexOf(currentAvatarGlyph);
+      const nextIdx = (idx + 1) % AVATAR_GLYPHS.length;
+      currentAvatarGlyph = AVATAR_GLYPHS[nextIdx];
+      localStorage.setItem('vqtd_avatar_glyph', currentAvatarGlyph);
       syncDrawerProfile();
       sounds.playWaxCrack();
-      showToast('Đã đổi biểu tượng tâm thức! ' + currentAvatarEmoji);
+      showToast('Đã đổi biểu tượng ấn chứng tâm thức!');
     }
 
     function syncDrawerProfile() {
       const name = currentUser?.name || 'Lữ Khách Bình An';
       document.getElementById('drawerUserName').textContent = name;
       document.getElementById('drawerUserEmail').textContent = currentUser?.email || 'Tài khoản khách';
-      document.getElementById('profileAvatarDisplay').textContent = currentAvatarEmoji;
-      document.getElementById('topAvatarIcon').textContent = currentAvatarEmoji;
+      
+      const avatarBubble = document.getElementById('profileAvatarDisplay');
+      if (avatarBubble) avatarBubble.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-lg');
+      const topAvatar = document.getElementById('topAvatarIcon');
+      if (topAvatar) topAvatar.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-sm');
     }
 
     async function editUserName() {
@@ -631,12 +678,13 @@
         currentUser.name = newName.trim();
         saveUser(currentUser);
         syncDrawerProfile();
-        showToast('Đã cập nhật tên thành công! ✨');
+        showToast('Đã cập nhật tên thành công!');
       }
     }
 
     // ── 7. KHỞI CHẠY TRANG ──
     async function initApp() {
+      Icons.renderAll();
       initTheme();
 
       currentUser = await getCurrentUser();
@@ -676,6 +724,7 @@
         setTimeout(openDrawer, 300);
       }
 
+      setTimeout(() => updateMorphicNav(activeTab), 150);
       initHoloTilt();
     }
 
@@ -733,94 +782,192 @@
       setInterval(tick, 1000);
     }
 
-    // ── 10. VẼ VÒNG QUAY LA BÀN HOÀNG KIM (PRO SHADER) ──
+    // ── 10. VẼ VÒNG QUAY LA BÀN THIÊN VĂN SACRED ASTROLABE (HIGH-DPI) ──
     const canvas = document.getElementById('spinCanvas');
     const ctx = canvas.getContext('2d');
-    const W = 480, H = 480, CX = 240, CY = 240, R = 224;
     const SEGMENTS = 12;
 
-    const SEGMENT_COLORS = [
-      '#FFDFD0', '#FFE9CE', '#FFF5CE', '#F1FFD6',
-      '#DCFCEE', '#D6F8FB', '#DEEDFF', '#E7E5FF',
-      '#F0E5FF', '#FCE5F9', '#FFE2EC', '#FFEAE0'
-    ];
-    const SEGMENT_RUNES = ['✦','✧','☽','☼','★','☆','☯','⚘','☘','❊','☸','࿏'];
-    const SEGMENT_LABELS = ['Bình An','Trí Tuệ','Hy Vọng','Chữa Lành','Dồi Dào','Tình Yêu',
-                            'Kỷ Luật','Bền Bỉ','Khai Sáng','Chánh Niệm','Thong Dong','Phúc Lạc'];
+    const SEGMENT_RUNES = ['✦','✧','☽','☼','♃','♄','☿','♀','♂','♈','♎','☯'];
+    const SEGMENT_LABELS = ['BÌNH AN','TRÍ TUỆ','HY VỌNG','CHỮA LÀNH','DỒI DÀO','TÌNH YÊU',
+                            'KỶ LUẬT','BỀN BỈ','KHAI SÁNG','CHÁNH NIỆM','THONG DONG','PHÚC LẠC'];
 
     let currentRotationAngle = 0;
     let isWheelSpinning = false;
     let lastSegmentIndex = -1;
 
     function drawWheel(angle) {
-      ctx.clearRect(0, 0, W, H);
+      const dpr = Math.max(window.devicePixelRatio || 1, 2);
+      const CSS_SIZE = 480;
+      if (canvas.width !== CSS_SIZE * dpr) {
+        canvas.width = CSS_SIZE * dpr;
+        canvas.height = CSS_SIZE * dpr;
+        canvas.style.width = CSS_SIZE + 'px';
+        canvas.style.height = CSS_SIZE + 'px';
+      }
+
+      ctx.save();
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      const CX = (CSS_SIZE * dpr) / 2;
+      const CY = (CSS_SIZE * dpr) / 2;
+      const R = 224 * dpr;
+      const s = dpr;
+      const isDark = document.documentElement.classList.contains('dark');
       const segAngle = (Math.PI * 2) / SEGMENTS;
 
-      // Outer gold metallic border
-      ctx.save();
+      // ── Outer Celestial Border Ring ──
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 8, 0, Math.PI * 2);
-      ctx.fillStyle = '#DDA73A';
-      ctx.shadowColor = 'rgba(221, 167, 58, 0.6)';
-      ctx.shadowBlur = 20;
+      ctx.arc(CX, CY, R + 10 * s, 0, Math.PI * 2);
+      ctx.fillStyle = isDark ? '#080A10' : '#EDE4D4';
+      ctx.shadowColor = isDark ? 'rgba(221, 167, 58, 0.45)' : 'rgba(184, 134, 11, 0.3)';
+      ctx.shadowBlur = 24 * s;
       ctx.fill();
 
+      // Outer Gold Bevel
       ctx.beginPath();
-      ctx.arc(CX, CY, R + 3, 0, Math.PI * 2);
-      ctx.fillStyle = '#2D1810';
-      ctx.fill();
+      ctx.arc(CX, CY, R + 9 * s, 0, Math.PI * 2);
+      ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
+      ctx.lineWidth = 2 * s;
+      ctx.stroke();
+
+      // ── 360-degree Astronomical Chrono Ticks ──
+      ctx.save();
+      for (let deg = 0; deg < 360; deg++) {
+        const rad = angle + (deg * Math.PI) / 180;
+        const isMajor = deg % 30 === 0;
+        const isMedium = deg % 5 === 0;
+        const tickLen = (isMajor ? 11 : isMedium ? 6.5 : 3.5) * s;
+        const rOuter = R + 5 * s;
+        const rInner = rOuter - tickLen;
+
+        const x1 = CX + Math.cos(rad) * rInner;
+        const y1 = CY + Math.sin(rad) * rInner;
+        const x2 = CX + Math.cos(rad) * rOuter;
+        const y2 = CY + Math.sin(rad) * rOuter;
+
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = isMajor
+          ? (isDark ? 'rgba(253, 230, 138, 0.95)' : 'rgba(180, 120, 20, 0.95)')
+          : isMedium
+            ? (isDark ? 'rgba(221, 167, 58, 0.65)' : 'rgba(184, 134, 11, 0.6)')
+            : (isDark ? 'rgba(221, 167, 58, 0.28)' : 'rgba(184, 134, 11, 0.25)');
+        ctx.lineWidth = (isMajor ? 2.2 : isMedium ? 1.2 : 0.75) * s;
+        ctx.stroke();
+      }
       ctx.restore();
 
-      // Segments
+      // ── 12 Astrolabe Sectors (Dual-Tone Luxury Horology Palette) ──
       for (let i = 0; i < SEGMENTS; i++) {
         const start = angle + i * segAngle;
         const end   = start + segAngle;
         const mid   = start + segAngle / 2;
+        const isEven = i % 2 === 0;
 
         ctx.beginPath();
         ctx.moveTo(CX, CY);
         ctx.arc(CX, CY, R, start, end);
         ctx.closePath();
-        ctx.fillStyle = SEGMENT_COLORS[i];
+
+        // Alternating Obsidian Slate / Alabaster Vellum
+        if (isDark) {
+          ctx.fillStyle = isEven ? '#101524' : '#151C2E';
+        } else {
+          ctx.fillStyle = isEven ? '#FFFDF9' : '#F6F0E5';
+        }
         ctx.fill();
 
-        ctx.strokeStyle = 'rgba(255, 255, 255, 0.95)';
-        ctx.lineWidth = 2.5;
+        // Antique Gold Radial Divider Line
+        ctx.beginPath();
+        ctx.moveTo(CX, CY);
+        ctx.lineTo(CX + Math.cos(start) * R, CY + Math.sin(start) * R);
+        ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.65)' : 'rgba(184, 134, 11, 0.55)';
+        ctx.lineWidth = 1.75 * s;
         ctx.stroke();
 
-        // Rune Cổ Tự
-        const rx = CX + Math.cos(mid) * (R * 0.74);
-        const ry = CY + Math.sin(mid) * (R * 0.74);
+        // Celestial Rune Sigil (Outer Orbit)
+        const rx = CX + Math.cos(mid) * (R * 0.78);
+        const ry = CY + Math.sin(mid) * (R * 0.78);
         ctx.save();
         ctx.translate(rx, ry);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = 'bold 22px serif';
-        ctx.fillStyle = '#4A2818';
+        ctx.font = `bold ${Math.round(20 * s)}px serif`;
+        ctx.fillStyle = isDark ? '#FDE68A' : '#7D4815';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(SEGMENT_RUNES[i], 0, 0);
         ctx.restore();
 
-        // Label Chữ
-        const lx = CX + Math.cos(mid) * (R * 0.44);
-        const ly = CY + Math.sin(mid) * (R * 0.44);
+        // Sector Label (Cinzel Typography)
+        const lx = CX + Math.cos(mid) * (R * 0.46);
+        const ly = CY + Math.sin(mid) * (R * 0.46);
         ctx.save();
         ctx.translate(lx, ly);
         ctx.rotate(mid + Math.PI / 2);
-        ctx.font = 'bold 11px Nunito, sans-serif';
-        ctx.fillStyle = '#2D1810';
+        ctx.font = `700 ${Math.round(10.5 * s)}px 'Cinzel', serif`;
+        ctx.fillStyle = isDark ? '#F1E9DB' : '#2D1810';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
         ctx.fillText(SEGMENT_LABELS[i], 0, 0);
         ctx.restore();
       }
 
-      // Inner ring
+      // ── Outer Circumference Golden Rings ──
       ctx.beginPath();
-      ctx.arc(CX, CY, 56, 0, Math.PI * 2);
-      ctx.strokeStyle = '#DDA73A';
-      ctx.lineWidth = 4;
+      ctx.arc(CX, CY, R, 0, Math.PI * 2);
+      ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
+      ctx.lineWidth = 2.5 * s;
       ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(CX, CY, R * 0.64, 0, Math.PI * 2);
+      ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.35)' : 'rgba(184, 134, 11, 0.3)';
+      ctx.lineWidth = 1 * s;
+      ctx.stroke();
+
+      // ── Sacred Geometry: Inscribed 12-Pointed Metatron Star ──
+      ctx.save();
+      ctx.beginPath();
+      const innerR = 64 * s;
+      for (let i = 0; i < 12; i++) {
+        const theta1 = angle + (i * Math.PI * 2) / 12;
+        const theta2 = angle + ((i + 4) * Math.PI * 2) / 12;
+        ctx.moveTo(CX + Math.cos(theta1) * innerR, CY + Math.sin(theta1) * innerR);
+        ctx.lineTo(CX + Math.cos(theta2) * innerR, CY + Math.sin(theta2) * innerR);
+      }
+      ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.4)' : 'rgba(184, 134, 11, 0.35)';
+      ctx.lineWidth = 1 * s;
+      ctx.stroke();
+      ctx.restore();
+
+      // ── Central Pivot Rings & Hub ──
+      ctx.beginPath();
+      ctx.arc(CX, CY, 52 * s, 0, Math.PI * 2);
+      ctx.fillStyle = isDark ? '#0E131F' : '#FAF5EB';
+      ctx.fill();
+      ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
+      ctx.lineWidth = 3 * s;
+      ctx.stroke();
+
+      // Center Concentric Gold Accent Ring
+      ctx.beginPath();
+      ctx.arc(CX, CY, 28 * s, 0, Math.PI * 2);
+      ctx.strokeStyle = isDark ? 'rgba(253, 230, 138, 0.7)' : 'rgba(184, 134, 11, 0.6)';
+      ctx.lineWidth = 1.5 * s;
+      ctx.stroke();
+
+      // ── Specular Curved Crystal Glare ──
+      const glareGrad = ctx.createLinearGradient(CX - R, CY - R, CX + R, CY);
+      glareGrad.addColorStop(0, 'rgba(255, 255, 255, 0.12)');
+      glareGrad.addColorStop(0.45, 'rgba(255, 255, 255, 0.03)');
+      glareGrad.addColorStop(1, 'transparent');
+      ctx.beginPath();
+      ctx.arc(CX, CY, R, 0, Math.PI * 2);
+      ctx.fillStyle = glareGrad;
+      ctx.fill();
+
+      ctx.restore();
     }
 
     // ── 11. THỰC HIỆN QUAY (Physics & Tactile Haptic) ──
@@ -961,7 +1108,7 @@
       if (isChecked) {
         sounds.playWaxCrack();
         launchConfettiEffect();
-        showToast('Tuyệt vời! Bạn đã hoàn thành hành động hôm nay ✨');
+        showToast('Tuyệt vời! Bạn đã hoàn thành hành động hôm nay');
       } else {
         showToast('Đã bỏ dấu hoàn thành');
       }
@@ -971,7 +1118,7 @@
       const note = document.getElementById('journalInput').value.trim();
       const isChecked = document.getElementById('actionCheckbox').checked;
       saveMessageNote(getTodayStr(), note, isChecked);
-      showToast('Đã lưu nhật ký vào hành trình của bạn 💾');
+      showToast('Đã lưu nhật ký vào hành trình của bạn');
     }
 
     // ── 13. THƯ VIỆN & BỘ LỌC HOLOGRAPHIC ──
@@ -1013,6 +1160,7 @@
       filtered.forEach(msg => {
         const isUnlocked = history.some(h => h.messageId === msg.id);
         const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
+        const iconSvg = Icons.get(cat.iconName || 'sparkles', 'svg-icon-sm');
 
         const card = document.createElement('div');
         card.className = 'lib-card holo-tilt';
@@ -1020,13 +1168,13 @@
           <div class="lib-card-art">
             <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}" loading="lazy">
             <div class="lib-card-glare"></div>
-            ${isUnlocked ? '' : '<div class="lib-card-lock-mask">🔒</div>'}
+            ${isUnlocked ? '' : `<div class="lib-card-lock-mask">${Icons.get('lock', 'svg-icon-lg')}</div>`}
           </div>
           <div class="lib-card-body">
             <div class="lib-card-name">${msg.name}</div>
             <div class="lib-card-meta">
-              <span style="color:${cat.color};font-weight:800;">${cat.icon} ${cat.name.split(' ')[0]}</span>
-              <span>${isUnlocked ? '✓ Đã mở' : 'Chưa mở'}</span>
+              <span style="color:${cat.color};font-weight:800;display:inline-flex;align-items:center;gap:4px;">${iconSvg} ${cat.name.split(' ')[0]}</span>
+              <span style="display:inline-flex;align-items:center;gap:3px;">${isUnlocked ? Icons.get('check', 'svg-icon-sm') + ' Đã mở' : 'Chưa mở'}</span>
             </div>
           </div>
         `;
@@ -1036,7 +1184,7 @@
             currentMessageId = msg.id;
             reopenTodayRitual();
           } else {
-            showToast('Lá thư này chưa được khai mở từ vòng quay 🔒');
+            showToast('Lá thư này chưa được khai mở từ vòng quay');
           }
         });
 
@@ -1079,16 +1227,16 @@
       });
     }
 
-    // ── 15. HUY HIỆU DANH DỰ (Trong Drawer) ──
+    // ── 15. HUY HIỆU DANH DỰ (Vector Engraved Trong Drawer) ──
     const BADGE_LIST = [
-      { emoji:'🌱', name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu' },
-      { emoji:'🌿', name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày streak' },
-      { emoji:'🌸', name:'Hoa Nở',     req: 10, type:'spin',   desc:'10 lần quay' },
-      { emoji:'🌟', name:'Ngôi Sao',   req: 14, type:'streak', desc:'14 ngày streak' },
-      { emoji:'🦋', name:'Bướm Bay',   req: 20, type:'unique', desc:'20 thông điệp' },
-      { emoji:'🌙', name:'Ánh Trăng',  req: 30, type:'spin',   desc:'30 lần quay' },
-      { emoji:'☀️', name:'Mặt Trời',   req: 30, type:'streak', desc:'30 ngày streak' },
-      { emoji:'💎', name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
+      { icon:'badgeSprout',    name:'Mầm Non',    req: 1,  type:'spin',   desc:'Quay lần đầu' },
+      { icon:'badgeLeaf',      name:'Chồi Xanh',  req: 7,  type:'streak', desc:'7 ngày streak' },
+      { icon:'badgeFlower',    name:'Hoa Nở',     req: 10, type:'spin',   desc:'10 lần quay' },
+      { icon:'badgeStar',      name:'Ngôi Sao',   req: 14, type:'streak', desc:'14 ngày streak' },
+      { icon:'badgeButterfly', name:'Bướm Bay',   req: 20, type:'unique', desc:'20 thông điệp' },
+      { icon:'badgeMoon',      name:'Ánh Trăng',  req: 30, type:'spin',   desc:'30 lần quay' },
+      { icon:'badgeSun',       name:'Mặt Trời',   req: 30, type:'streak', desc:'30 ngày streak' },
+      { icon:'badgeDiamond',   name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
     ];
 
     function renderDrawerBadges() {
@@ -1108,7 +1256,7 @@
 
         grid.innerHTML += `
           <div class="badge-tile ${earned ? 'earned' : ''}" title="${b.desc}: ${count}/${b.req}">
-            <span class="badge-emoji">${b.emoji}</span>
+            <div class="badge-icon-wrap">${Icons.get(b.icon)}</div>
             <div class="badge-label">${b.name}</div>
           </div>
         `;
@@ -1126,13 +1274,13 @@
         if (volSlider) volSlider.value = bgMusic.audio.volume;
 
         bgMusic.audio.addEventListener('play', () => {
-          if (toggleBtn) toggleBtn.textContent = '⏸';
+          if (toggleBtn) toggleBtn.innerHTML = Icons.get('pause');
           if (titleEl) titleEl.textContent = bgMusic.currentTrackName || 'Lofi Thiền Định';
           if (barEl) barEl.classList.add('playing');
         });
 
         bgMusic.audio.addEventListener('pause', () => {
-          if (toggleBtn) toggleBtn.textContent = '▶';
+          if (toggleBtn) toggleBtn.innerHTML = Icons.get('play');
           if (barEl) barEl.classList.remove('playing');
         });
       }
@@ -1145,8 +1293,10 @@
     function toggleSfxEngine() {
       const muted = sounds.toggleMute();
       const btn = document.getElementById('sfxStateBtn');
-      if (btn) btn.textContent = muted ? '🔇 Đã tắt' : '🔊 Đang bật';
-      showToast(muted ? 'Đã tắt tiếng chuông & click 🔇' : 'Đã bật hiệu ứng âm thanh 🔊');
+      if (btn) {
+        btn.innerHTML = `<span class="svg-icon-sm">${Icons.get(muted ? 'volumeX' : 'volume2')}</span> <span>${muted ? 'Đã tắt' : 'Đang bật'}</span>`;
+      }
+      showToast(muted ? 'Đã tắt tiếng chuông & click' : 'Đã bật hiệu ứng âm thanh');
     }
 
     // ── 17. TẠO & CHIA SẺ STORY INSTAGRAM ──
@@ -1178,12 +1328,12 @@
     function shareDirectLink() {
       if (!currentMessageId) return;
       const msg = getMessageById(currentMessageId);
-      const shareText = `🌀 Hôm nay tôi nhận được thông điệp: "${msg.name}" — ${msg.desc}`;
+      const shareText = `Hôm nay tôi nhận được thông điệp: "${msg.name}" — ${msg.desc}`;
       if (navigator.share) {
         navigator.share({ title: 'Vòng Quay Thông Điệp', text: shareText, url: window.location.href });
       } else {
         navigator.clipboard.writeText(shareText);
-        showToast('Đã sao chép lời nhắn vào bộ nhớ tạm! 📋');
+        showToast('Đã sao chép lời nhắn vào bộ nhớ tạm!');
       }
     }
 
@@ -1193,7 +1343,7 @@
         user: currentUser,
         history: getHistory(),
         streak: getStreak(),
-        avatarEmoji: currentAvatarEmoji,
+        avatarGlyph: currentAvatarGlyph,
         exportedAt: new Date().toISOString()
       };
       const blob = new Blob([JSON.stringify(backupData, null, 2)], { type: 'application/json' });
@@ -1201,7 +1351,7 @@
       a.href = URL.createObjectURL(blob);
       a.download = `vong-quay-backup-${new Date().toISOString().slice(0,10)}.json`;
       a.click();
-      showToast('Đã tải tệp JSON sao lưu về máy! 💾');
+      showToast('Đã tải tệp JSON sao lưu về máy!');
     }
 
     async function doUserLogout() {
