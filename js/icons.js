@@ -292,14 +292,18 @@
   function getIcon(name, customClass = '') {
     const raw = ICONS[name] || '';
     if (!raw) return '';
-    if (!customClass) return raw;
-    return raw.replace('<svg', `<svg class="${customClass}"`);
+    const classAttr = customClass ? `class="svg-icon ${customClass}"` : 'class="svg-icon"';
+    return raw.replace('<svg', `<svg ${classAttr} aria-hidden="true" focusable="false"`);
   }
 
   function renderAllIcons() {
     document.querySelectorAll('[data-svg]').forEach(el => {
       const name = el.getAttribute('data-svg');
-      const cls = el.getAttribute('data-svg-class') || '';
+      let cls = el.getAttribute('data-svg-class') || '';
+      if (!cls) {
+        const match = el.className.match(/\bsvg-icon-(xs|sm|md|lg|xl|2xl)\b/);
+        if (match) cls = match[0];
+      }
       if (ICONS[name]) {
         el.innerHTML = getIcon(name, cls);
       }

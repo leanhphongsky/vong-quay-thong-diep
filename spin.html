@@ -29,11 +29,11 @@
     <div class="top-actions">
       <!-- Dark/Light Mode Switcher -->
       <button class="icon-btn" id="themeToggleBtn" aria-label="Đổi giao diện Sáng/Tối" title="Chuyển chế độ Sáng / Tối">
-        <span id="themeIcon" data-svg="sun"></span>
+        <span id="themeIcon" class="svg-icon-md" data-svg="sun"></span>
       </button>
       <!-- Quick Profile / Sheet trigger -->
       <button class="icon-btn" onclick="openDrawer()" aria-label="Mở cài đặt và hồ sơ" title="Cài đặt & Hồ sơ">
-        <span id="topAvatarIcon" data-svg="user"></span>
+        <span id="topAvatarIcon" class="svg-icon-md" data-svg="user"></span>
       </button>
     </div>
   </header>
@@ -178,6 +178,7 @@
       <!-- Search & Filters -->
       <div class="lib-header-box">
         <div class="search-input-box">
+          <span class="search-prefix-icon"><span class="svg-icon-sm" data-svg="search"></span></span>
           <input type="text" id="libSearchInput" class="search-field" placeholder="Tìm kiếm thông điệp hoặc bài học..." oninput="onSearchLib()">
         </div>
         <div class="category-filter-bar">
@@ -210,9 +211,9 @@
       <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Khởi Đầu Tĩnh Lặng</span>
     </div>
     <div class="music-bar-controls">
-      <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span data-svg="skipBack"></span></button>
-      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span data-svg="play"></span></button>
-      <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span data-svg="skipForward"></span></button>
+      <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span class="svg-icon-sm" data-svg="skipBack"></span></button>
+      <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span class="svg-icon-xs" data-svg="play"></span></button>
+      <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span class="svg-icon-sm" data-svg="skipForward"></span></button>
     </div>
   </aside>
 
@@ -245,7 +246,7 @@
       <div class="drawer-drag-handle"></div>
       <div class="drawer-header">
         <h3 class="drawer-title">Tùy Chọn & Hồ Sơ</h3>
-        <button class="icon-btn" onclick="closeDrawer()" aria-label="Đóng bảng"><span data-svg="close"></span></button>
+        <button class="icon-btn" onclick="closeDrawer()" aria-label="Đóng bảng"><span class="svg-icon-sm" data-svg="close"></span></button>
       </div>
 
       <div class="drawer-body">
@@ -254,7 +255,7 @@
           <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="user"></span> Hồ Sơ Của Bạn</div>
           <div class="profile-row">
             <div class="profile-avatar-bubble" id="profileAvatarDisplay" onclick="cycleAvatarGlyph()" title="Chạm để đổi biểu tượng ấn chứng">
-              <span data-svg="astrolabe"></span>
+              <span class="svg-icon-xl" data-svg="astrolabe"></span>
             </div>
             <div class="profile-details">
               <div class="profile-name-text" id="drawerUserName">Người Dùng</div>
@@ -275,11 +276,11 @@
           <div class="sheet-section-title"><span class="svg-icon-sm" data-svg="sparkles"></span> Tùy Chọn Hình Nền</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
             <button class="bg-choice-chip active" id="bgChoicePaths" onclick="switchActiveBg('paths')">
-              <span class="chip-icon" data-svg="waves"></span>
+              <span class="chip-icon svg-icon-sm" data-svg="waves"></span>
               <span>Dải Lụa Vũ Trụ</span>
             </button>
             <button class="bg-choice-chip" id="bgChoiceRain" onclick="switchActiveBg('rainglass')">
-              <span class="chip-icon" data-svg="cloudRain"></span>
+              <span class="chip-icon svg-icon-sm" data-svg="cloudRain"></span>
               <span>Mưa Kính Mờ (Wipe)</span>
             </button>
           </div>
@@ -355,13 +356,13 @@
       <p style="font-size:0.88rem;color:var(--text-muted);">Chạm vào con dấu sáp để khai mở thông điệp của bạn</p>
       
       <button class="wax-seal-btn" id="waxSealBtn" onclick="onCrackWaxSeal()" title="Chạm để bẻ khóa con dấu sáp">
-        <span data-svg="astrolabe" class="svg-icon-lg"></span>
+        <span data-svg="astrolabe" class="svg-icon-2xl"></span>
       </button>
     </div>
 
     <!-- Phase 2: Card Flip Reveal & Journal -->
     <div class="letter-sheet-card" id="letterRevealCard">
-      <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư"><span data-svg="close"></span></button>
+      <button class="modal-close-round" onclick="closeRitualModal()" aria-label="Đóng lá thư"><span class="svg-icon-sm" data-svg="close"></span></button>
 
       <!-- 3D Card Flip with Holographic Tilt -->
       <div class="card-flip-stage holo-tilt" id="flipStage" onclick="toggleCardFlip()">
@@ -552,10 +553,10 @@
       const themeIcon = document.getElementById('themeIcon');
       if (theme === 'dark') {
         document.documentElement.classList.add('dark');
-        if (themeIcon) themeIcon.innerHTML = Icons.get('moon');
+        if (themeIcon) themeIcon.innerHTML = Icons.get('moon', 'svg-icon-md');
       } else {
         document.documentElement.classList.remove('dark');
-        if (themeIcon) themeIcon.innerHTML = Icons.get('sun');
+        if (themeIcon) themeIcon.innerHTML = Icons.get('sun', 'svg-icon-md');
       }
       localStorage.setItem('vqtd_theme', theme);
       if (typeof drawWheel === 'function') {
@@ -666,9 +667,9 @@
       document.getElementById('drawerUserEmail').textContent = currentUser?.email || 'Tài khoản khách';
       
       const avatarBubble = document.getElementById('profileAvatarDisplay');
-      if (avatarBubble) avatarBubble.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-lg');
+      if (avatarBubble) avatarBubble.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-xl');
       const topAvatar = document.getElementById('topAvatarIcon');
-      if (topAvatar) topAvatar.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-sm');
+      if (topAvatar) topAvatar.innerHTML = Icons.get(currentAvatarGlyph, 'svg-icon-md');
     }
 
     async function editUserName() {
@@ -725,6 +726,9 @@
       }
 
       setTimeout(() => updateMorphicNav(activeTab), 150);
+      if (document.fonts && document.fonts.ready) {
+        document.fonts.ready.then(() => updateMorphicNav(activeTab));
+      }
       initHoloTilt();
     }
 
@@ -1160,7 +1164,7 @@
       filtered.forEach(msg => {
         const isUnlocked = history.some(h => h.messageId === msg.id);
         const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
-        const iconSvg = Icons.get(cat.iconName || 'sparkles', 'svg-icon-sm');
+        const iconSvg = Icons.get(cat.iconName || 'sparkles', 'svg-icon-xs');
 
         const card = document.createElement('div');
         card.className = 'lib-card holo-tilt';
@@ -1174,7 +1178,7 @@
             <div class="lib-card-name">${msg.name}</div>
             <div class="lib-card-meta">
               <span style="color:${cat.color};font-weight:800;display:inline-flex;align-items:center;gap:4px;">${iconSvg} ${cat.name.split(' ')[0]}</span>
-              <span style="display:inline-flex;align-items:center;gap:3px;">${isUnlocked ? Icons.get('check', 'svg-icon-sm') + ' Đã mở' : 'Chưa mở'}</span>
+              <span style="display:inline-flex;align-items:center;gap:3px;">${isUnlocked ? Icons.get('check', 'svg-icon-xs') + ' Đã mở' : 'Chưa mở'}</span>
             </div>
           </div>
         `;
@@ -1256,7 +1260,7 @@
 
         grid.innerHTML += `
           <div class="badge-tile ${earned ? 'earned' : ''}" title="${b.desc}: ${count}/${b.req}">
-            <div class="badge-icon-wrap">${Icons.get(b.icon)}</div>
+            <div class="badge-icon-wrap">${Icons.get(b.icon, 'svg-icon-lg')}</div>
             <div class="badge-label">${b.name}</div>
           </div>
         `;
@@ -1273,14 +1277,18 @@
       if (bgMusic) {
         if (volSlider) volSlider.value = bgMusic.audio.volume;
 
+        if (toggleBtn) {
+          toggleBtn.innerHTML = Icons.get(bgMusic.isPlaying ? 'pause' : 'play', 'svg-icon-xs');
+        }
+
         bgMusic.audio.addEventListener('play', () => {
-          if (toggleBtn) toggleBtn.innerHTML = Icons.get('pause');
+          if (toggleBtn) toggleBtn.innerHTML = Icons.get('pause', 'svg-icon-xs');
           if (titleEl) titleEl.textContent = bgMusic.currentTrackName || 'Lofi Thiền Định';
           if (barEl) barEl.classList.add('playing');
         });
 
         bgMusic.audio.addEventListener('pause', () => {
-          if (toggleBtn) toggleBtn.innerHTML = Icons.get('play');
+          if (toggleBtn) toggleBtn.innerHTML = Icons.get('play', 'svg-icon-xs');
           if (barEl) barEl.classList.remove('playing');
         });
       }
@@ -1294,7 +1302,7 @@
       const muted = sounds.toggleMute();
       const btn = document.getElementById('sfxStateBtn');
       if (btn) {
-        btn.innerHTML = `<span class="svg-icon-sm">${Icons.get(muted ? 'volumeX' : 'volume2')}</span> <span>${muted ? 'Đã tắt' : 'Đang bật'}</span>`;
+        btn.innerHTML = `${Icons.get(muted ? 'volumeX' : 'volume2', 'svg-icon-sm')} <span>${muted ? 'Đã tắt' : 'Đang bật'}</span>`;
       }
       showToast(muted ? 'Đã tắt tiếng chuông & click' : 'Đã bật hiệu ứng âm thanh');
     }
