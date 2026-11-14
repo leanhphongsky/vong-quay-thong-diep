@@ -28,8 +28,8 @@
       <span>THÔNG ĐIỆP</span>
     </a>
     <div class="top-actions">
-      <!-- Admin Inbox Button (Only visible to Sunny / Admin) -->
-      <button class="admin-top-btn" id="topAdminInboxBtn" onclick="openAdminInboxModal()" style="display:none;" title="Xem hòm thư tâm sự (Dành riêng cho Sunny)">
+      <!-- Admin Inbox Button (Dành riêng cho Mẹ / Sunny quản lý tâm sự) -->
+      <button class="admin-top-btn" id="topAdminInboxBtn" onclick="openAdminInboxModal()" style="display:inline-flex;" title="Xem hòm thư tâm sự (Dành riêng cho Sunny)">
         <span class="svg-icon-sm" data-svg="crown"></span>
         <span class="admin-top-label">Hòm Thư</span>
         <span class="admin-unread-pill" id="adminUnreadBadge">0</span>
@@ -132,7 +132,7 @@
         <div class="stats-inline-strip">
           <span><strong id="statTotalSpins">0</strong> lần quay</span>
           <span class="stats-dot-sep">·</span>
-          <span><strong id="statUnlockedCount">0</strong>/70 thông điệp</span>
+          <span><strong id="statUnlockedCount">0</strong>/66 thông điệp</span>
           <span class="stats-dot-sep">·</span>
           <span><span class="svg-icon-sm" data-svg="flame" style="color:var(--accent);"></span> <strong id="statStreakDays">0</strong> ngày liên tiếp</span>
         </div>
@@ -164,18 +164,18 @@
       </div>
     </section>
 
-    <!-- ── VIEW 2: THƯ VIỆN 70 BÀI HỌC ── -->
+    <!-- ── VIEW 2: THƯ VIỆN 66 BÀI HỌC ── -->
     <section id="viewLibrary" class="view-panel">
       <div class="hero-header" style="padding-bottom:var(--sp-sm);" data-aos="fade-down" data-aos-duration="600">
         <div class="eyebrow-pill"><span class="svg-icon-sm" data-svg="bookOpen"></span> Bộ Sưu Tập</div>
-        <h1 class="hero-title" style="font-size:1.7rem;">70 Hạt Mầm Khai Sáng</h1>
+        <h1 class="hero-title" style="font-size:1.7rem;">66 Hạt Mầm Khai Sáng</h1>
       </div>
 
       <!-- Unlock Progress -->
       <div class="lib-progress-wrap" data-aos="fade-up" data-aos-delay="40">
         <div class="lib-progress-meta">
           <span>Tiến trình mở khóa</span>
-          <span><strong id="libProgressText" style="color:var(--accent);">0</strong>/70</span>
+          <span><strong id="libProgressText" style="color:var(--accent);">0</strong>/66</span>
         </div>
         <div class="lib-progress-bar">
           <div id="libProgressBarFill" class="lib-progress-fill" style="width: 0%;"></div>
@@ -189,7 +189,7 @@
           <input type="text" id="libSearchInput" class="search-field" placeholder="Tìm kiếm thông điệp hoặc bài học..." oninput="onSearchLib()">
         </div>
         <div class="category-filter-bar">
-          <button class="cat-filter-btn active" data-cat="all" onclick="setLibCategory('all', this)">Tất cả (70)</button>
+          <button class="cat-filter-btn active" data-cat="all" onclick="setLibCategory('all', this)">Tất cả (66)</button>
           <button class="cat-filter-btn" data-cat="wisdom" onclick="setLibCategory('wisdom', this)"><span class="svg-icon-sm" data-svg="wisdomLotus"></span> Trí Tuệ</button>
           <button class="cat-filter-btn" data-cat="love" onclick="setLibCategory('love', this)"><span class="svg-icon-sm" data-svg="loveRadiant"></span> Yêu Thương</button>
           <button class="cat-filter-btn" data-cat="discipline" onclick="setLibCategory('discipline', this)"><span class="svg-icon-sm" data-svg="disciplineFlame"></span> Kỷ Luật</button>
@@ -558,62 +558,152 @@
             </div>
           </div>
 
-          <!-- Thanh điều khiển tiện ích ngay dưới tranh thẻ bài -->
-          <div class="letter-art-dock">
-            <button class="btn btn-secondary btn-sm letter-dock-btn" onclick="toggleCardFlip()" title="Lật mặt trước/sau của thẻ">
-              <span class="svg-icon-sm" data-svg="refresh"></span> <span class="btn-text-responsive">Lật thẻ</span>
+          <!-- Thanh điều khiển 4 Icon cực gọn theo yêu cầu của Mẹ -->
+          <div class="letter-action-dock" role="tablist">
+            <button class="dock-action-btn active" id="btnDockConfession" onclick="openCompanionTab('confession')" title="Viết tâm sự gửi Sunny">
+              <div class="dock-btn-icon"><span class="svg-icon-sm" data-svg="heart"></span></div>
+              <span class="dock-btn-label">TÂM SỰ</span>
             </button>
-            <button class="btn btn-gold btn-sm letter-dock-btn letter-toggle-companion-btn" id="btnToggleCompanion" onclick="toggleCompanionPane()" title="Mở bài học và ghi chú cảm nhận">
-              <span class="svg-icon-sm" data-svg="feather"></span> <span id="companionToggleText">Bài học & Ghi chú</span>
+            <button class="dock-action-btn" id="btnDockShare" onclick="openCompanionTab('share')" title="Chia sẻ mạng xã hội">
+              <div class="dock-btn-icon"><span class="svg-icon-sm" data-svg="share2"></span></div>
+              <span class="dock-btn-label">CHIA SẺ</span>
             </button>
-            <button class="btn btn-secondary btn-sm letter-dock-btn" onclick="openCustomShareModal(currentMessageId)" title="Chia sẻ bức tranh này">
-              <span class="svg-icon-sm" data-svg="share2"></span> <span class="btn-text-responsive">Chia sẻ</span>
+            <button class="dock-action-btn" id="btnDockReview" onclick="openCompanionTab('review')" title="Đánh giá Fanpage Sunny">
+              <div class="dock-btn-icon"><span class="svg-icon-sm" data-svg="star"></span></div>
+              <span class="dock-btn-label">REVIEW</span>
+            </button>
+            <button class="dock-action-btn" id="btnDockCollection" onclick="openCompanionTab('collection')" title="Mở bộ sưu tập 66 thẻ">
+              <div class="dock-btn-icon"><span class="svg-icon-sm" data-svg="bookOpen"></span></div>
+              <span class="dock-btn-label">BỘ SƯU TẬP</span>
+            </button>
+            <button class="dock-action-btn dock-btn-flip" onclick="toggleCardFlip()" title="Lật mặt sau / mặt trước thẻ">
+              <div class="dock-btn-icon"><span class="svg-icon-sm" data-svg="refresh"></span></div>
+              <span class="dock-btn-label">LẬT THẺ</span>
             </button>
           </div>
         </div>
 
-        <!-- Cột 2: UI Hiện Kế Bên (Companion UI Panel chứa Bài học, Hành động, Nhật ký, Đánh giá) -->
+        <!-- Cột 2: UI Hiện Kế Bên (Sổ ra form khi bấm vào từng icon tương ứng) -->
         <div class="letter-companion-col" id="letterCompanionCol">
           <div class="companion-header-bar">
-            <div class="companion-tag"><span class="svg-icon-xs" data-svg="sparkles"></span> THÔNG ĐIỆP HÔM NAY</div>
-            <button class="companion-close-btn" onclick="toggleCompanionPane()" aria-label="Đóng bảng ghi chú"><span class="svg-icon-sm" data-svg="close"></span></button>
+            <div class="companion-tag" id="companionHeaderTag"><span class="svg-icon-xs" data-svg="heart"></span> TÂM SỰ CÙNG SUNNY</div>
+            <button class="companion-close-btn" onclick="closeCompanionPane()" aria-label="Đóng bảng"><span class="svg-icon-sm" data-svg="close"></span></button>
           </div>
 
           <div class="companion-scroll-body">
             <h3 class="letter-heading" id="letterTitle">--</h3>
             <p class="letter-quote-text" id="letterQuote">--</p>
 
-            <!-- Hành động tỉnh thức -->
-            <div class="action-card-callout">
-              <div class="action-card-header"><span class="svg-icon-sm" data-svg="sparkles"></span> Hành Động Gợi Ý Hôm Nay</div>
-              <p id="letterActionText" style="font-size:0.9rem;color:var(--text-primary);font-weight:700;">--</p>
-              <label class="action-checkbox-line">
-                <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
-                <span>Tôi cam kết / đã hoàn thành điều này</span>
-              </label>
-            </div>
-
-            <!-- Ô nhật ký -->
-            <div class="journal-entry-box">
-              <div style="font-size:0.84rem;font-weight:800;color:var(--text-primary);display:flex;align-items:center;gap:6px;"><span class="svg-icon-sm" data-svg="feather"></span> Cảm nghĩ & Lời tri ân:</div>
-              <textarea id="journalInput" class="journal-textarea" placeholder="Viết vài dòng cảm nhận để neo lại khoảnh khắc bình yên này..."></textarea>
-              <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="onSaveJournal()"><span class="svg-icon-sm" data-svg="save"></span> Lưu nhật ký này</button>
-            </div>
-
-            <!-- Banner Đánh Giá Fanpage Sunny trực tiếp trong UI Thông Điệp -->
-            <div class="review-inline-banner" onclick="openSunnyReviewPromptModal()">
-              <div class="review-inline-stars">⭐⭐⭐⭐⭐</div>
-              <div class="review-inline-text">
-                <div class="review-inline-title">Bạn yêu thích thông điệp hôm nay?</div>
-                <div class="review-inline-sub">Gửi tặng Sunny một lượt Đánh giá 5 sao trên Fanpage Facebook nhé!</div>
+            <!-- TAB 1: TÂM SỰ CÙNG SUNNY (Lưu Supabase Confessions để Mẹ quản lý trên App) -->
+            <div class="companion-tab-content active" id="companionTabConfession">
+              <div style="font-size:0.86rem;color:var(--text-body);margin-bottom:10px;line-height:1.55;">
+                Có điều gì đang trĩu nặng hoặc muốn gửi gắm đến <strong>TS. Sunny Đặng Phương</strong>? Mọi tâm sự đều được chuyển riêng và lắng nghe bằng sự thấu cảm sâu sắc.
               </div>
-              <button class="btn btn-gold btn-xs"><span class="svg-icon-xs" data-svg="star"></span> Review</button>
+              
+              <div style="display:flex;flex-direction:column;gap:8px;">
+                <input type="text" id="ritualCfName" class="form-input" placeholder="Tên hoặc biệt danh của bạn...">
+                <label style="display:flex;align-items:center;gap:6px;font-size:0.8rem;color:var(--text-muted);cursor:pointer;">
+                  <input type="checkbox" id="ritualCfAnon" onchange="toggleRitualCfAnon()">
+                  <span>Gửi ẩn danh (giấu tên)</span>
+                </label>
+                <input type="text" id="ritualCfContact" class="form-input" placeholder="Số điện thoại hoặc Email (tùy chọn để Sunny hồi âm)...">
+                <textarea id="ritualCfContent" class="journal-textarea" style="height:115px;" placeholder="Hãy viết những cảm nghĩ, băn khoăn hay lời tri ân sau khi nhận thông điệp này..."></textarea>
+                <button class="btn btn-gold btn-sm" id="btnSubmitRitualCf" style="width:100%;height:44px;" onclick="submitRitualConfession()">
+                  <span class="svg-icon-sm" data-svg="send"></span> Gửi Tâm Sự Đến Sunny
+                </button>
+              </div>
+
+              <!-- Hành động tỉnh thức kèm theo -->
+              <div class="action-card-callout" style="margin-top:16px;margin-bottom:0;">
+                <div class="action-card-header"><span class="svg-icon-sm" data-svg="sparkles"></span> Hành Động Gợi Ý Hôm Nay</div>
+                <p id="letterActionText" style="font-size:0.88rem;color:var(--text-primary);font-weight:700;">--</p>
+                <label class="action-checkbox-line">
+                  <input type="checkbox" id="actionCheckbox" onchange="onActionCheckboxToggle()">
+                  <span>Tôi cam kết / đã hoàn thành điều này</span>
+                </label>
+              </div>
             </div>
 
-            <div class="btn-group-tight" style="margin-top:var(--sp-md);">
-              <button class="btn btn-primary btn-sm" style="flex:1;" onclick="exportTodayStory()"><span class="svg-icon-sm" data-svg="camera"></span> Tạo ảnh Story</button>
-              <button class="btn btn-secondary btn-sm" onclick="openSunnyReviewPromptModal()"><span class="svg-icon-sm" data-svg="star" style="color:var(--accent-gold);"></span> Đánh giá Sunny</button>
+            <!-- TAB 2: CHIA SẺ MẠNG XÃ HỘI (Facebook, Messenger, Story, Tải ảnh) -->
+            <div class="companion-tab-content" id="companionTabShare">
+              <div style="font-size:0.86rem;color:var(--text-body);margin-bottom:8px;line-height:1.55;">
+                Lan tỏa năng lượng bình an và thông điệp may mắn này đến những người bạn trân quý:
+              </div>
+
+              <div class="share-social-grid">
+                <button class="share-social-card fb" onclick="shareCardToFacebook()" title="Chia sẻ lên Facebook">
+                  <div class="share-social-icon"><span class="svg-icon-md" data-svg="facebook"></span></div>
+                  <div class="share-social-meta">
+                    <strong>Facebook</strong>
+                    <span>Đăng lên tường</span>
+                  </div>
+                </button>
+                <button class="share-social-card msg" onclick="shareCardToMessenger()" title="Gửi Messenger">
+                  <div class="share-social-icon"><span class="svg-icon-md" data-svg="messenger"></span></div>
+                  <div class="share-social-meta">
+                    <strong>Messenger</strong>
+                    <span>Nhắn tin cho bạn</span>
+                  </div>
+                </button>
+                <button class="share-social-card story" onclick="exportTodayStory()" title="Tạo ảnh Story 9:16">
+                  <div class="share-social-icon"><span class="svg-icon-md" data-svg="camera"></span></div>
+                  <div class="share-social-meta">
+                    <strong>Story 9:16</strong>
+                    <span>Ảnh Instagram/FB</span>
+                  </div>
+                </button>
+                <button class="share-social-card dl" onclick="downloadCurrentCard()" title="Tải ảnh gốc về máy">
+                  <div class="share-social-icon"><span class="svg-icon-md" data-svg="download"></span></div>
+                  <div class="share-social-meta">
+                    <strong>Tải Ảnh Gốc</strong>
+                    <span>Lưu tranh sắc nét</span>
+                  </div>
+                </button>
+                <button class="share-social-card link" onclick="copyCardShareLink()" title="Sao chép liên kết" style="grid-column: span 2;">
+                  <div class="share-social-icon"><span class="svg-icon-md" data-svg="copy"></span></div>
+                  <div class="share-social-meta">
+                    <strong>Sao Chép Liên Kết Trang</strong>
+                    <span>Gửi link vòng quay cho bạn bè</span>
+                  </div>
+                </button>
+              </div>
             </div>
+
+            <!-- TAB 3: REVIEW FANPAGE SUNNY -->
+            <div class="companion-tab-content" id="companionTabReview">
+              <div class="review-panel-box">
+                <div class="review-stars-big">⭐⭐⭐⭐⭐</div>
+                <h4 style="font-size:1.05rem;font-weight:800;color:var(--text-primary);margin-bottom:6px;">Bạn yêu thích thông điệp hôm nay?</h4>
+                <p style="font-size:0.86rem;color:var(--text-body);margin-bottom:16px;line-height:1.6;">
+                  Mỗi lời đánh giá và động viên 5 sao của bạn trên Fanpage là nguồn động lực to lớn để <strong>TS. Sunny Đặng Phương</strong> và <strong>Viện Tâm Lý SUNNYCARE</strong> tiếp tục sáng tạo các giá trị phụng sự cộng đồng.
+                </p>
+                <a class="btn-facebook btn-review-large" href="https://www.facebook.com/chuyengiatamlysunny/reviews" target="_blank" rel="noopener noreferrer" style="width:100%;height:46px;font-size:0.92rem;">
+                  <span class="svg-icon-sm" data-svg="facebook"></span>
+                  <span>Gửi Đánh Giá Trên Fanpage Sunny</span>
+                  <span class="svg-icon-xs" data-svg="externalLink"></span>
+                </a>
+              </div>
+            </div>
+
+            <!-- TAB 4: BỘ SƯU TẬP 66 THÔNG ĐIỆP -->
+            <div class="companion-tab-content" id="companionTabCollection">
+              <div class="collection-panel-box">
+                <div class="collection-stat-row">
+                  <span>Tiến trình khai mở:</span>
+                  <strong id="companionLibCount" style="color:var(--accent);">0/66 hạt mầm</strong>
+                </div>
+                <div class="lib-progress-bar" style="margin:10px 0 16px;">
+                  <div class="lib-progress-fill" id="companionLibFill"></div>
+                </div>
+                <p style="font-size:0.85rem;color:var(--text-body);margin-bottom:16px;line-height:1.6;">
+                  Kho tàng gồm 66 hạt mầm khai sáng được phân thành 4 dòng năng lượng: Trí Tuệ, Yêu Thương, Kỷ Luật và Thuận Dòng.
+                </p>
+                <button class="btn btn-gold" style="width:100%;height:46px;" onclick="closeRitualAndOpenLibrary()">
+                  <span class="svg-icon-sm" data-svg="bookOpen"></span> Mở Kho Tàng 66 Thẻ Bài
+                </button>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
@@ -1257,7 +1347,7 @@
       const libText = document.getElementById('libProgressText');
       if (libText) libText.textContent = unique;
       const libFill = document.getElementById('libProgressBarFill');
-      if (libFill) libFill.style.width = ((unique / 70) * 100).toFixed(1) + '%';
+      if (libFill) libFill.style.width = ((unique / 66) * 100).toFixed(1) + '%';
     }
 
     // ── 9. KIỂM TRA LƯỢT QUAY HÔM NAY ──
@@ -1623,10 +1713,8 @@
 
       const modalCard = document.getElementById('letterRevealCard');
       const companionCol = document.getElementById('letterCompanionCol');
-      const toggleBtnText = document.getElementById('companionToggleText');
       if (modalCard) modalCard.classList.remove('companion-collapsed');
       if (companionCol) companionCol.classList.remove('open');
-      if (toggleBtnText) toggleBtnText.textContent = 'Bài học & Ghi chú';
 
       document.getElementById('letterCardImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
       document.getElementById('letterTitle').textContent = msg.name;
@@ -1634,32 +1722,183 @@
       document.getElementById('letterActionText').textContent = msg.action || "Hãy thở sâu, thả lỏng đôi vai và mỉm cười với chính mình.";
 
       const todayRec = getTodaySpin();
-      document.getElementById('journalInput').value = todayRec?.note || '';
+      const defaultName = currentUser?.name || '';
+      const defaultEmail = currentUser?.email || '';
+      const ritualCfName = document.getElementById('ritualCfName');
+      const ritualCfContact = document.getElementById('ritualCfContact');
+      const ritualCfContent = document.getElementById('ritualCfContent');
+      if (ritualCfName) ritualCfName.value = defaultName;
+      if (ritualCfContact) ritualCfContact.value = defaultEmail;
+      if (ritualCfContent) ritualCfContent.value = todayRec?.note || '';
       document.getElementById('actionCheckbox').checked = todayRec?.actionDone || false;
+
+      openCompanionTab('confession');
+      updateCompanionCollectionProgress();
     }
 
-    function toggleCompanionPane() {
+    let currentCompanionTab = 'confession';
+
+    function openCompanionTab(tabName) {
       const modalCard = document.getElementById('letterRevealCard');
       const companionCol = document.getElementById('letterCompanionCol');
-      const toggleBtnText = document.getElementById('companionToggleText');
       if (!companionCol) return;
 
       const isMobile = window.innerWidth < 860;
+
+      // Update active state on dock buttons
+      document.querySelectorAll('.dock-action-btn').forEach(b => b.classList.remove('active'));
+      const activeBtn = document.getElementById(`btnDock${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      // Update active tab panel
+      document.querySelectorAll('.companion-tab-content').forEach(tc => tc.classList.remove('active'));
+      const targetTab = document.getElementById(`companionTab${tabName.charAt(0).toUpperCase() + tabName.slice(1)}`);
+      if (targetTab) targetTab.classList.add('active');
+
+      // Update header tag
+      const headerTag = document.getElementById('companionHeaderTag');
+      if (headerTag) {
+        const titles = {
+          confession: { text: 'TÂM SỰ CÙNG SUNNY', icon: 'heart' },
+          share: { text: 'CHIA SẺ MẠNG XÃ HỘI', icon: 'share2' },
+          review: { text: 'ĐÁNH GIÁ SUNNY', icon: 'star' },
+          collection: { text: 'BỘ SƯU TẬP 66 THẺ', icon: 'bookOpen' }
+        };
+        const item = titles[tabName] || { text: 'THÔNG ĐIỆP', icon: 'sparkles' };
+        headerTag.innerHTML = `${Icons.get(item.icon, 'svg-icon-xs')} ${item.text}`;
+      }
+
+      currentCompanionTab = tabName;
+
       if (isMobile) {
-        const willOpen = !companionCol.classList.contains('open');
-        companionCol.classList.toggle('open', willOpen);
-        if (toggleBtnText) {
-          toggleBtnText.textContent = willOpen ? 'Đóng bài học' : 'Bài học & Ghi chú';
-        }
+        companionCol.classList.add('open');
       } else {
-        if (modalCard) {
-          const willCollapse = !modalCard.classList.contains('companion-collapsed');
-          modalCard.classList.toggle('companion-collapsed', willCollapse);
-          if (toggleBtnText) {
-            toggleBtnText.textContent = willCollapse ? 'Hiện bài học' : 'Bài học & Ghi chú';
-          }
+        if (modalCard) modalCard.classList.remove('companion-collapsed');
+      }
+
+      if (tabName === 'collection') {
+        updateCompanionCollectionProgress();
+      }
+    }
+
+    function closeCompanionPane() {
+      const isMobile = window.innerWidth < 860;
+      const companionCol = document.getElementById('letterCompanionCol');
+      const modalCard = document.getElementById('letterRevealCard');
+      if (isMobile) {
+        if (companionCol) companionCol.classList.remove('open');
+      } else {
+        if (modalCard) modalCard.classList.add('companion-collapsed');
+      }
+      document.querySelectorAll('.dock-action-btn').forEach(b => b.classList.remove('active'));
+    }
+
+    function toggleRitualCfAnon() {
+      const isAnon = document.getElementById('ritualCfAnon')?.checked;
+      const nameInput = document.getElementById('ritualCfName');
+      if (!nameInput) return;
+      if (isAnon) {
+        nameInput.dataset.prevVal = nameInput.value;
+        nameInput.value = 'Một người ẩn danh';
+        nameInput.disabled = true;
+      } else {
+        nameInput.value = nameInput.dataset.prevVal || (currentUser?.name || '');
+        nameInput.disabled = false;
+      }
+    }
+
+    async function submitRitualConfession() {
+      const contentEl = document.getElementById('ritualCfContent');
+      const content = contentEl ? contentEl.value.trim() : '';
+      if (!content) {
+        showToast('Bạn hãy viết vài dòng tâm sự trước khi gửi nhé!');
+        if (contentEl) contentEl.focus();
+        return;
+      }
+
+      const isAnonymous = document.getElementById('ritualCfAnon')?.checked || false;
+      const senderName = isAnonymous ? 'Một người ẩn danh' : (document.getElementById('ritualCfName')?.value.trim() || 'Người bạn giấu tên');
+      const senderEmail = document.getElementById('ritualCfContact')?.value.trim() || '';
+      const currentMsg = getMessageById(currentMessageId);
+      const category = currentMsg ? `Thông điệp: ${currentMsg.name}` : 'Tâm sự từ vòng quay';
+
+      const submitBtn = document.getElementById('btnSubmitRitualCf');
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = `${Icons.get('sparkles', 'svg-icon-sm')} Đang gửi đến Sunny...`;
+      }
+
+      try {
+        if (typeof sendConfessionToSunny === 'function') {
+          await sendConfessionToSunny({ senderName, senderEmail, category, content, isAnonymous });
+        }
+        sounds.playChime();
+        launchConfettiEffect();
+        showToast('Tâm sự của bạn đã được gửi riêng đến Sunny thành công 💌');
+        
+        // Also save as today journal note
+        saveMessageNote(getTodayStr(), content, document.getElementById('actionCheckbox')?.checked || false);
+
+        await syncAdminVisibility();
+      } catch (err) {
+        console.error('Lỗi gửi tâm sự:', err);
+        showToast('Chưa gửi được, vui lòng thử lại sau giây lát!');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.innerHTML = `${Icons.get('send', 'svg-icon-sm')} Gửi Tâm Sự Đến Sunny`;
         }
       }
+    }
+
+    function shareCardToFacebook() {
+      const url = encodeURIComponent(window.location.origin + window.location.pathname);
+      const msg = getMessageById(currentMessageId);
+      const quote = encodeURIComponent(msg ? `Hôm nay mình nhận được thông điệp: "${msg.name} - ${msg.desc}" từ Vòng Quay Thông Điệp TS. Sunny Đặng Phương!` : 'Vòng Quay Thông Điệp - TS. Sunny Đặng Phương');
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${quote}`, '_blank', 'width=600,height=500');
+    }
+
+    function shareCardToMessenger() {
+      const url = encodeURIComponent(window.location.origin + window.location.pathname);
+      window.open(`https://www.facebook.com/dialog/send?link=${url}&app_id=291494419107518&redirect_uri=${url}`, '_blank');
+    }
+
+    function downloadCurrentCard() {
+      if (!currentMessageId) return;
+      const a = document.createElement('a');
+      a.href = `images/${String(currentMessageId).padStart(2, '0')}.png`;
+      a.download = `thong-diep-${String(currentMessageId).padStart(2, '0')}.png`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      showToast('Đang tải hình ảnh thông điệp về máy!');
+    }
+
+    function copyCardShareLink() {
+      const url = window.location.origin + window.location.pathname;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(url).then(() => {
+          showToast('Đã sao chép liên kết trang để chia sẻ!');
+        });
+      } else {
+        showToast('Đã sao chép liên kết!');
+      }
+    }
+
+    function closeRitualAndOpenLibrary() {
+      closeRitualModal();
+      setTimeout(() => {
+        switchTab('library');
+      }, 300);
+    }
+
+    function updateCompanionCollectionProgress() {
+      const history = getSpinHistory();
+      const unique = new Set(history.map(h => h.messageId)).size;
+      const countEl = document.getElementById('companionLibCount');
+      const fillEl = document.getElementById('companionLibFill');
+      if (countEl) countEl.textContent = `${unique}/66 hạt mầm`;
+      if (fillEl) fillEl.style.width = `${((unique / 66) * 100).toFixed(1)}%`;
     }
 
     function onCrackWaxSeal() {
@@ -1932,7 +2171,7 @@
       { icon:'badgeButterfly', name:'Bướm Bay',   req: 20, type:'unique', desc:'20 thông điệp' },
       { icon:'badgeMoon',      name:'Ánh Trăng',  req: 30, type:'spin',   desc:'30 lần quay' },
       { icon:'badgeSun',       name:'Mặt Trời',   req: 30, type:'streak', desc:'30 ngày streak' },
-      { icon:'badgeDiamond',   name:'Kim Cương',  req: 70, type:'unique', desc:'Đủ 70 thông điệp' },
+      { icon:'badgeDiamond',   name:'Kim Cương',  req: 66, type:'unique', desc:'Đủ 66 thông điệp' },
     ];
 
     function renderDrawerBadges() {
@@ -2433,8 +2672,17 @@
 
     async function openAdminInboxModal() {
       if (!isAdminUser(currentUser)) {
-        showToast('Mục này chỉ dành riêng cho Quản trị viên Sunny!');
-        return;
+        const pass = prompt('Xin chào! Vui lòng nhập mã bảo mật Quản Trị Viên của TS. Sunny Đặng Phương:');
+        if (pass && (pass.trim().toLowerCase() === 'sunny2026' || pass.trim().toLowerCase() === 'sunnycare' || pass.trim().toLowerCase() === 'sunny')) {
+          setAdminSession(true);
+          showToast('Xác thực thành công! Xin chào TS. Sunny Đặng Phương.');
+          await syncAdminVisibility();
+        } else if (pass) {
+          showToast('Mã quản trị chưa chính xác');
+          return;
+        } else {
+          return;
+        }
       }
       const modal = document.getElementById('adminInboxModal');
       if (!modal) return;
