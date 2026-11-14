@@ -1964,6 +1964,7 @@
       const toggleBtn = document.getElementById('musicToggleBtn');
       const titleEl = document.getElementById('musicTrackTitle');
       const barEl = document.getElementById('musicPlayerBar');
+      const miniLyric = document.getElementById('musicMiniLyric');
       const volSlider = document.getElementById('drawerVolSlider');
 
       if (bgMusic) {
@@ -1971,6 +1972,13 @@
 
         if (toggleBtn) {
           toggleBtn.innerHTML = Icons.get(bgMusic.isPlaying ? 'pause' : 'play', 'svg-icon-sm');
+        }
+        if (titleEl && bgMusic.currentSong) {
+          titleEl.textContent = bgMusic.currentSong.title;
+        }
+        if (miniLyric) {
+          const l = bgMusic.getCurrentLyric();
+          if (l) miniLyric.textContent = `♪ ${l.text.replace(/^✦\s*/, '')}`;
         }
 
         bgMusic.audio.addEventListener('play', () => {
@@ -1983,6 +1991,9 @@
           if (toggleBtn) toggleBtn.innerHTML = Icons.get('play', 'svg-icon-sm');
           if (barEl) barEl.classList.remove('playing');
         });
+
+        // Khởi tạo ngay lập tức dữ liệu lời thiền định & playlist cho Góc Chill
+        renderChillView();
       }
     }
 

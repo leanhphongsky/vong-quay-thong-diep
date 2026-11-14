@@ -264,49 +264,76 @@ class BackgroundMusicPlayer {
     this.notifySongChange();
   }
 
-  playRandomNext() {
-    this.selectRandomSong();
+  switchTrack(newIndex) {
+    this.currentIndex = (newIndex + SONG_LIST.length) % SONG_LIST.length;
+    this.currentSong = SONG_LIST[this.currentIndex];
     sessionStorage.removeItem('vqtd_music_time');
-    this.play();
+    sessionStorage.setItem('vqtd_music_song_id', this.currentSong.id.toString());
+
+    // 1. Cập nhật UI ngay tức khắc trong 0ms (Tên bài, lời bài hát, đĩa quay, thẻ playlist)
+    this.updateUI();
+    if (typeof window.onMusicSongChange === 'function') {
+      window.onMusicSongChange(this.currentSong);
+    }
+
+    if (typeof showToast === 'function') {
+      showToast('Đang phát: ' + this.currentSong.title);
+    }
+
+    // 2. Tải và phát audio an toàn không bị pending promise
+    try {
+      this.audio.pause();
+    } catch (e) {}
+
+    this.audio.currentTime = 0;
+    this.audio.src = encodeURI(this.currentSong.file);
+    this.audio.load();
+
+    this.isPlaying = true;
+    this.isMutedByUser = false;
+    localStorage.setItem('vqtd_music_muted', 'false');
+    this.updateUI();
+
+    const p = this.audio.play();
+    if (p && typeof p.then === 'function') {
+      p.then(() => {
+        this.isPlaying = true;
+        this.updateUI();
+        if (typeof window.onMusicPlayStateChange === 'function') {
+          window.onMusicPlayStateChange(true);
+        }
+      }).catch(err => {
+        if (err.name !== 'AbortError') {
+          console.warn("Lỗi phát audio:", err);
+        }
+      });
+    }
+  }
+
+  playRandomNext() {
+    if (this.unplayedIndices.length === 0) {
+      this.resetQueue();
+      if (this.currentSong && SONG_LIST[this.unplayedIndices[0]].id === this.currentSong.id && this.unplayedIndices.length > 1) {
+        [this.unplayedIndices[0], this.unplayedIndices[1]] = [this.unplayedIndices[1], this.unplayedIndices[0]];
+      }
+    }
+    const nextIdx = this.unplayedIndices.pop();
+    this.switchTrack(nextIdx);
   }
 
   playSongById(id) {
     const idx = SONG_LIST.findIndex(s => s.id === id);
     if (idx !== -1) {
-      this.currentIndex = idx;
-      this.currentSong = SONG_LIST[idx];
-      this.audio.src = encodeURI(this.currentSong.file);
-      sessionStorage.removeItem('vqtd_music_time');
-      this.play();
-      this.notifySongChange();
-      if (typeof showToast === 'function') {
-        showToast('Đang phát: ' + this.currentSong.title);
-      }
+      this.switchTrack(idx);
     }
   }
 
   nextTrack() {
-    this.currentIndex = (this.currentIndex + 1) % SONG_LIST.length;
-    this.currentSong = SONG_LIST[this.currentIndex];
-    this.audio.src = encodeURI(this.currentSong.file);
-    sessionStorage.removeItem('vqtd_music_time');
-    this.play();
-    this.notifySongChange();
-    if (typeof showToast === 'function') {
-      showToast('Đang phát: ' + this.currentSong.title);
-    }
+    this.switchTrack(this.currentIndex + 1);
   }
 
   prevTrack() {
-    this.currentIndex = (this.currentIndex - 1 + SONG_LIST.length) % SONG_LIST.length;
-    this.currentSong = SONG_LIST[this.currentIndex];
-    this.audio.src = encodeURI(this.currentSong.file);
-    sessionStorage.removeItem('vqtd_music_time');
-    this.play();
-    this.notifySongChange();
-    if (typeof showToast === 'function') {
-      showToast('Đang phát: ' + this.currentSong.title);
-    }
+    this.switchTrack(this.currentIndex - 1);
   }
 
   seekTo(seconds) {
@@ -459,7 +486,7 @@ class BackgroundMusicPlayer {
 
     const currentLyric = this.getCurrentLyric();
     if (miniLyric && currentLyric) {
-      miniLyric.textContent = currentLyric.text;
+      miniLyric.textContent = '♪ ' + currentLyric.text.replace(/^✦\s*/, '');
     }
   }
 }
