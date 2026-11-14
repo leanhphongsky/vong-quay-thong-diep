@@ -201,13 +201,121 @@
       <div id="libCardGrid" class="library-grid"></div>
     </section>
 
+    <!-- ======================================================================
+         2C. VIEW 3: GÓC CHILL TÂM THỨC (Lofi Music & Synced Lyrics)
+         ====================================================================== -->
+    <section id="viewChill" class="view-panel">
+      <div class="hero-header" style="padding-bottom:var(--sp-sm);" data-aos="fade-down" data-aos-duration="600">
+        <div class="eyebrow-pill"><span class="svg-icon-sm" data-svg="music"></span> Trạm Sạc An Yên</div>
+        <h1 class="hero-title" style="font-size:clamp(1.75rem,4vw,2.4rem);">Góc Chill & Lời Thiền Định</h1>
+        <p class="hero-desc">Thả lỏng tâm trí, hòa mình vào giai điệu Lofi êm dịu và những lời nhắn nuôi dưỡng tâm hồn.</p>
+      </div>
+
+      <div class="chill-room-container">
+        <!-- Stage chính: Đĩa than Vinyl & Lời bài hát Lyrics song song -->
+        <div class="chill-main-stage" id="chillMainStage">
+          
+          <!-- Cột Trái: Đĩa than Vinyl 3D phát sáng theo nhịp thở -->
+          <div class="chill-player-card" id="chillPlayerCard">
+            <div class="vinyl-disc-wrap">
+              <div class="vinyl-disc-aura" id="vinylAura"></div>
+              <div class="vinyl-disc" id="vinylDisc">
+                <div class="vinyl-grooves"></div>
+                <div class="vinyl-center-label">
+                  <span class="svg-icon-md" data-svg="astrolabe" style="color:var(--accent-gold);"></span>
+                  <div class="vinyl-label-text">SUNNY LOFI</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="chill-meta-box">
+              <h2 class="chill-song-title" id="chillSongTitle">Lofi 1 · Khởi Đầu Tĩnh Lặng</h2>
+              <div class="chill-song-mood">
+                <span class="chill-mood-tag" id="chillSongMood">✦ Tĩnh Lặng & Chánh Niệm</span>
+                <span class="chill-live-badge"><span class="chill-live-dot"></span> Đang phát</span>
+              </div>
+            </div>
+
+            <!-- Thanh tua bài hát (Interactive Progress & Time) -->
+            <div class="chill-progress-wrap">
+              <div class="chill-time-display">
+                <span id="chillCurrentTime">00:00</span>
+                <span id="chillTotalTime">--:--</span>
+              </div>
+              <div class="chill-progress-bar" id="chillProgressBar" onclick="onChillProgressClick(event)">
+                <div class="chill-progress-filled" id="chillProgressFilled"></div>
+                <div class="chill-progress-handle" id="chillProgressHandle"></div>
+              </div>
+            </div>
+
+            <!-- Cụm nút điều khiển chuyên nghiệp -->
+            <div class="chill-controls-deck">
+              <button class="chill-btn-sub" onclick="bgMusic.seekBy(-10)" title="Lùi lại 10 giây">
+                -10s
+              </button>
+              <button class="chill-btn-ctrl" onclick="bgMusic.prevTrack()" title="Bài trước">
+                <span class="svg-icon-sm" data-svg="skipBack"></span>
+              </button>
+              <button class="chill-play-hero-btn" id="chillHeroPlayBtn" onclick="bgMusic.togglePlay()" title="Phát / Tạm dừng">
+                <span class="svg-icon-md" data-svg="play"></span>
+              </button>
+              <button class="chill-btn-ctrl" onclick="bgMusic.nextTrack()" title="Bài sau">
+                <span class="svg-icon-sm" data-svg="skipForward"></span>
+              </button>
+              <button class="chill-btn-sub" onclick="bgMusic.seekBy(10)" title="Tua tới 10 giây">
+                +10s
+              </button>
+            </div>
+
+            <!-- Volume Slider trong Chill Tab -->
+            <div class="chill-volume-wrap">
+              <span class="svg-icon-xs" data-svg="volume2" style="color:var(--text-muted);"></span>
+              <input type="range" class="chill-vol-slider" id="chillVolSlider" min="0" max="1" step="0.01" value="0.35" oninput="setMusicVol(this.value)">
+            </div>
+          </div>
+
+          <!-- Cột Phải: Bảng Hiệu Ứng Lời Bài Hát (Apple Music / Spotify Style Synced Lyrics) -->
+          <div class="chill-lyrics-card" id="chillLyricsCard">
+            <div class="lyrics-header">
+              <div class="lyrics-header-title">
+                <span class="svg-icon-sm" data-svg="feather" style="color:var(--accent-gold);"></span>
+                <span>Lời Nhắn Tâm Thức</span>
+              </div>
+              <button class="lyrics-mode-btn" onclick="toggleFullLyricsMode()" title="Chuyển chế độ xem">
+                <span class="svg-icon-xs" data-svg="search"></span> <span id="lyricsModeText">Toàn cảnh</span>
+              </button>
+            </div>
+
+            <div class="lyrics-stream-scroll" id="lyricsStreamScroll">
+              <!-- Rendered dynamically -->
+            </div>
+
+            <div class="lyrics-footer-hint">
+              <span class="svg-icon-xs" data-svg="sparkles"></span> Chạm vào bất kỳ dòng nào để phát ngay đoạn đó
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dải chọn nhanh 9 bài Lofi (Quick Mood Playlist) -->
+        <div class="chill-playlist-section">
+          <div class="chill-section-title">
+            <span class="svg-icon-sm" data-svg="music"></span> Danh Sách 9 Giai Điệu Chữa Lành
+          </div>
+          <div class="chill-track-grid" id="chillTrackGrid">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <!-- ======================================================================
        3. COMPACT MODERN MUSIC PLAYER BAR (48px Floating Pill with Live Visualizer)
        ====================================================================== -->
   <aside class="music-bar" id="musicPlayerBar">
-    <div class="music-bar-left">
+    <div class="music-bar-left" onclick="switchTab('chill')" title="Bấm để mở Góc Chill & Lời bài hát">
       <!-- Live Visualizer Bars -->
       <div class="music-visualizer-bars" id="musicEqBars">
         <div class="eq-bar-item"></div>
@@ -215,9 +323,13 @@
         <div class="eq-bar-item"></div>
         <div class="eq-bar-item"></div>
       </div>
-      <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Khởi Đầu Tĩnh Lặng</span>
+      <div class="music-info-group">
+        <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Khởi Đầu Tĩnh Lặng</span>
+        <span id="musicMiniLyric" class="music-mini-lyric">♪ Chạm để xem lời thiền định...</span>
+      </div>
     </div>
     <div class="music-bar-controls">
+      <button class="music-ctrl-btn" onclick="switchTab('chill')" title="Mở Góc Chill & Lời bài hát" aria-label="Góc Chill & Lời"><span class="svg-icon-xs" data-svg="feather"></span></button>
       <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span class="svg-icon-sm" data-svg="skipBack"></span></button>
       <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span class="svg-icon-sm" data-svg="play"></span></button>
       <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span class="svg-icon-sm" data-svg="skipForward"></span></button>
@@ -238,6 +350,10 @@
       <button class="morphic-nav-item" id="tabBtnLibrary" onclick="switchTab('library')" data-tab="library">
         <span class="svg-icon-sm" data-svg="bookOpen"></span>
         <span>Thư Viện</span>
+      </button>
+      <button class="morphic-nav-item" id="tabBtnChill" onclick="switchTab('chill')" data-tab="chill" title="Không gian âm nhạc & Lời bài hát Lofi chánh niệm">
+        <span class="svg-icon-sm" data-svg="music"></span>
+        <span>Góc Chill</span>
       </button>
       <button class="morphic-nav-item" id="tabBtnMore" onclick="openDrawer()" data-tab="more">
         <span class="svg-icon-sm" data-svg="sliders"></span>
@@ -930,26 +1046,35 @@
       }
     }
 
+    function getViewId(tabId) {
+      if (tabId === 'library') return 'viewLibrary';
+      if (tabId === 'chill') return 'viewChill';
+      return 'viewSpin';
+    }
+
     function switchTab(tabId) {
-      if (tabId === activeTab && document.getElementById(tabId === 'spin' ? 'viewSpin' : 'viewLibrary')?.classList.contains('active')) return;
+      const validTabs = ['spin', 'library', 'chill'];
+      if (!validTabs.includes(tabId)) tabId = 'spin';
+      if (tabId === activeTab && document.getElementById(getViewId(tabId))?.classList.contains('active')) return;
       const prevTab = activeTab;
       activeTab = tabId;
 
-      const currentPanel = prevTab === 'spin' ? document.getElementById('viewSpin') : document.getElementById('viewLibrary');
-      const targetPanel = tabId === 'spin' ? document.getElementById('viewSpin') : document.getElementById('viewLibrary');
+      const currentPanel = document.getElementById(getViewId(prevTab));
+      const targetPanel = document.getElementById(getViewId(tabId));
 
-      if (window.AppAnimations && typeof AppAnimations.animateViewTransition === 'function') {
-        AppAnimations.animateViewTransition(currentPanel, targetPanel, () => {
-          window.location.hash = tabId;
-          updateMorphicNav(tabId);
-          if (tabId === 'library') renderLibrary();
-        });
-      } else {
-        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
-        if (targetPanel) targetPanel.classList.add('active');
+      const finalize = () => {
         window.location.hash = tabId;
         updateMorphicNav(tabId);
         if (tabId === 'library') renderLibrary();
+        if (tabId === 'chill') renderChillView();
+      };
+
+      if (window.AppAnimations && typeof AppAnimations.animateViewTransition === 'function') {
+        AppAnimations.animateViewTransition(currentPanel, targetPanel, finalize);
+      } else {
+        document.querySelectorAll('.view-panel').forEach(p => p.classList.remove('active'));
+        if (targetPanel) targetPanel.classList.add('active');
+        finalize();
       }
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1101,6 +1226,8 @@
 
       if (window.location.hash === '#library') {
         switchTab('library');
+      } else if (window.location.hash === '#chill') {
+        switchTab('chill');
       } else if (window.location.hash === '#profile' || window.location.hash === '#settings') {
         setTimeout(openDrawer, 300);
       }
@@ -1875,6 +2002,209 @@
         minBtn.setAttribute('aria-label', isMin ? 'Mở rộng trình phát nhạc' : 'Thu nhỏ trình phát nhạc');
       }
     }
+
+    // ── 16B. GÓC CHILL TÂM THỨC & HIỆU ỨNG LYRICS ĐỒNG BỘ ──
+    let isFullLyricsMode = false;
+    let currentActiveLyricIndex = -1;
+
+    function renderChillView() {
+      renderChillSongInfo();
+      renderLyricsStream();
+      renderChillPlaylistGrid();
+      updateChillPlayState(bgMusic.isPlaying);
+      updateChillProgress(bgMusic.audio.currentTime || 0, bgMusic.audio.duration || 0);
+      const chillVol = document.getElementById('chillVolSlider');
+      if (chillVol && bgMusic) chillVol.value = bgMusic.audio.volume;
+    }
+
+    function renderChillSongInfo() {
+      const titleEl = document.getElementById('chillSongTitle');
+      const moodEl = document.getElementById('chillSongMood');
+      const song = bgMusic.currentSong;
+      if (!song) return;
+
+      if (titleEl) titleEl.textContent = song.title;
+      if (moodEl) moodEl.textContent = `✦ ${song.mood || 'Chánh Niệm'} & Bình An`;
+    }
+
+    function renderLyricsStream() {
+      const container = document.getElementById('lyricsStreamScroll');
+      if (!container) return;
+      const lyrics = bgMusic.currentSongLyrics;
+      currentActiveLyricIndex = -1;
+
+      if (!lyrics || lyrics.length === 0) {
+        container.innerHTML = `
+          <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
+            <p>Giai điệu Lofi không lời thuần khiết</p>
+            <span style="font-size:0.8rem;opacity:0.7;">Thả lỏng tâm trí và tận hưởng từng nốt nhạc an yên</span>
+          </div>
+        `;
+        return;
+      }
+
+      container.innerHTML = lyrics.map((line, idx) => `
+        <div class="lyric-line" id="lyricLine_${idx}" onclick="jumpToLyricTime(${line.time}, ${idx})">
+          ${line.text}
+        </div>
+      `).join('');
+
+      updateLiveLyrics(bgMusic.audio.currentTime || 0);
+    }
+
+    function updateLiveLyrics(currentTime) {
+      const lyrics = bgMusic.currentSongLyrics;
+      if (!lyrics || !lyrics.length) return;
+
+      let activeIdx = 0;
+      for (let i = 0; i < lyrics.length; i++) {
+        if (currentTime >= lyrics[i].time) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
+
+      // Cập nhật live lyric trên thanh Mini Player Bar
+      const miniLyric = document.getElementById('musicMiniLyric');
+      if (miniLyric && lyrics[activeIdx]) {
+        miniLyric.textContent = `♪ ${lyrics[activeIdx].text.replace(/^✦\s*/, '')}`;
+      }
+
+      // Cập nhật dòng lyric nổi bật trên Chill Tab
+      if (activeIdx !== currentActiveLyricIndex) {
+        currentActiveLyricIndex = activeIdx;
+        const allLines = document.querySelectorAll('.lyric-line');
+        allLines.forEach((el, i) => {
+          el.classList.remove('active', 'past');
+          if (i === activeIdx) {
+            el.classList.add('active');
+            const scrollBox = document.getElementById('lyricsStreamScroll');
+            if (scrollBox) {
+              const topPos = el.offsetTop - scrollBox.offsetTop - (scrollBox.clientHeight / 2) + (el.clientHeight / 2);
+              scrollBox.scrollTo({ top: Math.max(0, topPos), behavior: 'smooth' });
+            }
+          } else if (i < activeIdx) {
+            el.classList.add('past');
+          }
+        });
+      }
+    }
+
+    function jumpToLyricTime(seconds, idx) {
+      if (bgMusic) {
+        bgMusic.seekTo(seconds);
+        if (!bgMusic.isPlaying) bgMusic.play();
+        sounds.playWaxCrack();
+        showToast('Đã chuyển đến lời bài hát');
+      }
+    }
+
+    function onChillProgressClick(e) {
+      const bar = document.getElementById('chillProgressBar');
+      if (!bar || !bgMusic || !bgMusic.audio.duration) return;
+      const rect = bar.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const ratio = Math.max(0, Math.min(1, clickX / rect.width));
+      const targetTime = ratio * bgMusic.audio.duration;
+      bgMusic.seekTo(targetTime);
+      updateChillProgress(targetTime, bgMusic.audio.duration);
+    }
+
+    function updateChillProgress(currentTime, duration) {
+      const curEl = document.getElementById('chillCurrentTime');
+      const totEl = document.getElementById('chillTotalTime');
+      const fillEl = document.getElementById('chillProgressFilled');
+      const handleEl = document.getElementById('chillProgressHandle');
+
+      const formatTime = (sec) => {
+        if (!sec || isNaN(sec)) return '00:00';
+        const m = Math.floor(sec / 60);
+        const s = Math.floor(sec % 60);
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+      };
+
+      if (curEl) curEl.textContent = formatTime(currentTime);
+      if (totEl) totEl.textContent = formatTime(duration);
+
+      const percent = duration > 0 ? (currentTime / duration) * 100 : 0;
+      if (fillEl) fillEl.style.width = `${percent}%`;
+      if (handleEl) handleEl.style.left = `${percent}%`;
+    }
+
+    function updateChillPlayState(isPlaying) {
+      const heroBtn = document.getElementById('chillHeroPlayBtn');
+      const vinyl = document.getElementById('vinylDisc');
+      const playerCard = document.getElementById('chillPlayerCard');
+
+      if (heroBtn) {
+        heroBtn.innerHTML = Icons.get(isPlaying ? 'pause' : 'play', 'svg-icon-md');
+      }
+      if (vinyl) {
+        if (isPlaying) vinyl.classList.add('spinning');
+        else vinyl.classList.remove('spinning');
+      }
+      if (playerCard) {
+        if (isPlaying) playerCard.classList.add('playing');
+        else playerCard.classList.remove('playing');
+      }
+    }
+
+    function toggleFullLyricsMode() {
+      const stage = document.getElementById('chillMainStage');
+      const modeText = document.getElementById('lyricsModeText');
+      if (!stage) return;
+      isFullLyricsMode = !isFullLyricsMode;
+      stage.classList.toggle('full-lyrics', isFullLyricsMode);
+      if (modeText) {
+        modeText.textContent = isFullLyricsMode ? 'Thu nhỏ' : 'Toàn cảnh';
+      }
+    }
+
+    function renderChillPlaylistGrid() {
+      const grid = document.getElementById('chillTrackGrid');
+      if (!grid) return;
+
+      grid.innerHTML = SONG_LIST.map((song) => {
+        const isCurrent = bgMusic.currentSong && bgMusic.currentSong.id === song.id;
+        return `
+          <div class="chill-track-item ${isCurrent ? 'playing' : ''}" onclick="selectChillTrack(${song.id})">
+            <div class="chill-track-info">
+              <div class="chill-track-name">${song.title}</div>
+              <div class="chill-track-sub">✦ ${song.mood} · ${(song.lyrics || []).length} câu thiền định</div>
+            </div>
+            <div class="chill-track-badge">
+              ${isCurrent && bgMusic.isPlaying ? 'Đang phát' : 'Phát'}
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function selectChillTrack(id) {
+      bgMusic.playSongById(id);
+      renderChillSongInfo();
+      renderLyricsStream();
+      renderChillPlaylistGrid();
+      updateChillPlayState(true);
+    }
+
+    window.onMusicTimeUpdate = (currentTime, duration) => {
+      updateChillProgress(currentTime, duration);
+      updateLiveLyrics(currentTime);
+    };
+
+    window.onMusicSongChange = (song) => {
+      renderChillSongInfo();
+      renderLyricsStream();
+      renderChillPlaylistGrid();
+      updateChillPlayState(bgMusic.isPlaying);
+    };
+
+    window.onMusicPlayStateChange = (isPlaying) => {
+      updateChillPlayState(isPlaying);
+      renderChillPlaylistGrid();
+    };
 
     function toggleSfxEngine() {
       const muted = sounds.toggleMute();
