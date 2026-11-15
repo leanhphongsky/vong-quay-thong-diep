@@ -31,6 +31,12 @@
       </span>
     </a>
     <div class="top-actions">
+      <!-- Nút Về Trang Chủ Giới Thiệu -->
+      <a href="index.html" class="top-home-btn" title="Về trang chủ giới thiệu 7 chủ đề" style="text-decoration:none;display:inline-flex;align-items:center;gap:5px;font-size:0.82rem;font-weight:700;color:var(--text-primary);padding:6px 14px;border-radius:var(--r-pill);background:var(--bg-card);border:1px solid var(--border);transition:all 0.2s ease;">
+        <span class="svg-icon-xs" data-svg="astrolabe" style="color:var(--accent);"></span>
+        <span class="top-home-label">Trang Chủ</span>
+      </a>
+
       <!-- Admin Inbox Button (Dành riêng cho Mẹ / Sunny quản lý tâm sự) -->
       <button class="admin-top-btn" id="topAdminInboxBtn" onclick="openAdminInboxModal()" style="display:inline-flex;" title="Xem hòm thư tâm sự (Dành riêng cho Sunny)">
         <span class="svg-icon-sm" data-svg="crown"></span>
@@ -56,9 +62,25 @@
     <!-- ── VIEW 1: QUAY & TRANG CHỦ ── -->
     <section id="viewSpin" class="view-panel active">
       <div class="hero-header">
-        <div class="eyebrow-pill">✦ Trạm Sạc Tâm Hồn ✦</div>
-        <h1 class="hero-title">Thông Điệp <span id="greetingTime" style="color:var(--accent);">Hôm Nay</span></h1>
-        <p class="hero-subtitle" id="todayDateStr">Đang kết nối vũ trụ...</p>
+        <!-- 7 CHỦ ĐỀ VÒNG QUAY NĂNG LƯỢNG (HORIZONTAL PILL NAV) -->
+        <div class="topic-selector-container">
+          <div class="topic-selector-header">
+            <div class="topic-selector-label">
+              <span class="svg-icon-xs" data-svg="astrolabe"></span>
+              <span>7 VÒNG QUAY CHUYÊN SÂU:</span>
+            </div>
+            <a href="index.html" class="topic-home-link" title="Xem giới thiệu 7 chủ đề">
+              <span>Trang chủ</span> →
+            </a>
+          </div>
+          <div class="topic-pills-scroll" id="topicPillsWrap">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+
+        <div class="eyebrow-pill" id="topicEyebrow">✦ Trí Tâm Khai Sáng ✦</div>
+        <h1 class="hero-title" id="topicHeroTitle">Thông Điệp <span id="topicNameSpan" style="color:var(--accent);">Khai Sáng</span></h1>
+        <p class="hero-subtitle" id="topicHeroDesc">66 Hạt mầm tâm thức thức tỉnh trí tuệ và an trú hiện tại</p>
 
         <!-- Zen Breathe Interactive Guide -->
         <div class="zen-breathe-guide" onclick="triggerZenBreathe()" id="zenBreathePill" title="Chạm để bắt đầu 1 nhịp thở sâu">
@@ -78,10 +100,10 @@
             <svg viewBox="0 0 32 48" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="breguetGoldPin" x1="0" y1="0" x2="32" y2="48" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#FFE8A3"/>
-                  <stop offset="0.45" stop-color="#E5A638"/>
-                  <stop offset="0.8" stop-color="#C27A1A"/>
-                  <stop offset="1" stop-color="#8C4E0B"/>
+                  <stop id="pinStop1" stop-color="#FFE8A3"/>
+                  <stop id="pinStop2" offset="0.45" stop-color="#E5A638"/>
+                  <stop id="pinStop3" offset="0.8" stop-color="#C27A1A"/>
+                  <stop id="pinStop4" offset="1" stop-color="#8C4E0B"/>
                 </linearGradient>
               </defs>
               <path d="M16 48 L11 16 C11 11 13 8 16 8 C19 8 21 11 21 16 Z" fill="url(#breguetGoldPin)"/>
@@ -532,7 +554,13 @@
               </div>
               <div class="card-flip-face card-flip-back" title="Chạm vào hình để xem to trọn vẹn (không bị cắt)">
                 <img id="letterCardImg" src="" alt="Thông điệp">
-                <div class="card-zoom-badge"><span class="svg-icon-xs" data-svg="search"></span> Phóng to ảnh</div>
+                <div id="letterFallbackCard" class="card-art-fallback" style="display:none;">
+                  <div class="card-art-fallback-icon" id="fallbackCardIcon"><span class="svg-icon-xl" data-svg="astrolabe"></span></div>
+                  <h3 class="card-art-fallback-title" id="fallbackCardTitle">Thông Điệp</h3>
+                  <p class="card-art-fallback-desc" id="fallbackCardDesc">"Lời nhắn tâm thức từ vũ trụ..."</p>
+                  <div class="card-art-fallback-badge">✦ TS. Sunny Đặng Phương ✦</div>
+                </div>
+                <div class="card-zoom-badge" id="cardZoomBadge"><span class="svg-icon-xs" data-svg="search"></span> Phóng to ảnh</div>
                 <div class="lib-card-glare"></div>
               </div>
             </div>
@@ -1254,9 +1282,137 @@
     }
 
     // ── 7. KHỞI CHẠY TRANG ──
+    // ── 7B. HỆ THỐNG 7 CHỦ ĐỀ VÒNG QUAY NĂNG LƯỢNG ──
+    let activeTopic = (typeof getCurrentTopic === 'function') ? getCurrentTopic() : null;
+
+    function initTopicSystem() {
+      if (typeof getCurrentTopic === 'function') {
+        activeTopic = getCurrentTopic();
+      }
+      renderTopicSelectorPills();
+      if (activeTopic) {
+        applyTopicTheme(activeTopic);
+      }
+    }
+
+    function renderTopicSelectorPills() {
+      const wrap = document.getElementById('topicPillsWrap');
+      if (!wrap || typeof getAllTopics !== 'function') return;
+      const topics = getAllTopics();
+      wrap.innerHTML = topics.map(t => {
+        const isActive = activeTopic && t.id === activeTopic.id;
+        return `
+          <button class="topic-pill-btn ${isActive ? 'active' : ''}" 
+                  data-topic-id="${t.id}"
+                  onclick="selectTopic('${t.id}')"
+                  style="--btn-color:${t.color};--btn-glow:${t.glowColor};"
+                  title="${t.name} (${t.colorName})">
+            <span class="topic-pill-dot" style="background:${t.color};"></span>
+            <span>${t.name}</span>
+          </button>
+        `;
+      }).join('');
+    }
+
+    function selectTopic(topicId) {
+      if (typeof getTopic !== 'function') return;
+      const topic = getTopic(topicId);
+      if (!topic) return;
+      activeTopic = topic;
+      if (typeof setCurrentTopic === 'function') {
+        setCurrentTopic(topic.id);
+      }
+
+      if (window.history && window.history.replaceState) {
+        const url = new URL(window.location);
+        url.searchParams.set('topic', topic.id);
+        window.history.replaceState({}, '', url);
+      }
+
+      applyTopicTheme(topic);
+      updateTopicPillsUI();
+      drawWheel(currentRotationAngle);
+      checkTodaySpinStatus();
+      refreshStatsStrip();
+      if (typeof renderLibrary === 'function') {
+        renderLibrary();
+      }
+
+      sounds.playClick();
+      showToast(`Vòng Quay: ${topic.name}`);
+    }
+
+    function updateTopicPillsUI() {
+      document.querySelectorAll('.topic-pill-btn').forEach(btn => {
+        const tId = btn.getAttribute('data-topic-id');
+        const isActive = activeTopic && tId === activeTopic.id;
+        btn.classList.toggle('active', isActive);
+        if (isActive) {
+          btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        }
+      });
+    }
+
+    function applyTopicTheme(topic) {
+      if (!topic) return;
+      const root = document.documentElement;
+      root.style.setProperty('--accent', topic.color);
+      root.style.setProperty('--accent-light', topic.secondaryColor);
+      root.style.setProperty('--accent-soft', topic.lightBg);
+      root.style.setProperty('--accent-gold', topic.color === '#D97706' ? '#FDE68A' : topic.color);
+      root.style.setProperty('--hero-glow', topic.glowColor);
+      root.setAttribute('data-topic', topic.id);
+
+      document.body.className = document.body.className.replace(/\btopic-[a-z0-9-]+\b/g, '').trim();
+      document.body.classList.add(`topic-${topic.id}`);
+
+      document.title = `${topic.name} — Vòng Quay Thông Điệp Sống`;
+
+      const eyebrow = document.getElementById('topicEyebrow');
+      if (eyebrow) eyebrow.innerHTML = `✦ Vòng Quay ${topic.name} ✦`;
+
+      const heroNameSpan = document.getElementById('topicNameSpan');
+      if (heroNameSpan) {
+        heroNameSpan.textContent = topic.shortName || topic.name;
+        heroNameSpan.style.color = topic.color;
+      }
+
+      const heroDesc = document.getElementById('topicHeroDesc');
+      if (heroDesc) heroDesc.textContent = topic.tagline;
+
+      const libTitle = document.getElementById('libTopicTitle');
+      if (libTitle) {
+        libTitle.textContent = `${topic.messages.length} Hạt Mầm ${topic.shortName}`;
+      }
+
+      const libTotalText = document.getElementById('libProgressTotalText');
+      if (libTotalText) libTotalText.textContent = topic.messages.length;
+
+      const filterAllBtn = document.getElementById('libFilterAllBtn');
+      if (filterAllBtn) filterAllBtn.textContent = `Tất cả (${topic.messages.length})`;
+
+      const statTotalTopicCount = document.getElementById('statTotalTopicCount');
+      if (statTotalTopicCount) statTotalTopicCount.textContent = topic.messages.length;
+
+      updatePointerPinColor(topic);
+    }
+
+    function updatePointerPinColor(topic) {
+      const pinGrad = document.getElementById('breguetGoldPin');
+      if (!pinGrad) return;
+      const stops = pinGrad.querySelectorAll('stop');
+      if (stops.length >= 4) {
+        stops[0].setAttribute('stop-color', topic.secondaryColor || '#FFE8A3');
+        stops[1].setAttribute('stop-color', topic.color || '#E5A638');
+        stops[2].setAttribute('stop-color', topic.color || '#C27A1A');
+        stops[3].setAttribute('stop-color', '#121622');
+      }
+    }
+
     async function initApp() {
       Icons.renderAll();
       initTheme();
+      initTopicSystem();
 
       if (window.AppAnimations && typeof AppAnimations.init === 'function') {
         AppAnimations.init();
@@ -1318,7 +1474,9 @@
     function refreshStatsStrip() {
       const history = getHistory();
       const streak = getStreak();
-      const unique = uniqueMessagesCount();
+      const topicId = activeTopic ? activeTopic.id : 'tri-tam-khai-sang';
+      const totalCards = activeTopic ? (activeTopic.totalCards || 66) : 66;
+      const unique = uniqueMessagesCount(topicId);
 
       document.getElementById('statTotalSpins').textContent = history.length;
       document.getElementById('statUnlockedCount').textContent = unique;
@@ -1326,32 +1484,59 @@
 
       const libText = document.getElementById('libProgressText');
       if (libText) libText.textContent = unique;
+      const libProgTotal = document.getElementById('libProgressTotalText');
+      if (libProgTotal) libProgTotal.textContent = totalCards;
       const libFill = document.getElementById('libProgressBarFill');
-      if (libFill) libFill.style.width = ((unique / 66) * 100).toFixed(1) + '%';
+      if (libFill) libFill.style.width = Math.min(100, ((unique / totalCards) * 100)).toFixed(1) + '%';
     }
 
     // ── 9. KIỂM TRA LƯỢT QUAY HÔM NAY ──
     function checkTodaySpinStatus() {
-      const todayRecord = getTodaySpin();
+      const topicId = activeTopic ? activeTopic.id : null;
+      const todayRecord = getTodaySpin(topicId);
       const spinBtnWrapper = document.getElementById('spinBtnWrapper');
       const alreadySpunBox = document.getElementById('alreadySpunBox');
       const arena = document.querySelector('.wheel-arena');
 
       if (todayRecord) {
         currentMessageId = todayRecord.messageId;
-        const msg = getMessageById(todayRecord.messageId);
+        const msg = getMessageById(todayRecord.messageId, topicId);
 
         spinBtnWrapper.style.display = 'none';
         alreadySpunBox.classList.add('show');
         if (arena) arena.classList.add('already-spun-mode');
         setTimeout(() => drawWheel(currentRotationAngle), 50);
 
-        document.getElementById('todayThumbImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
-        document.getElementById('todayMsgTitle').textContent = msg.name;
-        document.getElementById('todayMsgQuote').textContent = `"${msg.desc}"`;
+        const thumbImg = document.getElementById('todayThumbImg');
+        const fallbackThumb = document.getElementById('todayFallbackThumb');
+        if (activeTopic && !activeTopic.hasCustomImages) {
+          if (thumbImg) thumbImg.style.display = 'none';
+          if (!fallbackThumb) {
+            const fb = document.createElement('div');
+            fb.id = 'todayFallbackThumb';
+            fb.className = 'w-16 h-20 rounded-xl flex flex-col items-center justify-center text-white p-1 text-center shadow-md flex-shrink-0';
+            fb.style.background = activeTopic.accentGradient || 'var(--accent-gradient)';
+            fb.innerHTML = `${Icons.get(activeTopic.icon || 'sparkles', 'svg-icon-md')}<span class="text-[9px] font-bold mt-1 line-clamp-1">${msg?.name || ''}</span>`;
+            thumbImg.parentNode.insertBefore(fb, thumbImg);
+          } else {
+            fallbackThumb.style.display = 'flex';
+            fallbackThumb.style.background = activeTopic.accentGradient || 'var(--accent-gradient)';
+            fallbackThumb.innerHTML = `${Icons.get(activeTopic.icon || 'sparkles', 'svg-icon-md')}<span class="text-[9px] font-bold mt-1 line-clamp-1">${msg?.name || ''}</span>`;
+          }
+        } else {
+          if (fallbackThumb) fallbackThumb.style.display = 'none';
+          if (thumbImg) {
+            thumbImg.style.display = 'block';
+            thumbImg.src = `images/${String(msg.id).padStart(2, '0')}.png`;
+          }
+        }
+        document.getElementById('todayMsgTitle').textContent = msg?.name || 'Thông Điệp';
+        document.getElementById('todayMsgQuote').textContent = `"${msg?.desc || ''}"`;
 
         startCountdownTimer();
       } else {
+        const fallbackThumb = document.getElementById('todayFallbackThumb');
+        if (fallbackThumb) fallbackThumb.style.display = 'none';
         spinBtnWrapper.style.display = 'block';
         alreadySpunBox.classList.remove('show');
         if (arena) arena.classList.remove('already-spun-mode');
@@ -1400,6 +1585,11 @@
       ctx.save();
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+      const runes = (activeTopic && activeTopic.runes) ? activeTopic.runes : SEGMENT_RUNES;
+      const labels = (activeTopic && activeTopic.segmentLabels) ? activeTopic.segmentLabels : SEGMENT_LABELS;
+      const topicColor = activeTopic ? activeTopic.color : '#DDA73A';
+      const topicSecondary = activeTopic ? activeTopic.secondaryColor : '#FDE68A';
+
       const CX = (size * dpr) / 2;
       const CY = (size * dpr) / 2;
       const R = (size * 0.46) * dpr;
@@ -1411,14 +1601,14 @@
       ctx.beginPath();
       ctx.arc(CX, CY, R + 9 * s, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#080A10' : '#EDE4D4';
-      ctx.shadowColor = isDark ? 'rgba(221, 167, 58, 0.45)' : 'rgba(184, 134, 11, 0.3)';
+      ctx.shadowColor = isDark ? (activeTopic?.glowColor || 'rgba(221, 167, 58, 0.45)') : 'rgba(0, 0, 0, 0.12)';
       ctx.shadowBlur = 18 * s;
       ctx.fill();
 
-      // Outer Gold Bevel
+      // Outer Bevel (Tông màu chủ đề)
       ctx.beginPath();
       ctx.arc(CX, CY, R + 8 * s, 0, Math.PI * 2);
-      ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
+      ctx.strokeStyle = isDark ? topicSecondary : topicColor;
       ctx.lineWidth = 2 * s;
       ctx.stroke();
 
@@ -1441,10 +1631,10 @@
         ctx.moveTo(x1, y1);
         ctx.lineTo(x2, y2);
         ctx.strokeStyle = isMajor
-          ? (isDark ? 'rgba(253, 230, 138, 0.95)' : 'rgba(180, 120, 20, 0.95)')
+          ? (isDark ? topicSecondary : topicColor)
           : isMedium
-            ? (isDark ? 'rgba(221, 167, 58, 0.65)' : 'rgba(184, 134, 11, 0.6)')
-            : (isDark ? 'rgba(221, 167, 58, 0.28)' : 'rgba(184, 134, 11, 0.25)');
+            ? (isDark ? 'rgba(255, 255, 255, 0.45)' : 'rgba(0, 0, 0, 0.35)')
+            : (isDark ? 'rgba(255, 255, 255, 0.18)' : 'rgba(0, 0, 0, 0.15)');
         ctx.lineWidth = (isMajor ? 2 : isMedium ? 1.2 : 0.75) * s;
         ctx.stroke();
       }
@@ -1470,25 +1660,25 @@
         }
         ctx.fill();
 
-        // Antique Gold Radial Divider Line
+        // Radial Divider Line
         ctx.beginPath();
         ctx.moveTo(CX, CY);
         ctx.lineTo(CX + Math.cos(start) * R, CY + Math.sin(start) * R);
-        ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.65)' : 'rgba(184, 134, 11, 0.55)';
+        ctx.strokeStyle = isDark ? (isEven ? topicSecondary : 'rgba(255, 255, 255, 0.25)') : (isEven ? topicColor : 'rgba(0, 0, 0, 0.18)');
         ctx.lineWidth = 1.5 * s;
         ctx.stroke();
 
-        // Celestial Rune Sigil (Outer Orbit) - No Emojis!
+        // Celestial Rune Sigil (Outer Orbit)
         const rx = CX + Math.cos(mid) * (R * 0.77);
         const ry = CY + Math.sin(mid) * (R * 0.77);
         ctx.save();
         ctx.translate(rx, ry);
         ctx.rotate(mid + Math.PI / 2);
         ctx.font = `bold ${Math.round(18 * s)}px 'Plus Jakarta Sans', sans-serif`;
-        ctx.fillStyle = isDark ? '#FDE68A' : '#7D4815';
+        ctx.fillStyle = isDark ? topicSecondary : topicColor;
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(SEGMENT_RUNES[i], 0, 0);
+        ctx.fillText(runes[i % runes.length], 0, 0);
         ctx.restore();
 
         // Sector Label (Upright Text Orientation with Native Vietnamese Font)
@@ -1497,7 +1687,6 @@
         ctx.save();
         ctx.translate(lx, ly);
 
-        // Normalize mid angle to 0..2PI to determine if upside down
         let rot = mid + Math.PI / 2;
         const normAngle = ((mid % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2);
         if (normAngle > 0 && normAngle < Math.PI) {
@@ -1509,20 +1698,20 @@
         ctx.fillStyle = isDark ? '#F1E9DB' : '#2D1810';
         ctx.textAlign = 'center';
         ctx.textBaseline = 'middle';
-        ctx.fillText(SEGMENT_LABELS[i], 0, 0);
+        ctx.fillText(labels[i % labels.length], 0, 0);
         ctx.restore();
       }
 
       // ── Outer Circumference Golden Rings ──
       ctx.beginPath();
       ctx.arc(CX, CY, R, 0, Math.PI * 2);
-      ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
+      ctx.strokeStyle = isDark ? topicSecondary : topicColor;
       ctx.lineWidth = 2.2 * s;
       ctx.stroke();
 
       ctx.beginPath();
       ctx.arc(CX, CY, R * 0.63, 0, Math.PI * 2);
-      ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.35)' : 'rgba(184, 134, 11, 0.3)';
+      ctx.strokeStyle = isDark ? 'rgba(255, 255, 255, 0.25)' : 'rgba(0, 0, 0, 0.18)';
       ctx.lineWidth = 1 * s;
       ctx.stroke();
 
@@ -1536,7 +1725,7 @@
         ctx.moveTo(CX + Math.cos(theta1) * innerR, CY + Math.sin(theta1) * innerR);
         ctx.lineTo(CX + Math.cos(theta2) * innerR, CY + Math.sin(theta2) * innerR);
       }
-      ctx.strokeStyle = isDark ? 'rgba(221, 167, 58, 0.38)' : 'rgba(184, 134, 11, 0.32)';
+      ctx.strokeStyle = isDark ? (topicSecondary + '55') : (topicColor + '44');
       ctx.lineWidth = 1 * s;
       ctx.stroke();
       ctx.restore();
@@ -1546,14 +1735,14 @@
       ctx.arc(CX, CY, 46 * s, 0, Math.PI * 2);
       ctx.fillStyle = isDark ? '#0E131F' : '#FAF5EB';
       ctx.fill();
-      ctx.strokeStyle = isDark ? '#DDA73A' : '#C4922A';
+      ctx.strokeStyle = isDark ? topicSecondary : topicColor;
       ctx.lineWidth = 2.5 * s;
       ctx.stroke();
 
-      // Center Concentric Gold Accent Ring
+      // Center Concentric Accent Ring
       ctx.beginPath();
       ctx.arc(CX, CY, 24 * s, 0, Math.PI * 2);
-      ctx.strokeStyle = isDark ? 'rgba(253, 230, 138, 0.7)' : 'rgba(184, 134, 11, 0.6)';
+      ctx.strokeStyle = isDark ? topicSecondary : topicColor;
       ctx.lineWidth = 1.2 * s;
       ctx.stroke();
 
@@ -1572,7 +1761,7 @@
 
     // ── 11. THỰC HIỆN QUAY (Physics & Tactile Haptic) ──
     function handleSpinStart() {
-      if (isWheelSpinning || hasSpunToday()) return;
+      if (isWheelSpinning || hasSpunToday(activeTopic ? activeTopic.id : null)) return;
       isWheelSpinning = true;
 
       sounds.init();
@@ -1587,7 +1776,7 @@
       const loader = document.getElementById('spinConicLoader');
       loader.style.display = 'flex';
 
-      const chosenMessage = getRandomMessage();
+      const chosenMessage = getRandomMessage(activeTopic ? activeTopic.id : null);
       currentMessageId = chosenMessage.id;
 
       const fullRotations = 7 + Math.random() * 3;
@@ -1666,7 +1855,7 @@
     async function onSpinDone(msg) {
       sounds.playSingingBowl();
       if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
-      await recordSpinToCloud(msg.id);
+      await recordSpinToCloud(msg.id, activeTopic ? activeTopic.id : null);
       refreshStatsStrip();
       setTimeout(() => openRitualModal(msg), 400);
     }
@@ -1679,12 +1868,39 @@
 
       if (waxCard) waxCard.style.display = 'none';
 
-      document.getElementById('letterCardImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
+      const isImgTopic = activeTopic ? activeTopic.hasCustomImages : true;
+      const imgEl = document.getElementById('letterCardImg');
+      const fallbackEl = document.getElementById('letterFallbackCard');
+      const zoomBadge = document.getElementById('cardZoomBadge');
+
+      if (isImgTopic) {
+        if (imgEl) {
+          imgEl.style.display = 'block';
+          imgEl.src = `images/${String(msg.id).padStart(2, '0')}.png`;
+        }
+        if (fallbackEl) fallbackEl.style.display = 'none';
+        if (zoomBadge) zoomBadge.style.display = 'inline-flex';
+      } else {
+        if (imgEl) imgEl.style.display = 'none';
+        if (fallbackEl) {
+          fallbackEl.style.display = 'flex';
+          fallbackEl.style.setProperty('--topic-soft', activeTopic ? activeTopic.lightBg : 'rgba(0,0,0,0.05)');
+          fallbackEl.style.setProperty('--topic-glow', activeTopic ? activeTopic.glowColor : 'rgba(0,0,0,0.1)');
+          const iconSpan = document.getElementById('fallbackCardIcon');
+          if (iconSpan) iconSpan.innerHTML = Icons.get(activeTopic?.icon || 'sparkles', 'svg-icon-xl');
+          const titleH3 = document.getElementById('fallbackCardTitle');
+          if (titleH3) titleH3.textContent = msg.name;
+          const descP = document.getElementById('fallbackCardDesc');
+          if (descP) descP.textContent = `"${msg.desc}"`;
+        }
+        if (zoomBadge) zoomBadge.style.display = 'none';
+      }
+
       document.getElementById('letterTitle').textContent = msg.name;
       document.getElementById('letterQuote').textContent = `"${msg.desc}"`;
       document.getElementById('letterActionText').textContent = msg.action || "Hãy thở sâu, thả lỏng đôi vai và mỉm cười với chính mình.";
 
-      const todayRec = getTodaySpin();
+      const todayRec = getTodaySpin(activeTopic ? activeTopic.id : null);
       const defaultName = currentUser?.name || '';
       const defaultEmail = currentUser?.email || '';
       const ritualCfName = document.getElementById('ritualCfName');
@@ -1985,7 +2201,7 @@
 
     function reopenTodayRitual() {
       if (!currentMessageId) return;
-      const msg = getMessageById(currentMessageId);
+      const msg = getMessageById(currentMessageId, activeTopic ? activeTopic.id : null);
       openRitualModal(msg);
       document.getElementById('waxSealCard').style.display = 'none';
       document.getElementById('letterRevealCard').classList.add('show');
@@ -2038,8 +2254,9 @@
       if (!grid) return;
 
       const history = getHistory();
+      const topicMessages = activeTopic ? activeTopic.messages : MESSAGES;
 
-      const filtered = MESSAGES.filter(m => {
+      const filtered = topicMessages.filter(m => {
         const matchCategory = selectedLibCategory === 'all' || m.category === selectedLibCategory;
         const matchSearch = !libSearchText ||
           m.name.toLowerCase().includes(libSearchText) ||
@@ -2047,18 +2264,47 @@
         return matchCategory && matchSearch;
       });
 
+      const totalTopicCount = topicMessages.length;
+      const unlockedCount = topicMessages.filter(m => history.some(h => h.messageId === m.id)).length;
+      
+      const libProgText = document.getElementById('libProgressText');
+      if (libProgText) libProgText.textContent = unlockedCount;
+      const libProgTotal = document.getElementById('libProgressTotalText');
+      if (libProgTotal) libProgTotal.textContent = totalTopicCount;
+      const libFill = document.getElementById('libProgressBarFill');
+      if (libFill) libFill.style.width = ((unlockedCount / totalTopicCount) * 100).toFixed(1) + '%';
+
       grid.innerHTML = '';
       filtered.forEach((msg) => {
         const isUnlocked = history.some(h => h.messageId === msg.id);
-        const cat = CATEGORIES[msg.category.toUpperCase()] || CATEGORIES.WISDOM;
+        const cat = CATEGORIES[msg.category?.toUpperCase()] || CATEGORIES.WISDOM;
         const iconSvg = Icons.get(cat.iconName || 'sparkles', 'svg-icon-xs');
 
         const card = document.createElement('div');
         card.className = 'lib-card holo-tilt';
-        card.innerHTML = `
-          <div class="lib-card-art">
+
+        let artHtml = '';
+        if (activeTopic && activeTopic.hasCustomImages) {
+          artHtml = `
             <img src="images/${String(msg.id).padStart(2,'0')}.png" alt="${msg.name}">
             <div class="lib-card-glare"></div>
+          `;
+        } else {
+          artHtml = `
+            <div class="card-art-fallback" style="--topic-soft:${activeTopic?.lightBg || 'rgba(0,0,0,0.04)'};--topic-glow:${activeTopic?.glowColor || 'rgba(0,0,0,0.1)'};min-height:190px;padding:18px 14px;">
+              <div class="card-art-fallback-icon" style="width:48px;height:48px;margin-bottom:12px;color:${activeTopic?.color || 'var(--accent)'};">
+                ${Icons.get(activeTopic?.icon || 'sparkles', 'svg-icon-md')}
+              </div>
+              <div style="font-weight:800;font-size:0.95rem;color:var(--text-primary);margin-bottom:6px;">${msg.name}</div>
+              <div style="font-size:0.75rem;opacity:0.75;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">"${msg.desc}"</div>
+            </div>
+            <div class="lib-card-glare"></div>
+          `;
+        }
+
+        card.innerHTML = `
+          <div class="lib-card-art">
+            ${artHtml}
             ${isUnlocked ? `
               <div class="lib-status-pill is-unlocked" title="Đã khai mở từ vòng quay">
                 ${Icons.get('check', 'svg-icon-xs')}

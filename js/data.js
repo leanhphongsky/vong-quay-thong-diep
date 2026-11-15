@@ -474,17 +474,768 @@ const MESSAGES = [
   }
 ];
 
-// Helpers
-function getMessageById(id) {
-  return MESSAGES.find(m => m.id === Number(id)) || null;
+
+
+// ============================================================
+// HỆ THỐNG 7 CHỦ ĐỀ VÒNG QUAY THÔNG ĐIỆP SỐNG — TS. SUNNY ĐẶNG PHƯƠNG
+// ============================================================
+
+const TOPIC_SEED_MESSAGES = {
+  'su-nghiep': [
+    {
+      id: 101,
+      name: "Mục Tiêu Rõ Ràng",
+      category: "discipline",
+      desc: "Khi đích đến đã rõ ràng, mọi bước chân đều mang sức mạnh của sự quyết đoán và kiên định.",
+      action: "Viết ra 3 mục tiêu ưu tiên nhất trong tuần này và gạch bỏ những việc gây xao nhãng."
+    },
+    {
+      id: 102,
+      name: "Bứt Phá Giới Hạn",
+      category: "discipline",
+      desc: "Vùng an toàn là nơi ấm áp, nhưng không có hạt mầm thành công nào lớn lên ở đó.",
+      action: "Dám làm một việc bạn từng ngại ngần trước 3 giờ chiều hôm nay."
+    },
+    {
+      id: 103,
+      name: "Kỷ Luật Thép",
+      category: "discipline",
+      desc: "Động lực giúp bạn bắt đầu, nhưng chỉ có kỷ luật mới đưa bạn về đích viên mãn.",
+      action: "Giữ đúng cam kết thời gian cho cuộc hẹn hoặc công việc đầu ngày."
+    },
+    {
+      id: 104,
+      name: "Quản Trị Cảm Xúc",
+      category: "wisdom",
+      desc: "Sự chuyên nghiệp cao nhất là giữ được tâm thế bình tĩnh trước những áp lực bất ngờ.",
+      action: "Hít sâu 3 nhịp trước khi trả lời một email hoặc cuộc gọi căng thẳng."
+    },
+    {
+      id: 105,
+      name: "Tư Duy Giải Pháp",
+      category: "wisdom",
+      desc: "Đừng nói về lý do tại sao không thể, hãy tập trung vào cách thức để hoàn thành.",
+      action: "Tìm ít nhất 2 phương án khả thi cho một khúc mắc công việc hiện tại."
+    },
+    {
+      id: 106,
+      name: "Bản Lĩnh Dẫn Đầu",
+      category: "discipline",
+      desc: "Lãnh đạo bằng sự chân thành và gương mẫu luôn bền vững hơn bất kỳ mệnh lệnh nào.",
+      action: "Chủ động giúp đỡ và ghi nhận đóng góp tích cực của một người đồng nghiệp."
+    },
+    {
+      id: 107,
+      name: "Học Tập Trọn Đời",
+      category: "wisdom",
+      desc: "Trí tuệ của hôm qua không thể giải quyết được những cơ hội vĩ đại của ngày mai.",
+      action: "Dành 20 phút đọc một bài học hoặc tài liệu chuyên môn nâng tầm tư duy."
+    },
+    {
+      id: 108,
+      name: "Kiên Trì Bền Bỉ",
+      category: "discipline",
+      desc: "Nhiều người bỏ cuộc ngay trước bước ngoặt thành công chỉ vì thiếu một chút bền bỉ.",
+      action: "Tiếp tục hoàn thành công việc dở dang dù cảm thấy mệt mỏi hay chán nản."
+    },
+    {
+      id: 109,
+      name: "Tập Trung Tuyệt Đối",
+      category: "discipline",
+      desc: "Ngọn nến chỉ thắp sáng khi không bị gió cuốn đi mọi hướng. Hãy tập trung một việc.",
+      action: "Tập trung 100% vào nhiệm vụ quan trọng trong 30 phút, tắt mọi thông báo."
+    },
+    {
+      id: 110,
+      name: "Dám Chịu Trách Nhiệm",
+      category: "wisdom",
+      desc: "Sức mạnh thực sự bắt đầu khi bạn nhận lãnh trách nhiệm 100% về kết quả của mình.",
+      action: "Chủ động nhận trách nhiệm và đề xuất giải pháp khắc phục nếu có sai sót."
+    },
+    {
+      id: 111,
+      name: "Chiến Lược Dài Hạn",
+      category: "wisdom",
+      desc: "Tầm nhìn xa giúp bạn không bị lạc lối trước những biến động và thách thức ngắn hạn.",
+      action: "Dành 15 phút tĩnh lặng để nhìn lại lộ trình sự nghiệp 1 năm tới của bạn."
+    },
+    {
+      id: 112,
+      name: "Vinh Quang & Khiêm Nhường",
+      category: "flow",
+      desc: "Đỉnh cao thực sự là khi bạn đứng trên đỉnh núi và cúi mình biết ơn cuộc đời.",
+      action: "Gửi lời cảm ơn chân thành đến người đã nâng đỡ hoặc đồng hành cùng bạn."
+    }
+  ],
+  'hon-nhan': [
+    {
+      id: 201,
+      name: "Thấu Hiểu Trước, Phán Xét Sau",
+      category: "love",
+      desc: "Trong hôn nhân, người thắng trong tranh cãi thường là người thua trong hạnh phúc.",
+      action: "Lắng nghe trọn vẹn người bạn đời mà không ngắt lời hay phán xét."
+    },
+    {
+      id: 202,
+      name: "Ngọn Lửa Tổ Ấm",
+      category: "love",
+      desc: "Gia đình không phải là nơi để đòi hỏi hoàn hảo, mà là bến đỗ để cùng nhau hoàn thiện.",
+      action: "Nói một lời dịu dàng hoặc dành một cái ôm ấm áp khi trở về nhà."
+    },
+    {
+      id: 203,
+      name: "Bao Dung Khác Biệt",
+      category: "love",
+      desc: "Hai con người đến từ hai thế giới khác nhau cần sự bao dung làm nhịp cầu nối.",
+      action: "Mỉm cười chấp nhận một thói quen nhỏ chưa ưng ý của người thân hôm nay."
+    },
+    {
+      id: 204,
+      name: "Lắng Nghe Bằng Trái Tim",
+      category: "wisdom",
+      desc: "Đôi khi người bạn đời không cần lời khuyên, họ chỉ cần cảm thấy mình được lắng nghe.",
+      action: "Dành 15 phút trò chuyện không nhìn vào màn hình điện thoại tối nay."
+    },
+    {
+      id: 205,
+      name: "Nuôi Dưỡng Sự Gắn Kết",
+      category: "love",
+      desc: "Tình yêu hôn nhân như cái cây, cần tưới tắm bằng những cử chỉ quan tâm nhỏ mỗi ngày.",
+      action: "Bất ngờ chuẩn bị một món ăn nhẹ hoặc gửi tin nhắn chúc ngày an lành."
+    },
+    {
+      id: 206,
+      name: "Tôn Trọng Khoảng Trời Riêng",
+      category: "wisdom",
+      desc: "Yêu thương sâu sắc là tôn trọng cả khoảng trời riêng của người mình yêu quý.",
+      action: "Ủng hộ và để người bạn đời có thời gian nghỉ ngơi hoặc làm điều họ thích."
+    },
+    {
+      id: 207,
+      name: "Lời Xin Lỗi Chân Thành",
+      category: "love",
+      desc: "Lời xin lỗi chân thành là chiếc chìa khóa hóa giải mọi bức tường ngăn cách.",
+      action: "Chủ động làm hòa nếu có sự giận hờn, mở rộng trái tim tha thứ."
+    },
+    {
+      id: 208,
+      name: "Đồng Hành Qua Bão Giông",
+      category: "discipline",
+      desc: "Giá trị của hôn nhân được đo bằng sự vững vàng tay nắm tay qua những ngày gian khó.",
+      action: "Nắm tay người bạn đời và nói: 'Có anh/em ở đây cùng vượt qua'."
+    },
+    {
+      id: 209,
+      name: "Biết Ơn Sự Hiện Diện",
+      category: "love",
+      desc: "Đừng coi những điều người thân làm cho bạn là hiển nhiên; hãy trân trọng mỗi ngày.",
+      action: "Nói lời cảm ơn vì một việc rất nhỏ mà người ấy đã làm hôm nay."
+    },
+    {
+      id: 210,
+      name: "Trò Chuyện Trong Bình An",
+      category: "wisdom",
+      desc: "Cơn giận dữ chỉ làm cháy rụi tổ ấm; hãy đợi tâm lắng lại rồi cùng bàn bạc.",
+      action: "Thở sâu và tạm hoãn tranh luận khi cảm thấy cảm xúc bắt đầu dâng trào."
+    },
+    {
+      id: 211,
+      name: "Chia Sẻ Gánh Nặng",
+      category: "love",
+      desc: "Gia đình là cùng nhau san sẻ, từ việc nhà giản dị đến nỗi lo toan cuộc sống.",
+      action: "Chủ động chia sẻ một công việc nhà mà bạn ít khi làm."
+    },
+    {
+      id: 212,
+      name: "Bình Yên Sau Cánh Cửa",
+      category: "flow",
+      desc: "Hãy để những bực dọc bên ngoài cánh cửa trước khi bước vào tổ ấm yêu thương.",
+      action: "Tươi cười chào đón gia đình khi bước qua cửa nhà hôm nay."
+    }
+  ],
+  'nuoi-day-con': [
+    {
+      id: 301,
+      name: "Làm Gương Hơn Lời Nói",
+      category: "wisdom",
+      desc: "Trẻ con không nghe những gì bạn nói, chúng quan sát những gì bạn làm mỗi ngày.",
+      action: "Thực hiện đúng một hành động mẫu mực về sự tử tế trước mặt con hôm nay."
+    },
+    {
+      id: 302,
+      name: "Kiên Nhẫn Cùng Nhịp Điệu",
+      category: "love",
+      desc: "Mỗi đứa trẻ là một bông hoa có mùa nở riêng. Đừng so sánh con với người khác.",
+      action: "Không so sánh con với bất kỳ ai hôm nay; ghi nhận nét riêng của con."
+    },
+    {
+      id: 303,
+      name: "Lắng Nghe Cảm Xúc Con",
+      category: "love",
+      desc: "Khi con tức giận hay khóc lóc, đó là lúc con cần tình yêu thương và sự thấu cảm nhất.",
+      action: "Ngồi xuống ngang tầm mắt con và dịu dàng hỏi: 'Con đang cảm thấy thế nào?'."
+    },
+    {
+      id: 304,
+      name: "Khích Lệ Sự Nỗ Lực",
+      category: "discipline",
+      desc: "Khen ngợi sự cố gắng quý giá hơn nhiều so với việc chỉ khen điểm số hay tài năng.",
+      action: "Ghi nhận sự chăm chỉ của con khi con hoàn thành một việc nhỏ."
+    },
+    {
+      id: 305,
+      name: "Rèn Luyện Tính Tự Lập",
+      category: "wisdom",
+      desc: "Món quà lớn nhất cha mẹ trao cho con là đôi cánh tự tin để tự bay trên đường đời.",
+      action: "Để con tự tay làm một việc cá nhân hôm nay mà không làm thay con."
+    },
+    {
+      id: 306,
+      name: "Tình Thương Vô Điều Kiện",
+      category: "love",
+      desc: "Hãy để con biết rằng tình yêu của cha mẹ không phụ thuộc vào thành công hay sai lầm.",
+      action: "Ôm con vào lòng và nói: 'Ba/Mẹ yêu con vì chính con'."
+    },
+    {
+      id: 307,
+      name: "Dạy Con Về Lòng Biết Ơn",
+      category: "wisdom",
+      desc: "Một đứa trẻ biết ơn sẽ luôn tìm thấy niềm vui và hạnh phúc trong cuộc sống.",
+      action: "Cùng con kể ra 3 điều may mắn trong ngày trước giờ đi ngủ."
+    },
+    {
+      id: 308,
+      name: "Cho Con Quyền Được Sai",
+      category: "love",
+      desc: "Sai lầm là bài học tuyệt vời nhất để con trưởng thành, miễn là con được thấu hiểu.",
+      action: "Bình tĩnh hướng dẫn khi con làm vỡ hoặc sai sót một việc, không quát mắng."
+    },
+    {
+      id: 309,
+      name: "Đồng Hành Thay Vì Áp Đặt",
+      category: "wisdom",
+      desc: "Làm bạn cùng con để con luôn có một nơi an toàn để tìm về khi gặp khó khăn.",
+      action: "Dành 20 phút chơi trò con thích mà không can thiệp hay chỉ trích."
+    },
+    {
+      id: 310,
+      name: "Nuôi Dưỡng Trí Tò Mò",
+      category: "wisdom",
+      desc: "Đừng dập tắt những câu hỏi 'tại sao' của con bằng sự thiếu kiên nhẫn.",
+      action: "Cùng con tìm hiểu câu trả lời cho một thắc mắc ngộ nghĩnh của con hôm nay."
+    },
+    {
+      id: 311,
+      name: "Giữ Lời Hứa Với Con",
+      category: "discipline",
+      desc: "Sự tôn trọng bắt đầu từ việc người lớn giữ trọn lời đã hứa với trẻ nhỏ.",
+      action: "Thực hiện một lời hứa nhỏ mà bạn từng nói với con."
+    },
+    {
+      id: 312,
+      name: "Bình An Của Cha Mẹ",
+      category: "flow",
+      desc: "Cha mẹ bình an chính là môi trường giáo dục tuyệt vời nhất cho tâm hồn con.",
+      action: "Dành 10 phút thư giãn bản thân để luôn có năng lượng tích cực bên con."
+    }
+  ],
+  'suc-khoe-tinh-than': [
+    {
+      id: 501,
+      name: "Thả Lỏng Toàn Thân",
+      category: "flow",
+      desc: "Cơ thể căng thẳng khi tâm trí bạn ôm đồm quá nhiều thứ không thuộc về hiện tại.",
+      action: "Nhắm mắt, thả lỏng đôi vai, cơ hàm và thở dài nhẹ nhõm 3 lần."
+    },
+    {
+      id: 502,
+      name: "Chấp Nhận Cảm Xúc",
+      category: "love",
+      desc: "Bạn không cần phải luôn luôn vui vẻ; hãy cho phép mình được mệt mỏi đôi chút.",
+      action: "Nhận diện nỗi buồn hay áp lực mà không tự trách móc bản thân."
+    },
+    {
+      id: 503,
+      name: "Ranh Giới Lành Mạnh",
+      category: "wisdom",
+      desc: "Nói 'không' với những điều vắt kiệt bạn là nói 'có' với sức khỏe tinh thần của mình.",
+      action: "Từ chối khéo léo một yêu cầu làm bạn quá tải hôm nay."
+    },
+    {
+      id: 504,
+      name: "Trị Liệu Thiên Nhiên",
+      category: "flow",
+      desc: "Một cơn gió mát, một cành lá xanh có thể làm dịu đi những muộn phiền sâu kín.",
+      action: "Dành 10 phút đi dạo dưới bóng cây hoặc hít thở khí trời trong lành."
+    },
+    {
+      id: 505,
+      name: "Giấc Ngủ An Yên",
+      category: "flow",
+      desc: "Giấc ngủ sâu là liều thuốc chữa lành kỳ diệu nhất mà tự nhiên trao tặng cho bạn.",
+      action: "Tắt điện thoại trước khi ngủ 30 phút, ngâm chân nước ấm hoặc nghe nhạc lofi."
+    },
+    {
+      id: 506,
+      name: "Buông Bỏ Hoàn Hảo",
+      category: "wisdom",
+      desc: "Hoàn hảo là ảo tưởng ngăn cản bạn tận hưởng sự bình dị đẹp đẽ của cuộc sống.",
+      action: "Cho phép mọi thứ ở mức 'đủ tốt' và mỉm cười thanh thản."
+    },
+    {
+      id: 507,
+      name: "Thanh Lọc Năng Lượng",
+      category: "wisdom",
+      desc: "Tránh xa những cuộc tranh cãi vô bổ và luồng tin tức độc hại để bảo vệ tâm trí.",
+      action: "Không bấm vào những tin tức tiêu cực hay tranh cãi trên mạng xã hội."
+    },
+    {
+      id: 508,
+      name: "Nuông Chiều Bản Thân",
+      category: "love",
+      desc: "Bạn đã chăm sóc người khác nhiều rồi, hôm nay hãy chăm sóc chính bản thân bạn.",
+      action: "Thưởng cho mình một tách trà ấm, một món ăn ngon hoặc bài nhạc ưa thích."
+    },
+    {
+      id: 509,
+      name: "Chiếc Mỏ Neo Hơi Thở",
+      category: "flow",
+      desc: "Hơi thở là chiếc mỏ neo kéo tâm trí đang trôi dạt trở về với sự an trú nguyên bản.",
+      action: "Thực hành bài tập thở 4-7-8 ba lần trong ngày khi thấy căng thẳng."
+    },
+    {
+      id: 510,
+      name: "Tự Nhủ Lời Yêu Thương",
+      category: "love",
+      desc: "Tiếng nói nội tâm đang đối xử với bạn như một người bạn tri kỷ hay một quan tòa?",
+      action: "Tự nói với chính mình: 'Tôi đã làm hết sức và tôi xứng đáng được bình yên'."
+    },
+    {
+      id: 511,
+      name: "Viết Ra Để Buông Bỏ",
+      category: "wisdom",
+      desc: "Khi tâm trí rối bời, hãy đưa những suy nghĩ đó lên từng trang giấy để giải tỏa.",
+      action: "Viết ra tất cả những lo lắng vào một trang nhật ký rồi khép lại bình an."
+    },
+    {
+      id: 512,
+      name: "Bình Tâm Đón Nhận",
+      category: "flow",
+      desc: "Mọi cơn bão rồi cũng sẽ qua đi, bầu trời sau mưa rồi sẽ lại trong xanh thanh tịnh.",
+      action: "Nhắc nhở bản thân: 'Điều này rồi cũng sẽ qua, mình luôn an toàn'."
+    }
+  ],
+  'tam-linh': [
+    {
+      id: 601,
+      name: "Sống Thuận Dòng Tự Nhiên",
+      category: "flow",
+      desc: "Dòng nước mềm mại nhất nhưng có thể bào mòn cả đá tảng; hãy sống mềm mại thuận dòng.",
+      action: "Không cố gắng kiểm soát mọi diễn biến hôm nay; để vạn sự tùy duyên."
+    },
+    {
+      id: 602,
+      name: "Kết Nối Nguồn Cội",
+      category: "wisdom",
+      desc: "Bạn không phải là một giọt nước riêng lẻ, bạn là cả đại dương trong một giọt nước.",
+      action: "Dành 10 phút ngồi thiền tĩnh lặng, cảm nhận sự sống tràn ngập trong từng tế bào."
+    },
+    {
+      id: 603,
+      name: "Luật Nhân Quả Vi Diệu",
+      category: "wisdom",
+      desc: "Mỗi ý niệm tốt lành bạn phát ra hôm nay là một đóa hoa thơm nở rộ trong tương lai.",
+      action: "Gửi lời chúc phúc thầm lặng đến tất cả những người bạn tình cờ gặp gỡ."
+    },
+    {
+      id: 604,
+      name: "Thức Tỉnh Hiện Tại",
+      category: "wisdom",
+      desc: "Quá khứ là ký ức, tương lai là tưởng tượng; chỉ có giây phút này là có thật và nhiệm màu.",
+      action: "Thực hành chánh niệm trọn vẹn trong một bữa ăn hoặc một ngụm trà sớm."
+    },
+    {
+      id: 605,
+      name: "Trái Tim Từ Bi",
+      category: "love",
+      desc: "Từ bi không làm bạn yếu đuối, từ bi là sức mạnh chuyển hóa lớn nhất của vũ trụ.",
+      action: "Mở rộng lòng tha thứ cho một người từng làm bạn phật ý trong quá khứ."
+    },
+    {
+      id: 606,
+      name: "Ánh Sáng Trí Huệ",
+      category: "wisdom",
+      desc: "Bóng tối không thể xua đi bóng tối, chỉ có ánh sáng của trí tuệ mới làm được điều đó.",
+      action: "Nhìn vào khía cạnh bài học tích cực ẩn giấu sau một biến cố vừa qua."
+    },
+    {
+      id: 607,
+      name: "Tần Số Rung Động Thuần Khiết",
+      category: "flow",
+      desc: "Nâng cao năng lượng của bạn bằng sự thuần khiết, biết ơn và thanh thản nội tâm.",
+      action: "Nói lời biết ơn cuộc đời mỗi sáng thức dậy và tối trước khi ngủ."
+    },
+    {
+      id: 608,
+      name: "Duyên Khởi & Buông Xả",
+      category: "flow",
+      desc: "Vạn vật đến do duyên và đi cũng do duyên; an nhiên mỉm cười trước mọi hợp tan.",
+      action: "Buông bỏ một sự níu kéo trong tâm trí về một điều không thể thay đổi."
+    },
+    {
+      id: 609,
+      name: "Sự Thiêng Liêng Vạn Vật",
+      category: "flow",
+      desc: "Mỗi nhành cây, ngọn cỏ, giọt sương đều mang trong mình sự sống thiêng liêng nhiệm màu.",
+      action: "Chạm nhẹ vào một chiếc lá cây và cảm nhận sự kỳ diệu của mẹ thiên nhiên."
+    },
+    {
+      id: 610,
+      name: "Lắng Nghe Trực Giác",
+      category: "wisdom",
+      desc: "Khi tâm trí hoàn toàn tĩnh lặng, tiếng nói linh thiêng sâu thẳm bên trong sẽ cất lời.",
+      action: "Dành một khoảng lặng lắng nghe trực giác trước khi quyết định việc quan trọng."
+    },
+    {
+      id: 611,
+      name: "Vô Ngã & Tự Tại",
+      category: "wisdom",
+      desc: "Càng bớt bám chấp vào cái 'tôi' bé nhỏ, bạn càng hòa nhập vào sự rộng lớn tự do.",
+      action: "Lắng nghe quan điểm của người khác mà không cần phải chứng minh mình đúng."
+    },
+    {
+      id: 612,
+      name: "Viên Mãn Trong Tâm",
+      category: "flow",
+      desc: "Hạnh phúc không nằm ở những gì bạn tích lũy, mà ở sự viên mãn tròn đầy trong tâm hồn.",
+      action: "Cảm nhận sự đủ đầy của giây phút hiện tại, tâm không còn mong cầu thêm."
+    }
+  ],
+  'tien-hon-nhan': [
+    {
+      id: 701,
+      name: "Yêu Tỉnh Thức Không Mù Quáng",
+      category: "love",
+      desc: "Tình yêu chân thực là nhìn rõ cả ưu và khuyết điểm nhưng vẫn chọn thấu hiểu đồng hành.",
+      action: "Ngồi lại viết ra những giá trị cốt lõi bạn tìm kiếm ở người bạn đời tương lai."
+    },
+    {
+      id: 702,
+      name: "Hòa Hợp Giá Trị Sống",
+      category: "wisdom",
+      desc: "Hôn nhân bền vững xây dựng trên sự đồng điệu về nhân sinh quan và lý tưởng sống.",
+      action: "Cùng người yêu thảo luận cởi mở về quan điểm gia đình và mục tiêu cuộc đời."
+    },
+    {
+      id: 703,
+      name: "Minh Bạch Về Tài Chính",
+      category: "discipline",
+      desc: "Tình yêu lãng mạn nhưng hôn nhân thực tế; hãy rõ ràng về tài chính ngay từ trước.",
+      action: "Thẳng thắn chia sẻ về thói quen chi tiêu và kế hoạch tích lũy dài hạn cùng nhau."
+    },
+    {
+      id: 704,
+      name: "Nhận Diện Khác Biệt",
+      category: "wisdom",
+      desc: "Đừng lờ đi những bất đồng căn bản chỉ vì hy vọng hôn nhân sẽ tự thay đổi đối phương.",
+      action: "Can đảm nhìn nhận thẳng thắn những điểm chưa tương thích để cùng đối thoại."
+    },
+    {
+      id: 705,
+      name: "Sự Độc Lập Trước Khi Gắn Kết",
+      category: "wisdom",
+      desc: "Hai cái cây đứng vững chãi mới tạo nên khu rừng đẹp; đừng biến mình thành tầm gửi.",
+      action: "Vun bồi sự tự chủ về cảm xúc, công việc và cuộc sống của riêng bạn."
+    },
+    {
+      id: 706,
+      name: "Văn Hóa Giải Quyết Xung Đột",
+      category: "love",
+      desc: "Cách hai người tranh cãi và làm hòa trước hôn nhân sẽ dự báo tương lai tổ ấm.",
+      action: "Học cách hạ cái tôi khi có bất đồng, tập trung giải quyết vấn đề thay vì công kích."
+    },
+    {
+      id: 707,
+      name: "Tôn Trọng Gia Đình Hai Bên",
+      category: "love",
+      desc: "Hôn nhân là sự kết nối của hai dòng họ; sự hòa hợp cần sự tôn trọng chân thành.",
+      action: "Gửi lời hỏi thăm chu đáo đến phụ huynh hoặc người thân của người yêu."
+    },
+    {
+      id: 708,
+      name: "Trách Nhiệm & Sự Cam Kết",
+      category: "discipline",
+      desc: "Cam kết là chọn yêu người ấy ngay cả trong những ngày cảm xúc lãng mạn lắng xuống.",
+      action: "Khẳng định sự nghiêm túc và niềm tin vững chắc vào tương lai chung của hai người."
+    },
+    {
+      id: 709,
+      name: "Đồng Nhất Quan Điểm Con Cái",
+      category: "wisdom",
+      desc: "Nuôi dạy con cái là trách nhiệm thiêng liêng cần sự thống nhất tư tưởng từ sớm.",
+      action: "Trao đổi chân thành về mong muốn sinh con và phương pháp giáo dục trong tương lai."
+    },
+    {
+      id: 710,
+      name: "Không Đánh Mất Chính Mình",
+      category: "wisdom",
+      desc: "Một tình yêu lành mạnh sẽ làm bạn tỏa sáng hơn chứ không làm mờ đi bản sắc của bạn.",
+      action: "Duy trì sở thích cá nhân và những mối quan hệ bạn bè tích cực của bạn."
+    },
+    {
+      id: 711,
+      name: "Thấu Hiểu Ngôn Ngữ Tình Yêu",
+      category: "love",
+      desc: "Mỗi người có một cách cảm nhận tình yêu khác nhau; hãy học ngôn ngữ của người ấy.",
+      action: "Hỏi người ấy xem điều gì làm họ cảm thấy được yêu thương và trân trọng nhất."
+    },
+    {
+      id: 712,
+      name: "Chuẩn Bị Tâm Thế Vững Vàng",
+      category: "flow",
+      desc: "Hôn nhân không phải là đích đến, mà là điểm khởi đầu cho hành trình trưởng thành chung.",
+      action: "Đọc một cuốn sách tâm lý hôn nhân bổ ích hoặc tham gia buổi chia sẻ bổ ích."
+    }
+  ]
+};
+
+const TOPICS = {
+  'su-nghiep': {
+    id: 'su-nghiep',
+    num: 1,
+    name: 'Phát Triển Sự Nghiệp',
+    shortName: 'Sự Nghiệp',
+    colorName: 'Màu Đỏ',
+    color: '#DC2626',
+    secondaryColor: '#EF4444',
+    lightBg: '#FEF2F2',
+    accentGradient: 'linear-gradient(135deg, #DC2626 0%, #B91C1C 50%, #EF4444 100%)',
+    glowColor: 'rgba(220, 38, 38, 0.45)',
+    icon: 'compass',
+    tagline: 'Kỷ luật, bứt phá giới hạn và vươn tới đỉnh cao sự nghiệp',
+    description: 'Trạm năng lượng hành động giúp bạn củng cố bản lĩnh lãnh đạo, quản trị thời gian, kiên định mục tiêu và tạo ra những thành tựu vượt bậc.',
+    runes: ['⚡', '🎯', '🔥', '🦁', '👑', '🚀', '🏆', '💎', '🏔️', '⚔️', '🏹', '🌟'],
+    segmentLabels: ['BỨT PHÁ', 'KỶ LUẬT', 'MỤC TIÊU', 'DẪN ĐẦU', 'BẢN LĨNH', 'TẬP TRUNG', 'HÀNH ĐỘNG', 'KIÊN ĐỊNH', 'ĐỘT PHÁ', 'CHIẾN LƯỢC', 'SÁNG TẠO', 'VINH QUANG'],
+    totalCards: 12,
+    hasCustomImages: false,
+    messages: TOPIC_SEED_MESSAGES['su-nghiep']
+  },
+  'hon-nhan': {
+    id: 'hon-nhan',
+    num: 2,
+    name: 'Hôn Nhân Gia Đình',
+    shortName: 'Hôn Nhân',
+    colorName: 'Màu Cam',
+    color: '#EA580C',
+    secondaryColor: '#F97316',
+    lightBg: '#FFF7ED',
+    accentGradient: 'linear-gradient(135deg, #EA580C 0%, #C2410C 50%, #F97316 100%)',
+    glowColor: 'rgba(234, 88, 12, 0.45)',
+    icon: 'heart',
+    tagline: 'Gắn kết yêu thương, thấu hiểu và cùng nhau xây đắp tổ ấm',
+    description: 'Chỉ dẫn tâm lý giúp các cặp đôi vượt qua bất đồng, học cách lắng nghe bao dung và vun đắp ngọn lửa hạnh phúc gia đình bền chặt.',
+    runes: ['☀️', '🕊️', '🌿', '🧡', '🏡', '🤝', '🕯️', '🌸', '💫', '🌻', '🎁', '💖'],
+    segmentLabels: ['GẮN KẾT', 'THẤU HIỂU', 'LẮNG NGHE', 'ẤM ÁP', 'BAO DUNG', 'BÌNH YÊN', 'CHÂN THÀNH', 'ĐỒNG HÀNH', 'CHIA SẺ', 'TÔN TRỌNG', 'HÒA HỢP', 'TỔ ẤM'],
+    totalCards: 12,
+    hasCustomImages: false,
+    messages: TOPIC_SEED_MESSAGES['hon-nhan']
+  },
+  'nuoi-day-con': {
+    id: 'nuoi-day-con',
+    num: 3,
+    name: 'Nuôi Dạy Con Cái',
+    shortName: 'Nuôi Dạy Con',
+    colorName: 'Màu Xanh Lá',
+    color: '#16A34A',
+    secondaryColor: '#22C55E',
+    lightBg: '#F0FDF4',
+    accentGradient: 'linear-gradient(135deg, #16A34A 0%, #15803D 50%, #22C55E 100%)',
+    glowColor: 'rgba(22, 163, 74, 0.45)',
+    icon: 'sparkles',
+    tagline: 'Khai phóng tiềm năng, kiên nhẫn làm gương và bầu bạn cùng con',
+    description: 'Kho tàng thấu cảm tâm lý trẻ em từ TS. Sunny Đặng Phương, giúp cha mẹ nuôi dạy con bằng sự kiên nhẫn, yêu thương và trí tuệ.',
+    runes: ['🌱', '🌳', '🕊️', '🎨', '🧩', '🎈', '☀️', '⭐', '🌈', '🌻', '📚', '🤍'],
+    segmentLabels: ['KIÊN NHẪN', 'LÀM GƯƠNG', 'YÊU THƯƠNG', 'KHÍCH LỆ', 'THẤU CẢM', 'LẮNG NGHE', 'ĐỒNG HÀNH', 'TỰ LẬP', 'TIN TƯỞNG', 'VUN BỒI', 'TRÍ TUỆ', 'BẢO BỌC'],
+    totalCards: 12,
+    hasCustomImages: false,
+    messages: TOPIC_SEED_MESSAGES['nuoi-day-con']
+  },
+  'tri-tam-khai-sang': {
+    id: 'tri-tam-khai-sang',
+    num: 4,
+    name: 'Trí Tâm Khai Sáng',
+    shortName: 'Khai Sáng',
+    colorName: 'Màu Lam Ngọc',
+    color: '#0D9488',
+    secondaryColor: '#14B8A6',
+    lightBg: '#F0FDFA',
+    accentGradient: 'linear-gradient(135deg, #0D9488 0%, #0F766E 50%, #14B8A6 100%)',
+    glowColor: 'rgba(13, 148, 136, 0.45)',
+    icon: 'astrolabe',
+    tagline: '66 Hạt mầm tâm thức thức tỉnh trí tuệ và an trú hiện tại',
+    description: 'Bộ sưu tập 66 thông điệp khai sáng trọn vẹn của TS. Sunny Đặng Phương với tranh vẽ nghệ thuật, soi sáng tâm thức mỗi ngày.',
+    runes: ['✦', '✧', '★', '❂', '✺', '🜂', '🜁', '🜄', '🜃', '☼', '☽', '∞'],
+    segmentLabels: ['BÌNH AN', 'TRÍ TUỆ', 'HY VỌNG', 'CHỮA LÀNH', 'DỒI DÀO', 'TÌNH YÊU', 'KỶ LUẬT', 'BỀN BỈ', 'KHAI SÁNG', 'CHÁNH NIỆM', 'THONG DONG', 'PHÚC LẠC'],
+    totalCards: 66,
+    hasCustomImages: true,
+    messages: MESSAGES
+  },
+  'suc-khoe-tinh-than': {
+    id: 'suc-khoe-tinh-than',
+    num: 5,
+    name: 'Sức Khỏe Tinh Thần',
+    shortName: 'Tinh Thần',
+    colorName: 'Màu Chàm',
+    color: '#4F46E5',
+    secondaryColor: '#6366F1',
+    lightBg: '#EEF2FF',
+    accentGradient: 'linear-gradient(135deg, #4F46E5 0%, #4338CA 50%, #6366F1 100%)',
+    glowColor: 'rgba(79, 70, 229, 0.45)',
+    icon: 'feather',
+    tagline: 'Giải phóng âu lo, chữa lành tổn thương và tìm lại sự cân bằng',
+    description: 'Trạm sơ cứu và dưỡng tâm dành cho những ngày căng thẳng mỏi mệt, tiếp thêm sức mạnh nội tại để bạn mỉm cười bước tiếp.',
+    runes: ['🌊', '🕊️', '🌿', '💧', '🪷', '🌙', '🌌', '✨', '🍃', '🫧', '🕯️', '💜'],
+    segmentLabels: ['CHỮA LÀNH', 'AN YÊN', 'BUÔNG THƯ', 'TỰ TẠI', 'THỞ SÂU', 'BÌNH TÂM', 'GIẢI THOÁT', 'NỘI LỰC', 'DỊU DÀNG', 'PHỤC HỒI', 'THANH LỌC', 'VẸN NGUYÊN'],
+    totalCards: 12,
+    hasCustomImages: false,
+    messages: TOPIC_SEED_MESSAGES['suc-khoe-tinh-than']
+  },
+  'tam-linh': {
+    id: 'tam-linh',
+    num: 6,
+    name: 'Phát Triển Tâm Linh',
+    shortName: 'Tâm Linh',
+    colorName: 'Màu Gold',
+    color: '#D97706',
+    secondaryColor: '#F59E0B',
+    lightBg: '#FFFBEB',
+    accentGradient: 'linear-gradient(135deg, #D97706 0%, #B45309 50%, #F59E0B 100%)',
+    glowColor: 'rgba(217, 119, 6, 0.45)',
+    icon: 'crown',
+    tagline: 'Kết nối vũ trụ, thiền định thâm sâu và sống thuận dòng nhân quả',
+    description: 'Nâng cao tần số rung động tâm thức, cảm nhận sự kết nối màu nhiệm giữa bản thể với thiên nhiên và trật tự vĩ đại của vũ trụ.',
+    runes: ['☀️', '⚡', '🌌', '🕉️', '☸️', '☸', '✺', '⚜️', '🪐', '💫', '🪷', '♾️'],
+    segmentLabels: ['THUẬN DÒNG', 'THỨC TỈNH', 'TỰ TẠI', 'KẾT NỐI', 'VÔ LƯỢNG', 'BỒ ĐỀ', 'TỪ BI', 'LINH ỨNG', 'NHÂN DUYÊN', 'ÁNH SÁNG', 'HUYỀN DIỆU', 'VIÊN MÃN'],
+    totalCards: 12,
+    hasCustomImages: false,
+    messages: TOPIC_SEED_MESSAGES['tam-linh']
+  },
+  'tien-hon-nhan': {
+    id: 'tien-hon-nhan',
+    num: 7,
+    name: 'Yêu - Tiền Hôn Nhân',
+    shortName: 'Tiền Hôn Nhân',
+    colorName: 'Màu Tím',
+    color: '#9333EA',
+    secondaryColor: '#A855F7',
+    lightBg: '#FAF5FF',
+    accentGradient: 'linear-gradient(135deg, #9333EA 0%, #7E22CE 50%, #A855F7 100%)',
+    glowColor: 'rgba(147, 51, 234, 0.45)',
+    icon: 'heart',
+    tagline: 'Tình yêu tỉnh thức, hòa hợp giá trị sống và chuẩn bị cho hôn nhân',
+    description: 'Kim chỉ nam trước ngưỡng cửa hôn nhân: Nhận diện người đồng hành phù hợp, chuẩn bị tâm lý, tài chính và xây nền móng vững chắc cho tình yêu.',
+    runes: ['💎', '💍', '🕊️', '🔮', '💜', '🌸', '✨', '🤝', '🥂', '💌', '🌹', '♾️'],
+    segmentLabels: ['TỈNH THỨC', 'HÒA HỢP', 'ĐỒNG ĐIỆU', 'CAM KẾT', 'CHÂN THÀNH', 'NGUYÊN BẢN', 'TRÂN QUÝ', 'THẤU SUỐT', 'SẴN SÀNG', 'CHIA SẺ', 'TRAO GỞI', 'HẠNH PHÚC'],
+    totalCards: 12,
+    hasCustomImages: false,
+    messages: TOPIC_SEED_MESSAGES['tien-hon-nhan']
+  }
+};
+
+const TOPIC_LIST = [
+  TOPICS['su-nghiep'],
+  TOPICS['hon-nhan'],
+  TOPICS['nuoi-day-con'],
+  TOPICS['tri-tam-khai-sang'],
+  TOPICS['suc-khoe-tinh-than'],
+  TOPICS['tam-linh'],
+  TOPICS['tien-hon-nhan']
+];
+
+// Topic Helpers
+function getAllTopics() {
+  return TOPIC_LIST;
 }
 
-function getMessagesByCategory(catId) {
-  if (!catId || catId === 'all') return MESSAGES;
-  return MESSAGES.filter(m => m.category === catId);
+function getTopic(idOrNum) {
+  if (!idOrNum) return TOPICS['tri-tam-khai-sang'];
+  const s = String(idOrNum).toLowerCase().trim();
+  if (TOPICS[s]) return TOPICS[s];
+  // Check alias or number
+  if (s === '1' || s.includes('su-nghiep') || s.includes('nghiep')) return TOPICS['su-nghiep'];
+  if (s === '2' || s.includes('hon-nhan') || s.includes('gia-dinh')) return TOPICS['hon-nhan'];
+  if (s === '3' || s.includes('nuoi-day') || s.includes('con-cai')) return TOPICS['nuoi-day-con'];
+  if (s === '4' || s.includes('khai-sang') || s.includes('tri-tam')) return TOPICS['tri-tam-khai-sang'];
+  if (s === '5' || s.includes('suc-khoe') || s.includes('tinh-than')) return TOPICS['suc-khoe-tinh-than'];
+  if (s === '6' || s.includes('tam-linh')) return TOPICS['tam-linh'];
+  if (s === '7' || s.includes('tien-hon-nhan') || s.includes('yeu')) return TOPICS['tien-hon-nhan'];
+  return TOPICS['tri-tam-khai-sang'];
 }
 
-function getRandomMessage() {
-  const idx = Math.floor(Math.random() * MESSAGES.length);
-  return MESSAGES[idx];
+function getCurrentTopic() {
+  if (typeof window !== 'undefined') {
+    const params = new URLSearchParams(window.location.search);
+    const topicParam = params.get('topic');
+    if (topicParam) {
+      const topic = getTopic(topicParam);
+      if (topic) {
+        try { localStorage.setItem('vqtd_selected_topic', topic.id); } catch (_) {}
+        return topic;
+      }
+    }
+    try {
+      const saved = localStorage.getItem('vqtd_selected_topic');
+      if (saved) return getTopic(saved);
+    } catch (_) {}
+  }
+  return TOPICS['tri-tam-khai-sang'];
+}
+
+function setCurrentTopic(topicId) {
+  const topic = getTopic(topicId);
+  if (typeof window !== 'undefined') {
+    try { localStorage.setItem('vqtd_selected_topic', topic.id); } catch (_) {}
+  }
+  return topic;
+}
+
+function getMessagesForTopic(topicId) {
+  const topic = getTopic(topicId);
+  return topic ? topic.messages : MESSAGES;
+}
+
+// Helpers Override
+function getMessageById(id, topicId) {
+  const numId = Number(id);
+  if (topicId) {
+    const topic = getTopic(topicId);
+    if (topic) {
+      const found = topic.messages.find(m => m.id === numId);
+      if (found) return found;
+    }
+  }
+  // Try current active topic
+  const currentTopic = getCurrentTopic();
+  const inCurrent = currentTopic.messages.find(m => m.id === numId);
+  if (inCurrent) return inCurrent;
+
+  // Search across all topics
+  for (const t of TOPIC_LIST) {
+    const found = t.messages.find(m => m.id === numId);
+    if (found) return found;
+  }
+  return MESSAGES.find(m => m.id === numId) || null;
+}
+
+function getMessagesByCategory(catId, topicId) {
+  const list = topicId ? getMessagesForTopic(topicId) : getCurrentTopic().messages;
+  if (!catId || catId === 'all') return list;
+  return list.filter(m => m.category === catId);
+}
+
+function getRandomMessage(topicId) {
+  const list = topicId ? getMessagesForTopic(topicId) : getCurrentTopic().messages;
+  if (!list || list.length === 0) return MESSAGES[0];
+  const idx = Math.floor(Math.random() * list.length);
+  return list[idx];
 }

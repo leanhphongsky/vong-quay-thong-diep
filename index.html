@@ -2,12 +2,702 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Vòng Quay Thông Điệp Sống — Đang kết nối...</title>
-  <script>
-    window.location.replace('spin.html');
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Vòng Quay Thông Điệp Sống — TS. Sunny Đặng Phương</title>
+  <link rel="stylesheet" href="css/aos.css">
+  <link rel="stylesheet" href="css/global.css">
+  <style>
+    /* ── STYLES CHO TRANG CHỦ HOME GIỚI THIỆU ── */
+    .home-hero {
+      padding: clamp(50px, 8vw, 90px) 20px 40px;
+      text-align: center;
+      max-width: 960px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 2;
+    }
+
+    .home-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 18px;
+      background: var(--bg-card);
+      border: 1.5px solid rgba(221, 167, 58, 0.45);
+      border-radius: var(--r-pill);
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 22px;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+    }
+
+    .home-hero-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(2.1rem, 5.5vw, 3.6rem);
+      font-weight: 800;
+      line-height: 1.2;
+      color: var(--text-primary);
+      margin-bottom: 18px;
+      letter-spacing: -0.5px;
+    }
+
+    .home-hero-desc {
+      font-size: clamp(1rem, 2vw, 1.18rem);
+      color: var(--text-body);
+      max-width: 680px;
+      margin: 0 auto 32px;
+      line-height: 1.7;
+    }
+
+    .home-hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      margin-bottom: 40px;
+    }
+
+    .btn-hero-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      background: linear-gradient(135deg, #0D9488 0%, #0F766E 50%, #14B8A6 100%);
+      color: #FFFFFF;
+      font-weight: 800;
+      font-size: 0.98rem;
+      border-radius: var(--r-pill);
+      text-decoration: none;
+      box-shadow: 0 8px 24px rgba(13, 148, 136, 0.35);
+      transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .btn-hero-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px rgba(13, 148, 136, 0.5);
+      color: #FFFFFF;
+    }
+
+    .btn-hero-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      background: var(--bg-card);
+      color: var(--text-primary);
+      border: 1.5px solid var(--border);
+      font-weight: 700;
+      font-size: 0.95rem;
+      border-radius: var(--r-pill);
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .btn-hero-secondary:hover {
+      background: var(--bg-hover);
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* ── STATS BAR TRÊN HOME ── */
+    .home-stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 18px 24px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--r-xl);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .home-stat-item {
+      text-align: center;
+    }
+
+    .home-stat-num {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1.2;
+    }
+
+    .home-stat-label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+    }
+
+    /* ── SECTION 7 CHỦ ĐỀ PORTALS ── */
+    .home-topics-section {
+      max-width: 1180px;
+      margin: 60px auto 90px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .section-header-center {
+      text-align: center;
+      max-width: 720px;
+      margin: 0 auto 46px;
+    }
+
+    .section-eyebrow {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.25;
+    }
+
+    .section-desc {
+      font-size: 0.98rem;
+      color: var(--text-body);
+      line-height: 1.65;
+    }
+
+    /* ── LƯỚI 7 THẺ PORTAL ── */
+    .topics-portal-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .topic-portal-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-xl);
+      padding: 30px 26px 26px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .topic-portal-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 5px;
+      background: var(--topic-color, var(--accent));
+      transition: height 0.3s ease;
+    }
+
+    .topic-portal-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg), 0 16px 36px var(--topic-glow, rgba(0, 0, 0, 0.15));
+      border-color: var(--topic-color, var(--accent));
+    }
+
+    .topic-portal-card:hover::before {
+      height: 7px;
+    }
+
+    /* Thẻ đặc biệt Trí Tâm Khai Sáng (Featured Card) */
+    .topic-portal-card.is-featured {
+      border: 2px solid #0D9488;
+      box-shadow: var(--shadow-md), 0 12px 30px rgba(13, 148, 136, 0.22);
+      background: linear-gradient(180deg, var(--bg-card) 0%, rgba(13, 148, 136, 0.04) 100%);
+    }
+
+    .topic-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .topic-num-pill {
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 4px 12px;
+      border-radius: var(--r-pill);
+      background: var(--topic-soft, var(--bg-subtle));
+      color: var(--topic-color, var(--text-primary));
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topic-status-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--r-pill);
+      background: rgba(13, 148, 136, 0.14);
+      color: #0D9488;
+      border: 1px solid rgba(13, 148, 136, 0.3);
+    }
+
+    .topic-icon-orb {
+      width: 58px;
+      height: 58px;
+      border-radius: var(--r-lg);
+      background: var(--topic-soft, var(--bg-subtle));
+      color: var(--topic-color, var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      box-shadow: 0 4px 16px var(--topic-glow, rgba(0, 0, 0, 0.08));
+      transition: transform 0.3s ease;
+    }
+
+    .topic-portal-card:hover .topic-icon-orb {
+      transform: scale(1.08) rotate(4deg);
+    }
+
+    .topic-card-title {
+      font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.5px;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .topic-card-tagline {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: var(--topic-color, var(--accent));
+      margin-bottom: 12px;
+      line-height: 1.45;
+    }
+
+    .topic-card-desc {
+      font-size: 0.86rem;
+      color: var(--text-body);
+      line-height: 1.6;
+      margin-bottom: 22px;
+      flex-grow: 1;
+    }
+
+    .topic-card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 18px;
+      border-top: 1px dashed var(--border);
+      margin-top: auto;
+    }
+
+    .topic-footer-info {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--text-muted);
+    }
+
+    .topic-cta-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: var(--topic-color, var(--accent));
+      transition: gap 0.2s ease;
+    }
+
+    .topic-portal-card:hover .topic-cta-btn {
+      gap: 10px;
+    }
+
+    /* ── SECTION GIỚI THIỆU TÁC GIẢ ── */
+    .home-author-section {
+      max-width: 960px;
+      margin: 0 auto 90px;
+      padding: 0 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .home-author-card {
+      background: var(--bg-card);
+      border: 1.5px solid var(--border);
+      border-radius: var(--r-2xl);
+      padding: clamp(30px, 6vw, 50px);
+      box-shadow: var(--shadow-md);
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    .author-avatar-wrap {
+      width: clamp(120px, 20vw, 170px);
+      height: clamp(120px, 20vw, 170px);
+      border-radius: 50%;
+      border: 3px solid var(--accent-gold);
+      padding: 4px;
+      background: var(--bg-card);
+      box-shadow: 0 8px 30px rgba(221, 167, 58, 0.35);
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .author-avatar-img {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .author-quote-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--accent);
+      margin-bottom: 8px;
+    }
+
+    .author-title {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      line-height: 1.3;
+    }
+
+    .author-bio {
+      font-size: 0.94rem;
+      color: var(--text-body);
+      line-height: 1.7;
+      margin-bottom: 20px;
+    }
+
+    .author-quote-box {
+      background: var(--bg-subtle);
+      border-left: 3px solid var(--accent-gold);
+      padding: 14px 18px;
+      border-radius: 0 var(--r-md) var(--r-md) 0;
+      font-style: italic;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    /* ── FOOTER TRANG CHỦ ── */
+    .home-footer {
+      border-top: 1px solid var(--border);
+      background: var(--bg-card);
+      padding: 40px 20px 80px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .home-footer-brand {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .footer-copy {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 768px) {
+      .home-author-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 24px;
+      }
+      .author-avatar-wrap {
+        margin: 0 auto;
+      }
+      .author-quote-box {
+        text-align: left;
+      }
+      .home-stats-bar {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+  </style>
 </head>
-<body style="background:#FFFAF5;display:flex;align-items:center;justify-content:center;height:100vh;font-family:'Nunito',sans-serif;color:#6B4A3A;">
-  <p>Đang mở La Bàn Thông Điệp...</p>
+<body>
+
+  <!-- Kokonut Background Paths Ribbon Canvas -->
+  <div class="bg-paths-wrapper" id="bgPathsWrap" aria-hidden="true">
+    <canvas id="bgPathsCanvas" class="bg-paths-canvas"></canvas>
+  </div>
+
+  <!-- ======================================================================
+       1. TOP BAR (Fixed, Compact, Glassmorphic)
+       ====================================================================== -->
+  <header class="top-bar">
+    <a class="brand-link" href="index.html">
+      <span class="brand-logo-icon" data-svg="astrolabe"></span>
+      <span class="brand-title-wrap">
+        <span class="brand-line-1">VÒNG QUAY</span>
+        <span class="brand-line-2">THÔNG ĐIỆP SỐNG</span>
+      </span>
+    </a>
+
+    <div class="top-actions">
+      <!-- Nút vào nhanh Vòng quay -->
+      <a href="spin.html?topic=tri-tam-khai-sang" class="btn btn-primary btn-sm" style="display:inline-flex;padding:7px 16px;font-size:0.82rem;text-decoration:none;">
+        <span class="svg-icon-xs" data-svg="compass"></span>
+        <span>Vào Vòng Quay</span>
+      </a>
+
+      <!-- Dark/Light Mode Switcher -->
+      <button class="icon-btn" id="themeToggleBtn" aria-label="Đổi giao diện Sáng/Tối" title="Chuyển chế độ Sáng / Tối">
+        <span id="themeIcon" class="svg-icon-md" data-svg="sun"></span>
+      </button>
+
+      <!-- Tài khoản / Đăng nhập -->
+      <a href="login.html" class="icon-btn" aria-label="Đăng nhập tài khoản" title="Đăng nhập / Hồ sơ">
+        <span class="svg-icon-md" data-svg="user"></span>
+      </a>
+    </div>
+  </header>
+
+  <!-- ======================================================================
+       2. HERO GIỚI THIỆU TRANG CHỦ
+       ====================================================================== -->
+  <main>
+    <section class="home-hero" data-aos="fade-up" data-aos-duration="700">
+      <div class="home-hero-badge">
+        <span class="svg-icon-xs" data-svg="sparkles"></span>
+        <span>7 Vòng Quay Tâm Thức · TS. Sunny Đặng Phương</span>
+      </div>
+
+      <h1 class="home-hero-title">
+        Mỗi Vòng Quay Là Một Hành Trình<br>
+        <span style="background:linear-gradient(135deg, #E06D44 0%, #DDA73A 50%, #0D9488 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Khai Mở Tâm Thức</span>
+      </h1>
+
+      <p class="home-hero-desc">
+        Hệ thống 7 vòng quay chuyên sâu được thiết kế riêng biệt cho từng khía cạnh cuộc đời. Hãy dành ra 2 phút lắng đọng mỗi ngày để đón nhận thông điệp chỉ dẫn và nuôi dưỡng năng lượng bình an.
+      </p>
+
+      <div class="home-hero-actions">
+        <a href="#topicsSection" class="btn-hero-primary">
+          <span class="svg-icon-sm" data-svg="astrolabe"></span>
+          <span>Khám Phá 7 Chủ Đề</span>
+        </a>
+        <a href="spin.html?topic=tri-tam-khai-sang" class="btn-hero-secondary">
+          <span class="svg-icon-sm" data-svg="compass"></span>
+          <span>Quay Ngay: Trí Tâm Khai Sáng (66 Hạt Mầm)</span>
+        </a>
+      </div>
+
+      <!-- Quick Stats -->
+      <div class="home-stats-bar">
+        <div class="home-stat-item">
+          <div class="home-stat-num">7</div>
+          <div class="home-stat-label">Chủ Đề Cuộc Sống</div>
+        </div>
+        <div class="home-stat-item">
+          <div class="home-stat-num" style="color:#0D9488;">66+</div>
+          <div class="home-stat-label">Hạt Mầm Trí Tuệ</div>
+        </div>
+        <div class="home-stat-item">
+          <div class="home-stat-num" style="color:#DDA73A;">100%</div>
+          <div class="home-stat-label">An Nhiên & Tĩnh Lặng</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         3. DANH SÁCH 7 CHỦ ĐỀ VÒNG QUAY (THE 7 PORTALS)
+         ====================================================================== -->
+    <section class="home-topics-section" id="topicsSection">
+      <div class="section-header-center" data-aos="fade-up">
+        <div class="section-eyebrow">✦ 7 TRỤ CỘT CUỘC ĐỜI ✦</div>
+        <h2 class="section-title">Chọn Vòng Quay Bạn Muốn Khai Mở</h2>
+        <p class="section-desc">Mỗi chủ đề sở hữu một vòng quay thiên văn riêng biệt với tông màu chủ đạo độc bản cùng những lời chỉ dẫn chuyển hóa tâm thức.</p>
+      </div>
+
+      <div class="topics-portal-grid" id="topicsGrid">
+        <!-- Rendered dynamically by JavaScript to guarantee synchronization -->
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         4. VỀ DỰ ÁN & TS. SUNNY ĐẶNG PHƯƠNG
+         ====================================================================== -->
+    <section class="home-author-section" id="aboutSection" data-aos="fade-up">
+      <div class="home-author-card">
+        <div class="author-avatar-wrap">
+          <img src="images/01.png" alt="TS. Sunny Đặng Phương" class="author-avatar-img" onerror="this.src='images/02.png'">
+        </div>
+        <div class="author-info-col">
+          <div class="author-quote-badge">
+            <span class="svg-icon-xs" data-svg="heart"></span> Người Đồng Sáng Lập & Chuyên Gia Tâm Lý
+          </div>
+          <h3 class="author-title">TS. Sunny Đặng Phương</h3>
+          <p class="author-bio">
+            Viện Tâm Lý SunnyCare và dự án <strong>Vòng Quay Thông Điệp Sống</strong> ra đời với sứ mệnh mang lại sự bình an nội tại, soi chiếu những góc khuất tâm hồn và giúp mỗi người sống trọn vẹn, tử tế và hạnh phúc hơn mỗi ngày.
+          </p>
+          <div class="author-quote-box">
+            "Khi bạn dành ra 2 phút mỗi sáng để lắng nghe chính mình, cả một ngày dài sau đó sẽ được bao bọc trong sự thông suốt và bình yên."
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ======================================================================
+       5. FOOTER TRANG CHỦ
+       ====================================================================== -->
+  <footer class="home-footer">
+    <div class="home-footer-brand">
+      <span class="brand-logo-icon" data-svg="astrolabe" style="width:34px;height:34px;color:#DDA73A;"></span>
+      <div style="font-family:'Plus Jakarta Sans',sans-serif;font-weight:800;font-size:1.1rem;letter-spacing:1px;color:var(--text-primary);margin-top:6px;">
+        VÒNG QUAY THÔNG ĐIỆP SỐNG
+      </div>
+      <div style="font-size:0.84rem;color:var(--text-muted);">
+        Bản quyền thuộc về Viện Tâm Lý SunnyCare & TS. Sunny Đặng Phương © 2026
+      </div>
+    </div>
+    <p class="footer-copy">
+      Trạm sạc tâm hồn trực tuyến — 7 Vòng quay chuyên sâu khai mở hạnh phúc & thành công.
+    </p>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/gsap.min.js"></script>
+  <script src="js/aos.js"></script>
+  <script src="js/icons.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/background-paths.js"></script>
+  <script>
+    // Khởi tạo icon và hiệu ứng nền
+    Icons.renderAll();
+    AOS.init({ duration: 650, once: true });
+
+    window.initBackgroundPaths('bgPathsCanvas', {
+      count: 38,
+      spread: 0.95,
+      angle: -8,
+      speed: 0.75,
+      interactive: true
+    });
+
+    // Dark/Light Theme Switcher
+    const themeBtn = document.getElementById('themeToggleBtn');
+    const themeIcon = document.getElementById('themeIcon');
+    const savedTheme = localStorage.getItem('vqtd_theme') || 'light';
+    if (savedTheme === 'dark') {
+      document.documentElement.classList.add('dark');
+      if (themeIcon) themeIcon.setAttribute('data-svg', 'moon');
+      Icons.renderAll();
+    }
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        localStorage.setItem('vqtd_theme', isDark ? 'dark' : 'light');
+        if (themeIcon) {
+          themeIcon.setAttribute('data-svg', isDark ? 'moon' : 'sun');
+          Icons.renderAll();
+        }
+      });
+    }
+
+    // Render 7 Topics Grid
+    function renderTopicsGrid() {
+      const grid = document.getElementById('topicsGrid');
+      if (!grid) return;
+
+      const topics = getAllTopics();
+      grid.innerHTML = topics.map(topic => {
+        const isKhaiSang = topic.id === 'tri-tam-khai-sang';
+        const statusHtml = isKhaiSang
+          ? `<span class="topic-status-badge">✦ 66 Hạt Mầm Sẵn Sàng ⭐</span>`
+          : `<span class="topic-num-pill" style="opacity:0.85;">Đang hoàn thiện tranh</span>`;
+
+        return `
+          <a href="spin.html?topic=${topic.id}" 
+             class="topic-portal-card ${isKhaiSang ? 'is-featured' : ''}" 
+             style="--topic-color:${topic.color};--topic-soft:${topic.lightBg};--topic-glow:${topic.glowColor};"
+             data-aos="fade-up"
+             title="Khám phá Vòng Quay ${topic.name}">
+            
+            <div>
+              <div class="topic-card-top">
+                <span class="topic-num-pill">
+                  <strong>0${topic.num}</strong> · ${topic.colorName}
+                </span>
+                ${statusHtml}
+              </div>
+
+              <div class="topic-icon-orb">
+                <span class="svg-icon-xl" data-svg="${topic.icon}"></span>
+              </div>
+
+              <h3 class="topic-card-title">
+                ${topic.name}
+              </h3>
+
+              <div class="topic-card-tagline">
+                ✦ ${topic.tagline}
+              </div>
+
+              <p class="topic-card-desc">
+                ${topic.description}
+              </p>
+            </div>
+
+            <div class="topic-card-footer">
+              <span class="topic-footer-info">
+                ${topic.messages.length} Lời Nhắn Chỉ Dẫn
+              </span>
+              <span class="topic-cta-btn">
+                <span>Vào Vòng Quay</span>
+                <span>→</span>
+              </span>
+            </div>
+          </a>
+        `;
+      }).join('');
+
+      Icons.renderAll();
+    }
+
+    renderTopicsGrid();
+  </script>
 </body>
 </html>

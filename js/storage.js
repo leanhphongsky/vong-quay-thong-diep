@@ -229,14 +229,16 @@ async function syncDataFromSupabase(userId) {
   }
 }
 
-async function recordSpinToCloud(messageId) {
+async function recordSpinToCloud(messageId, topicId = 'tri-tam-khai-sang') {
   const user = getLocalUser();
   const today = getTodayStr();
   const userId = user?.id;
+  const tId = topicId || (typeof getCurrentTopic === 'function' ? getCurrentTopic().id : 'tri-tam-khai-sang');
 
   let history = getLocalHistory(userId);
-  if (!history.find(h => h.date === today)) {
-    history.unshift({ date: today, messageId, note: '', actionDone: false });
+  const existingToday = history.find(h => h.date === today && (h.topicId === tId || (!h.topicId && tId === 'tri-tam-khai-sang')));
+  if (!existingToday) {
+    history.unshift({ date: today, messageId, topicId: tId, note: '', actionDone: false });
     saveLocalHistory(history, userId);
   }
 
@@ -254,12 +256,23 @@ async function recordSpinToCloud(messageId) {
 
   if (sbClient && user && user.id && user.id !== 'guest') {
     try {
-      const { error: insErr } = await sbClient.from('spin_history').insert({
+      // Thử chèn có trường topic_id, nếu bảng cũ chưa có cột thì fallback chèn cơ bản
+      let { error: insErr } = await sbClient.from('spin_history').insert({
         user_id: user.id,
         message_id: messageId,
-        spin_date: today
+        spin_date: today,
+        topic_id: tId
       });
-      if (insErr) console.warn("Lỗi lưu spin_history lên Cloud:", insErr.message);
+      if (insErr && insErr.message && insErr.message.includes('topic_id')) {
+        const { error: fbErr } = await sbClient.from('spin_history').insert({
+          user_id: user.id,
+          message_id: messageId,
+          spin_date: today
+        });
+        if (fbErr) console.warn("Lỗi lưu spin_history fallback lên Cloud:", fbErr.message);
+      } else if (insErr) {
+        console.warn("Lỗi lưu spin_history lên Cloud:", insErr.message);
+      }
 
       const { error: profErr } = await sbClient.from('profiles').upsert({
         id: user.id,
@@ -331,13 +344,22 @@ function saveUser(u) {
 function clearUser() { clearLocalUser(); }
 function getHistory() { return getLocalHistory(); }
 function getStreak() { return getLocalStreak(); }
-function getTodaySpin() {
+function getTodaySpin(topicId) {
   const history = getLocalHistory();
-  return history.find(h => h.date === getTodayStr()) || null;
+  const today = getTodayStr();
+  if (topicId) {
+    return history.find(h => h.date === today && (h.topicId === topicId || (!h.topicId && topicId === 'tri-tam-khai-sang'))) || null;
+  }
+  return history.find(h => h.date === today) || null;
 }
-function hasSpunToday() { return getTodaySpin() !== null; }
-function uniqueMessagesCount() {
-  const ids = new Set(getLocalHistory().map(h => h.messageId));
+function hasSpunToday(topicId) { return getTodaySpin(topicId) !== null; }
+function uniqueMessagesCount(topicId) {
+  const history = getLocalHistory();
+  if (topicId) {
+    const filtered = history.filter(h => (h.topicId === topicId) || (!h.topicId && topicId === 'tri-tam-khai-sang'));
+    return new Set(filtered.map(h => h.messageId)).size;
+  }
+  const ids = new Set(history.map(h => h.messageId));
   return ids.size;
 }
 
