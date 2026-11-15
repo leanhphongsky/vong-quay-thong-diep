@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Đăng Nhập — Vòng Quay Thông Điệp</title>
+  <title>Đăng Nhập — Vòng Quay Thông Điệp Sống</title>
   <link rel="stylesheet" href="css/aos.css">
   <link rel="stylesheet" href="css/global.css">
   <style>
@@ -46,10 +46,32 @@
     .auth-header h1 {
       font-family: 'Plus Jakarta Sans', 'Be Vietnam Pro', sans-serif;
       color: white;
-      font-size: 1.35rem;
+      margin-bottom: 6px;
+      line-height: 1.25;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+    }
+
+    .auth-brand-line-1 {
+      display: block;
+      white-space: nowrap;
+      font-size: 1.45rem;
       font-weight: 800;
-      letter-spacing: 1.5px;
-      margin-bottom: 4px;
+      letter-spacing: 2px;
+      color: #FFFFFF;
+      text-transform: uppercase;
+    }
+
+    .auth-brand-line-2 {
+      display: block;
+      white-space: nowrap;
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 1.2px;
+      color: #FDE68A;
+      text-transform: uppercase;
     }
 
     .auth-header p {
@@ -255,7 +277,10 @@
     <!-- Header -->
     <div class="auth-header">
       <div class="auth-logo" style="display:flex;align-items:center;justify-content:center;color:#FDE68A;"><span class="svg-icon-xl" data-svg="astrolabe"></span></div>
-      <h1>VÒNG QUAY THÔNG ĐIỆP</h1>
+      <h1>
+        <span class="auth-brand-line-1">VÒNG QUAY</span>
+        <span class="auth-brand-line-2">THÔNG ĐIỆP SỐNG</span>
+      </h1>
       <p>Trạm sạc tâm hồn & đón nhận chỉ dẫn mỗi ngày</p>
     </div>
 
@@ -406,6 +431,22 @@
       btn.textContent = 'Đang kết nối...';
 
       try {
+        // Tài khoản Admin Sunny chính thức
+        if (email.toLowerCase() === 'dangphuongvietnam@gmail.com' && pwd === '0987037068') {
+          if (typeof setAdminSession === 'function') setAdminSession(true);
+          saveUser({
+            id: 'admin_sunny',
+            name: 'TS. Sunny Đặng Phương',
+            email: 'dangphuongvietnam@gmail.com',
+            role: 'admin'
+          });
+          if (typeof loginWithEmail === 'function') {
+            try { await loginWithEmail(email, pwd); } catch (_) {}
+          }
+          location.href = 'spin.html';
+          return;
+        }
+
         await loginWithEmail(email, pwd);
         location.href = 'spin.html';
       } catch (err) {
@@ -447,10 +488,10 @@
     }
 
     function handleAdminLogin() {
-      const code = prompt('Nhập mật mã quản trị viên Sunny (Mặc định: sunny2026):', 'sunny2026');
-      if (code === 'sunny2026' || code === 'admin' || code === 'sunny') {
+      const code = prompt('Nhập mật khẩu quản trị viên Sunny (dangphuongvietnam@gmail.com):', '0987037068');
+      if (code === '0987037068' || code === 'sunny2026' || code === 'admin' || code === 'sunny') {
         if (typeof setAdminSession === 'function') setAdminSession(true);
-        saveUser({ id: 'admin', name: 'Sunny (Chủ Trang)', email: 'chuyengiatamlysunny@gmail.com', role: 'admin' });
+        saveUser({ id: 'admin_sunny', name: 'TS. Sunny Đặng Phương', email: 'dangphuongvietnam@gmail.com', role: 'admin' });
         location.href = 'spin.html';
       } else if (code !== null) {
         showError('loginError', 'Mật mã quản trị viên không chính xác!');

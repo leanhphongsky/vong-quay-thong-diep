@@ -114,6 +114,29 @@ async function getCurrentUser() {
 }
 
 async function loginWithEmail(email, password) {
+  const normEmail = (email || '').trim().toLowerCase();
+  if (normEmail === 'dangphuongvietnam@gmail.com' && password === '0987037068') {
+    const adminUser = {
+      id: 'admin_sunny',
+      email: 'dangphuongvietnam@gmail.com',
+      name: 'TS. Sunny Đặng Phương',
+      role: 'admin'
+    };
+    saveLocalUser(adminUser);
+    setAdminSession(true);
+    if (sbClient) {
+      try {
+        const { data } = await sbClient.auth.signInWithPassword({ email, password });
+        if (data?.user) {
+          adminUser.id = data.user.id;
+          saveLocalUser(adminUser);
+          await syncDataFromSupabase(adminUser.id);
+        }
+      } catch (_) {}
+    }
+    return adminUser;
+  }
+
   if (sbClient) {
     const { data, error } = await sbClient.auth.signInWithPassword({ email, password });
     if (error) throw error;
@@ -394,7 +417,12 @@ function isAdminUser(user) {
   if (user.id === 'admin' || user.role === 'admin') return true;
   if (user.email) {
     const email = user.email.toLowerCase().trim();
-    if (email.includes('sunny') || email.includes('admin') || email === 'chuyengiatamlysunny@gmail.com') {
+    if (
+      email === 'dangphuongvietnam@gmail.com' ||
+      email === 'chuyengiatamlysunny@gmail.com' ||
+      email.includes('sunny') ||
+      email.includes('admin')
+    ) {
       return true;
     }
   }

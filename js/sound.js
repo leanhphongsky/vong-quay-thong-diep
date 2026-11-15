@@ -1,6 +1,7 @@
 // ============================================================
-// SOUND ENGINE — Web Audio API Synthesizer (Thiền định & Tương tác)
-// Không cần tải file audio nặng, tạo âm thanh tự nhiên trực tiếp
+// SOUND ENGINE — Web Audio API Synthesizer (Thiền định & Tương tác Dịu Êm)
+// Âm thanh hữu cơ (Organic Acoustic Taps, Solfeggio 528Hz Chime & Singing Bowl)
+// Không chói gắt, không rè, mang lại cảm giác bình an thư giãn
 // ============================================================
 
 class SoundEngine {
@@ -32,32 +33,94 @@ class SoundEngine {
     return this.muted;
   }
 
-  // Tiếng kim khẩy nhẹ qua từng nấc của vòng quay
-  playTick(pitchRatio = 1.0) {
+  // Tiếng chạm nút hữu cơ, nhẹ nhàng, thanh thoát (Soft Organic Wooden Tap)
+  playClick() {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
 
     const now = this.ctx.currentTime;
-    if (now - this.lastTickTime < 0.03) return; // Tránh rè khi quay quá nhanh
-    this.lastTickTime = now;
-
     try {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
 
-      osc.type = 'triangle';
-      osc.frequency.setValueAtTime(600 * pitchRatio, now);
-      osc.frequency.exponentialRampToValueAtTime(150, now + 0.04);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(540, now);
+      osc.frequency.exponentialRampToValueAtTime(320, now + 0.035);
 
-      gain.gain.setValueAtTime(0.12, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+      gain.gain.setValueAtTime(0.045, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.035);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
       osc.start(now);
       osc.stop(now + 0.04);
+    } catch (_) {}
+  }
+
+  // Tiếng kim khẩy nhẹ qua từng nấc của vòng quay (Soft Wooden Clockwork Tick)
+  playTick(pitchRatio = 1.0) {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    if (now - this.lastTickTime < 0.028) return; // Chống dội âm khi quay nhanh
+    this.lastTickTime = now;
+
+    try {
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+
+      osc.type = 'sine';
+      const baseFreq = 420 * Math.max(0.7, Math.min(1.4, pitchRatio));
+      osc.frequency.setValueAtTime(baseFreq, now);
+      osc.frequency.exponentialRampToValueAtTime(220, now + 0.025);
+
+      gain.gain.setValueAtTime(0.035, now);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.025);
+
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+
+      osc.start(now);
+      osc.stop(now + 0.028);
+    } catch (_) {}
+  }
+
+  // Âm chuông ngân thanh tịnh 528Hz (Solfeggio Miracle Tone + Harmony)
+  playChime() {
+    if (this.muted) return;
+    this.init();
+    if (!this.ctx) return;
+
+    const now = this.ctx.currentTime;
+    // Tần số 528Hz (Tình yêu & Phục hồi) + 792Hz (Hài âm thuần khiết)
+    const tones = [
+      { freq: 528, gain: 0.06, decay: 1.1 },
+      { freq: 792, gain: 0.03, decay: 0.9 },
+      { freq: 1056, gain: 0.015, decay: 0.7 }
+    ];
+
+    try {
+      tones.forEach(t => {
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(t.freq, now);
+
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(t.gain, now + 0.03); // Soft attack 30ms
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + t.decay);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+
+        osc.start(now);
+        osc.stop(now + t.decay + 0.05);
+      });
     } catch (_) {}
   }
 
@@ -69,7 +132,7 @@ class SoundEngine {
 
     const now = this.ctx.currentTime;
     const freqs = [432, 864, 1296, 1728]; // Chuỗi hài âm thiền định
-    const gains = [0.25, 0.12, 0.06, 0.03];
+    const gains = [0.18, 0.09, 0.045, 0.02];
 
     try {
       freqs.forEach((freq, idx) => {
@@ -78,45 +141,24 @@ class SoundEngine {
 
         osc.type = 'sine';
         osc.frequency.setValueAtTime(freq, now);
-        // Dao động nhẹ tần số tạo cảm giác chuông ngân
-        osc.frequency.linearRampToValueAtTime(freq * 0.998, now + 3.5);
+        osc.frequency.linearRampToValueAtTime(freq * 0.998, now + 3.2);
 
-        gain.gain.setValueAtTime(gains[idx], now);
-        gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.5);
+        gain.gain.setValueAtTime(0.0001, now);
+        gain.gain.linearRampToValueAtTime(gains[idx], now + 0.04);
+        gain.gain.exponentialRampToValueAtTime(0.0001, now + 3.2);
 
         osc.connect(gain);
         gain.connect(this.ctx.destination);
 
         osc.start(now);
-        osc.stop(now + 3.5);
+        osc.stop(now + 3.3);
       });
     } catch (_) {}
   }
 
-  // Tiếng bóc con dấu sáp cổ điển
+  // Thay thế tiếng nứt dấu sáp cũ bằng âm chạm êm ái
   playWaxCrack() {
-    if (this.muted) return;
-    this.init();
-    if (!this.ctx) return;
-
-    const now = this.ctx.currentTime;
-    try {
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-
-      osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(320, now);
-      osc.frequency.exponentialRampToValueAtTime(80, now + 0.12);
-
-      gain.gain.setValueAtTime(0.18, now);
-      gain.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
-
-      osc.connect(gain);
-      gain.connect(this.ctx.destination);
-
-      osc.start(now);
-      osc.stop(now + 0.12);
-    } catch (_) {}
+    this.playClick();
   }
 }
 

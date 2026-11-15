@@ -304,6 +304,31 @@ p {
   user-select: none;
 }
 
+.brand-title-wrap {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+  text-align: left;
+}
+
+.brand-line-1 {
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  font-weight: 800;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
+.brand-line-2 {
+  font-size: 0.92rem;
+  letter-spacing: 0.6px;
+  color: var(--accent);
+  font-weight: 800;
+  white-space: nowrap;
+  text-transform: uppercase;
+}
+
 .brand-logo-icon {
   width: 28px;
   height: 28px;
@@ -3520,19 +3545,20 @@ p {
 
 .chill-main-stage {
   display: flex;
-  gap: 24px;
-  align-items: stretch;
+  justify-content: center;
+  align-items: center;
   margin-bottom: 32px;
 }
 
-/* Cột Trái: Đĩa than Vinyl & Trình phát nhạc */
+/* Cột Trái: Đĩa than Vinyl & Trình phát nhạc trung tâm */
 .chill-player-card {
-  flex: 1 1 42%;
-  min-width: 310px;
+  flex: 0 1 500px;
+  width: 100%;
+  max-width: 500px;
   background: var(--bg-card);
   border: 1.5px solid rgba(221, 167, 58, 0.35);
-  border-radius: var(--r-lg);
-  padding: 28px 24px;
+  border-radius: var(--r-xl);
+  padding: 30px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -3540,6 +3566,7 @@ p {
   box-shadow: var(--shadow-md), 0 10px 30px rgba(0, 0, 0, 0.25);
   position: relative;
   overflow: hidden;
+  margin: 0 auto;
 }
 
 .vinyl-disc-wrap {

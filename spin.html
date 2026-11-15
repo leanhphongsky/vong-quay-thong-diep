@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Vòng Quay Thông Điệp — Trạm Sạc Tâm Hồn</title>
+  <title>Vòng Quay Thông Điệp Sống — Trạm Sạc Tâm Hồn</title>
   <link rel="stylesheet" href="css/aos.css">
   <link rel="stylesheet" href="css/global.css">
 </head>
@@ -25,7 +25,10 @@
   <header class="top-bar">
     <a class="brand-link" onclick="switchTab('spin')">
       <span class="brand-logo-icon" data-svg="astrolabe"></span>
-      <span>THÔNG ĐIỆP</span>
+      <span class="brand-title-wrap">
+        <span class="brand-line-1">VÒNG QUAY</span>
+        <span class="brand-line-2">THÔNG ĐIỆP SỐNG</span>
+      </span>
     </a>
     <div class="top-actions">
       <!-- Admin Inbox Button (Dành riêng cho Mẹ / Sunny quản lý tâm sự) -->
@@ -202,20 +205,20 @@
     </section>
 
     <!-- ======================================================================
-         2C. VIEW 3: GÓC CHILL TÂM THỨC (Lofi Music & Synced Lyrics)
+         2C. VIEW 3: GÓC CHILL TÂM THỨC (Lofi Music Player)
          ====================================================================== -->
     <section id="viewChill" class="view-panel">
       <div class="hero-header" style="padding-bottom:var(--sp-sm);" data-aos="fade-down" data-aos-duration="600">
         <div class="eyebrow-pill"><span class="svg-icon-sm" data-svg="music"></span> Trạm Sạc An Yên</div>
-        <h1 class="hero-title" style="font-size:clamp(1.75rem,4vw,2.4rem);">Góc Chill & Lời Thiền Định</h1>
-        <p class="hero-desc">Thả lỏng tâm trí, hòa mình vào giai điệu Lofi êm dịu và những lời nhắn nuôi dưỡng tâm hồn.</p>
+        <h1 class="hero-title" style="font-size:clamp(1.75rem,4vw,2.4rem);">Góc Chill Thư Giãn</h1>
+        <p class="hero-desc">Thả lỏng tâm trí, hòa mình vào giai điệu Lofi êm dịu nuôi dưỡng sự an yên trong tâm hồn.</p>
       </div>
 
       <div class="chill-room-container">
-        <!-- Stage chính: Đĩa than Vinyl & Lời bài hát Lyrics song song -->
+        <!-- Stage chính: Đĩa than Vinyl & Trình phát trung tâm -->
         <div class="chill-main-stage" id="chillMainStage">
           
-          <!-- Cột Trái: Đĩa than Vinyl 3D phát sáng theo nhịp thở -->
+          <!-- Đĩa than Vinyl 3D phát sáng theo nhịp thở -->
           <div class="chill-player-card" id="chillPlayerCard">
             <div class="vinyl-disc-wrap">
               <div class="vinyl-disc-aura" id="vinylAura"></div>
@@ -274,27 +277,6 @@
             </div>
           </div>
 
-          <!-- Cột Phải: Bảng Hiệu Ứng Lời Bài Hát (Apple Music / Spotify Style Synced Lyrics) -->
-          <div class="chill-lyrics-card" id="chillLyricsCard">
-            <div class="lyrics-header">
-              <div class="lyrics-header-title">
-                <span class="svg-icon-sm" data-svg="feather" style="color:var(--accent-gold);"></span>
-                <span>Lời Nhắn Tâm Thức</span>
-              </div>
-              <button class="lyrics-mode-btn" onclick="toggleFullLyricsMode()" title="Chuyển chế độ xem">
-                <span class="svg-icon-xs" data-svg="search"></span> <span id="lyricsModeText">Toàn cảnh</span>
-              </button>
-            </div>
-
-            <div class="lyrics-stream-scroll" id="lyricsStreamScroll">
-              <!-- Rendered dynamically -->
-            </div>
-
-            <div class="lyrics-footer-hint">
-              <span class="svg-icon-xs" data-svg="sparkles"></span> Chạm vào bất kỳ dòng nào để phát ngay đoạn đó
-            </div>
-          </div>
-
         </div>
 
         <!-- Dải chọn nhanh 9 bài Lofi (Quick Mood Playlist) -->
@@ -315,7 +297,7 @@
        3. COMPACT MODERN MUSIC PLAYER BAR (48px Floating Pill with Live Visualizer)
        ====================================================================== -->
   <aside class="music-bar" id="musicPlayerBar">
-    <div class="music-bar-left" onclick="switchTab('chill')" title="Bấm để mở Góc Chill & Lời bài hát">
+    <div class="music-bar-left" onclick="switchTab('chill')" title="Bấm để mở Góc Chill thư giãn">
       <!-- Live Visualizer Bars -->
       <div class="music-visualizer-bars" id="musicEqBars">
         <div class="eq-bar-item"></div>
@@ -325,11 +307,9 @@
       </div>
       <div class="music-info-group">
         <span id="musicTrackTitle" class="music-title-marquee">Lofi 1 — Khởi Đầu Tĩnh Lặng</span>
-        <span id="musicMiniLyric" class="music-mini-lyric">♪ Chạm để xem lời thiền định...</span>
       </div>
     </div>
     <div class="music-bar-controls">
-      <button class="music-ctrl-btn" onclick="switchTab('chill')" title="Mở Góc Chill & Lời bài hát" aria-label="Góc Chill & Lời"><span class="svg-icon-xs" data-svg="feather"></span></button>
       <button class="music-ctrl-btn" onclick="bgMusic.prevTrack()" title="Bài trước" aria-label="Bài trước"><span class="svg-icon-sm" data-svg="skipBack"></span></button>
       <button class="music-play-btn" id="musicToggleBtn" onclick="bgMusic.togglePlay()" title="Phát / Dừng" aria-label="Phát hoặc dừng nhạc"><span class="svg-icon-sm" data-svg="play"></span></button>
       <button class="music-ctrl-btn" onclick="bgMusic.nextTrack()" title="Bài sau" aria-label="Bài sau"><span class="svg-icon-sm" data-svg="skipForward"></span></button>
@@ -525,8 +505,8 @@
        ====================================================================== -->
   <div class="ritual-modal-layer" id="ritualModal">
     
-    <!-- Phase 1: Wax Seal Envelope -->
-    <div class="seal-envelope-card" id="waxSealCard">
+    <!-- Phase 1: Wax Seal Envelope (Đã bỏ theo yêu cầu: Mở thẳng thông điệp khi quay xong) -->
+    <div class="seal-envelope-card" id="waxSealCard" style="display:none;">
       <div style="font-size:0.85rem;font-weight:800;color:var(--accent);text-transform:uppercase;margin-bottom:6px;letter-spacing:1px;">✦ LÁ THƯ TÂM THỨC ✦</div>
       <h2 style="font-size:1.4rem;margin-bottom:8px;font-family:'Playfair Display',serif;">Vũ Trụ Đã Gửi Lời Nhắn</h2>
       <p style="font-size:0.88rem;color:var(--text-muted);">Chạm vào con dấu sáp để khai mở thông điệp của bạn</p>
@@ -1691,30 +1671,13 @@
       setTimeout(() => openRitualModal(msg), 400);
     }
 
-    // ── 12. RITUAL MODAL (Wax Seal & Holographic Flip Card) ──
+    // ── 12. RITUAL MODAL (Mở thẳng thông điệp sau khi quay xong) ──
     function openRitualModal(msg) {
       const modal = document.getElementById('ritualModal');
       const waxCard = document.getElementById('waxSealCard');
       const letterCard = document.getElementById('letterRevealCard');
 
-      waxCard.style.display = 'block';
-      waxCard.style.opacity = '1';
-      waxCard.style.transform = 'none';
-      letterCard.classList.remove('show');
-
-      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
-        AppAnimations.openModal(modal, '#waxSealCard');
-      } else {
-        modal.classList.add('show');
-        document.body.style.overflow = 'hidden';
-      }
-
-      document.getElementById('flipStage').classList.remove('flipped');
-
-      const modalCard = document.getElementById('letterRevealCard');
-      const companionCol = document.getElementById('letterCompanionCol');
-      if (modalCard) modalCard.classList.remove('companion-collapsed');
-      if (companionCol) companionCol.classList.remove('open');
+      if (waxCard) waxCard.style.display = 'none';
 
       document.getElementById('letterCardImg').src = `images/${String(msg.id).padStart(2, '0')}.png`;
       document.getElementById('letterTitle').textContent = msg.name;
@@ -1734,6 +1697,19 @@
 
       openCompanionTab('confession');
       updateCompanionCollectionProgress();
+
+      letterCard.classList.add('show');
+      if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
+        AppAnimations.openModal(modal, '#letterRevealCard');
+      } else {
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+      }
+
+      // Tự động lật mặt tranh thông điệp, tung pháo hoa và phát chuông ngân dịu êm
+      document.getElementById('flipStage')?.classList.add('flipped');
+      launchConfettiEffect();
+      sounds.playChime();
     }
 
     let currentCompanionTab = 'confession';
@@ -2253,13 +2229,9 @@
       }
     }
 
-    // ── 16B. GÓC CHILL TÂM THỨC & HIỆU ỨNG LYRICS ĐỒNG BỘ ──
-    let isFullLyricsMode = false;
-    let currentActiveLyricIndex = -1;
-
+    // ── 16B. GÓC CHILL TÂM THỨC (LOFI PLAYER) ──
     function renderChillView() {
       renderChillSongInfo();
-      renderLyricsStream();
       renderChillPlaylistGrid();
       updateChillPlayState(bgMusic.isPlaying);
       updateChillProgress(bgMusic.audio.currentTime || 0, bgMusic.audio.duration || 0);
@@ -2275,79 +2247,6 @@
 
       if (titleEl) titleEl.textContent = song.title;
       if (moodEl) moodEl.textContent = `✦ ${song.mood || 'Chánh Niệm'} & Bình An`;
-    }
-
-    function renderLyricsStream() {
-      const container = document.getElementById('lyricsStreamScroll');
-      if (!container) return;
-      const lyrics = bgMusic.currentSongLyrics;
-      currentActiveLyricIndex = -1;
-
-      if (!lyrics || lyrics.length === 0) {
-        container.innerHTML = `
-          <div style="text-align:center;padding:40px 20px;color:var(--text-muted);">
-            <p>Giai điệu Lofi không lời thuần khiết</p>
-            <span style="font-size:0.8rem;opacity:0.7;">Thả lỏng tâm trí và tận hưởng từng nốt nhạc an yên</span>
-          </div>
-        `;
-        return;
-      }
-
-      container.innerHTML = lyrics.map((line, idx) => `
-        <div class="lyric-line" id="lyricLine_${idx}" onclick="jumpToLyricTime(${line.time}, ${idx})">
-          ${line.text}
-        </div>
-      `).join('');
-
-      updateLiveLyrics(bgMusic.audio.currentTime || 0);
-    }
-
-    function updateLiveLyrics(currentTime) {
-      const lyrics = bgMusic.currentSongLyrics;
-      if (!lyrics || !lyrics.length) return;
-
-      let activeIdx = 0;
-      for (let i = 0; i < lyrics.length; i++) {
-        if (currentTime >= lyrics[i].time) {
-          activeIdx = i;
-        } else {
-          break;
-        }
-      }
-
-      // Cập nhật live lyric trên thanh Mini Player Bar
-      const miniLyric = document.getElementById('musicMiniLyric');
-      if (miniLyric && lyrics[activeIdx]) {
-        miniLyric.textContent = `♪ ${lyrics[activeIdx].text.replace(/^✦\s*/, '')}`;
-      }
-
-      // Cập nhật dòng lyric nổi bật trên Chill Tab
-      if (activeIdx !== currentActiveLyricIndex) {
-        currentActiveLyricIndex = activeIdx;
-        const allLines = document.querySelectorAll('.lyric-line');
-        allLines.forEach((el, i) => {
-          el.classList.remove('active', 'past');
-          if (i === activeIdx) {
-            el.classList.add('active');
-            const scrollBox = document.getElementById('lyricsStreamScroll');
-            if (scrollBox) {
-              const topPos = el.offsetTop - scrollBox.offsetTop - (scrollBox.clientHeight / 2) + (el.clientHeight / 2);
-              scrollBox.scrollTo({ top: Math.max(0, topPos), behavior: 'smooth' });
-            }
-          } else if (i < activeIdx) {
-            el.classList.add('past');
-          }
-        });
-      }
-    }
-
-    function jumpToLyricTime(seconds, idx) {
-      if (bgMusic) {
-        bgMusic.seekTo(seconds);
-        if (!bgMusic.isPlaying) bgMusic.play();
-        sounds.playWaxCrack();
-        showToast('Đã chuyển đến lời bài hát');
-      }
     }
 
     function onChillProgressClick(e) {
@@ -2400,17 +2299,6 @@
       }
     }
 
-    function toggleFullLyricsMode() {
-      const stage = document.getElementById('chillMainStage');
-      const modeText = document.getElementById('lyricsModeText');
-      if (!stage) return;
-      isFullLyricsMode = !isFullLyricsMode;
-      stage.classList.toggle('full-lyrics', isFullLyricsMode);
-      if (modeText) {
-        modeText.textContent = isFullLyricsMode ? 'Thu nhỏ' : 'Toàn cảnh';
-      }
-    }
-
     function renderChillPlaylistGrid() {
       const grid = document.getElementById('chillTrackGrid');
       if (!grid) return;
@@ -2421,7 +2309,7 @@
           <div class="chill-track-item ${isCurrent ? 'playing' : ''}" onclick="selectChillTrack(${song.id})">
             <div class="chill-track-info">
               <div class="chill-track-name">${song.title}</div>
-              <div class="chill-track-sub">✦ ${song.mood} · ${(song.lyrics || []).length} câu thiền định</div>
+              <div class="chill-track-sub">✦ ${song.mood} · Giai điệu thư giãn</div>
             </div>
             <div class="chill-track-badge">
               ${isCurrent && bgMusic.isPlaying ? 'Đang phát' : 'Phát'}
@@ -2434,19 +2322,16 @@
     function selectChillTrack(id) {
       bgMusic.playSongById(id);
       renderChillSongInfo();
-      renderLyricsStream();
       renderChillPlaylistGrid();
       updateChillPlayState(true);
     }
 
     window.onMusicTimeUpdate = (currentTime, duration) => {
       updateChillProgress(currentTime, duration);
-      updateLiveLyrics(currentTime);
     };
 
     window.onMusicSongChange = (song) => {
       renderChillSongInfo();
-      renderLyricsStream();
       renderChillPlaylistGrid();
       updateChillPlayState(bgMusic.isPlaying);
     };
@@ -2672,8 +2557,8 @@
 
     async function openAdminInboxModal() {
       if (!isAdminUser(currentUser)) {
-        const pass = prompt('Xin chào! Vui lòng nhập mã bảo mật Quản Trị Viên của TS. Sunny Đặng Phương:');
-        if (pass && (pass.trim().toLowerCase() === 'sunny2026' || pass.trim().toLowerCase() === 'sunnycare' || pass.trim().toLowerCase() === 'sunny')) {
+        const pass = prompt('Xin chào! Vui lòng nhập mật mã Quản Trị Viên (TS. Sunny Đặng Phương):');
+        if (pass && (pass.trim() === '0987037068' || pass.trim().toLowerCase() === 'sunny2026' || pass.trim().toLowerCase() === 'sunnycare' || pass.trim().toLowerCase() === 'sunny')) {
           setAdminSession(true);
           showToast('Xác thực thành công! Xin chào TS. Sunny Đặng Phương.');
           await syncAdminVisibility();
