@@ -148,7 +148,8 @@
           const currentSeg = Math.floor((currentAngle % (Math.PI * 2)) / segAngle);
           if (currentSeg !== lastSegIndex) {
             lastSegIndex = currentSeg;
-            if (onTick) onTick(tween.progress());
+            const prog = this && typeof this.progress === 'function' ? this.progress() : 0.5;
+            if (onTick) onTick(prog);
 
             // Nhịp kim chỉ hồi chuyển bằng GSAP micro-kick
             if (pointerPin) {

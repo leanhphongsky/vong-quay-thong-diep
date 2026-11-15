@@ -91,7 +91,7 @@
 
       <!-- Wheel Arena Section -->
       <div class="wheel-arena">
-        <div class="wheel-disc-container" id="wheelDiscWrap">
+        <div class="wheel-disc-container" id="wheelDiscWrap" onclick="handleSpinStart()" title="Chạm vào vòng quay để đón nhận thông điệp" style="cursor:pointer;">
           <!-- Vành đai chòm sao thiên văn quay chậm -->
           <div class="wheel-astral-ring"></div>
 
@@ -1420,8 +1420,9 @@
 
       currentUser = await getCurrentUser();
       if (!currentUser) {
-        location.href = 'login.html';
-        return;
+        // Tự động khởi tạo phiên Khách để người dùng trải nghiệm quay ngay mà không bị chặn điều hướng
+        currentUser = { id: 'guest', name: 'Người Bạn Bình An', email: '' };
+        saveLocalUser(currentUser);
       }
 
       syncDrawerProfile();
@@ -1435,7 +1436,8 @@
 
       const hr = new Date().getHours();
       const greeting = hr < 12 ? 'Buổi Sáng' : hr < 18 ? 'Buổi Chiều' : 'Buổi Tối';
-      document.getElementById('greetingTime').textContent = greeting;
+      const greetingEl = document.getElementById('greetingTime');
+      if (greetingEl) greetingEl.textContent = greeting;
       
       const viDateStr = new Date().toLocaleDateString('vi-VN', {
         weekday: 'long',
@@ -1443,7 +1445,8 @@
         month: 'long',
         day: 'numeric'
       });
-      document.getElementById('todayDateStr').textContent = viDateStr;
+      const todayDateEl = document.getElementById('todayDateStr');
+      if (todayDateEl) todayDateEl.textContent = viDateStr;
 
       drawWheel(0);
       refreshStatsStrip();
@@ -1853,11 +1856,27 @@
     }
 
     async function onSpinDone(msg) {
-      sounds.playSingingBowl();
-      if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
-      await recordSpinToCloud(msg.id, activeTopic ? activeTopic.id : null);
-      refreshStatsStrip();
-      setTimeout(() => openRitualModal(msg), 400);
+      try {
+        sounds.playSingingBowl();
+        if (navigator.vibrate) navigator.vibrate([30, 50, 30]);
+        await recordSpinToCloud(msg.id, activeTopic ? activeTopic.id : null);
+        refreshStatsStrip();
+        setTimeout(() => openRitualModal(msg), 400);
+      } catch (err) {
+        console.error("Lỗi hoàn tất lượt quay:", err);
+        openRitualModal(msg);
+      } finally {
+        isWheelSpinning = false;
+        const discWrap = document.getElementById('wheelDiscWrap');
+        if (discWrap) discWrap.classList.remove('spinning-active');
+        const loader = document.getElementById('spinConicLoader');
+        if (loader) loader.style.display = 'none';
+        const btn = document.getElementById('spinBtn');
+        if (btn) {
+          btn.disabled = false;
+          btn.textContent = 'QUAY VÒNG QUAY';
+        }
+      }
     }
 
     // ── 12. RITUAL MODAL (Mở thẳng thông điệp sau khi quay xong) ──
@@ -1912,7 +1931,11 @@
       document.getElementById('actionCheckbox').checked = todayRec?.actionDone || false;
 
       openCompanionTab('confession');
-      updateCompanionCollectionProgress();
+      try {
+        updateCompanionCollectionProgress();
+      } catch (cpErr) {
+        console.warn('Lỗi cập nhật tiến trình:', cpErr);
+      }
 
       letterCard.classList.add('show');
       if (window.AppAnimations && typeof AppAnimations.openModal === 'function') {
@@ -2085,12 +2108,15 @@
     }
 
     function updateCompanionCollectionProgress() {
-      const history = getSpinHistory();
-      const unique = new Set(history.map(h => h.messageId)).size;
+      const history = typeof getHistory === 'function' ? getHistory() : getLocalHistory();
+      const topicId = activeTopic ? activeTopic.id : 'tri-tam-khai-sang';
+      const totalCards = activeTopic ? (activeTopic.totalCards || 66) : 66;
+      const topicSpins = history.filter(h => (h.topicId === topicId) || (!h.topicId && topicId === 'tri-tam-khai-sang'));
+      const unique = new Set(topicSpins.map(h => h.messageId)).size;
       const countEl = document.getElementById('companionLibCount');
       const fillEl = document.getElementById('companionLibFill');
-      if (countEl) countEl.textContent = `${unique}/66 hạt mầm`;
-      if (fillEl) fillEl.style.width = `${((unique / 66) * 100).toFixed(1)}%`;
+      if (countEl) countEl.textContent = `${unique}/${totalCards} hạt mầm`;
+      if (fillEl) fillEl.style.width = `${Math.min(100, (unique / totalCards) * 100).toFixed(1)}%`;
     }
 
     function onCrackWaxSeal() {
@@ -2606,7 +2632,7 @@
       const dataUrl = await generateStoryCard({
         message: msg,
         userName: currentUser?.name || 'Bạn',
-        dateStr: document.getElementById('todayDateStr').textContent,
+        dateStr: document.getElementById('todayDateStr')?.textContent || new Date().toLocaleDateString('vi-VN'),
         note
       });
 

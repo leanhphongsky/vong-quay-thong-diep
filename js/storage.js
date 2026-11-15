@@ -343,6 +343,7 @@ function saveUser(u) {
 }
 function clearUser() { clearLocalUser(); }
 function getHistory() { return getLocalHistory(); }
+function getSpinHistory(userId) { return getLocalHistory(userId); }
 function getStreak() { return getLocalStreak(); }
 function getTodaySpin(topicId) {
   const history = getLocalHistory();
